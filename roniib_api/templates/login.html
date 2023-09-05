@@ -31,7 +31,7 @@
         <li><a href="{% url 'login' %}" class="active">Sign In</a></li>
         <li><a href="{% url 'register' %}" class="inactive">Register</a></li>
         {% else %}
-        <li><a href="{% url 'logout' %}" class="inactive">Sign Out</a></li>
+            <li><a href="{% url 'myaccount' %}" class="inactive">My account</a></li>
         <img src="{% static 'images/bgimg.jpg' %}"
              width="30" height="30" style="border-radius:30px;margin-top:5px">
         {% endif %}

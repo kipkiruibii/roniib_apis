@@ -29,7 +29,7 @@
             <li><a href="{% url 'login' %}" class="inactive">Sign In</a></li>
             <li><a href="{% url 'register' %}" class="inactive">Register</a></li>
             {% else %}
-            <li><a href="{% url 'logout' %}" class="inactive">Sign Out</a></li>
+            <li><a href="{% url 'myaccount' %}" class="inactive">My account</a></li>
             <img src="{% static 'images/bgimg.jpg' %}"
                       width="30" height="30" style="border-radius:30px;margin-top:5px">
             {% endif %}
@@ -147,19 +147,19 @@
             <h2>Recommended</h2>
             <div style="overflow-x: auto;">
                 <div class="api-list">
-<!--                    <div class="apicontainer">-->
-<!--                        <img src="https://www.noaa.gov/sites/default/files/styles/square_width_650/public/2021-02/FocusArea__Weather-02.jpg?h=5dc006f5&itok=20VGa8_F"-->
-<!--                            alt="">-->
-<!--                        <h2>Weather API</h2>-->
-<!--                        <p style="font-size: 12px;padding-left: 10px;">The Football API offers real-time and historical-->
-<!--                            data on fixtures, live scores, player stats, transfer updates, and more, providing a-->
-<!--                            comprehensive resource for football enthusiasts and developers worldwide.</p>-->
-<!--                        <div style="display: flex;justify-content: center;">-->
-<!--                            <div class="test-btn">-->
-<!--                                <p>Test</p>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
+                    <div class="apicontainer">
+                        <img src="https://www.noaa.gov/sites/default/files/styles/square_width_650/public/2021-02/FocusArea__Weather-02.jpg?h=5dc006f5&itok=20VGa8_F"
+                            alt="">
+                        <h2>Weather API</h2>
+                        <p style="font-size: 12px;padding-left: 10px;">The Football API offers real-time and historical
+                            data on fixtures, live scores, player stats, transfer updates, and more, providing a
+                            comprehensive resource for football enthusiasts and developers worldwide.</p>
+                        <div style="display: flex;justify-content: center;">
+                            <div class="test-btn">
+                                <p>Test</p>
+                            </div>
+                        </div>
+                    </div>
                     <div class="apicontainer">
                         <img src="https://www.displayr.com/wp-content/uploads/2018/07/shutterstock_374965561.jpg"
                             alt="">

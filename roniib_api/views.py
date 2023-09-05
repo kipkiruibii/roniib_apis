@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login,logout,authenticate
+from django.contrib.auth.decorators import login_required
 from .models import *
 
 # Create your views here.
@@ -76,7 +77,9 @@ def health(request):
 def terms_conditions(request):
     return render(request,'terms_co.html')
 
-
+@login_required
+def myAccount(request):
+    return render(request,'myaccount.html')
 def documentation(request):
     apiname=request.GET.get('api','')
     if apiname:

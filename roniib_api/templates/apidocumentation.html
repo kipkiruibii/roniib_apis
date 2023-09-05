@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Hezron Bii">
+    <meta name="description" content="This website serves APIs to developers to power their applications">
+    <meta
+            name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'images/light_blue_png.png' %}" type="image/x-image">
+    <link rel="stylesheet" href="{% static '/css/main.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Documentation</title>
+
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-dart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-ruby.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-R.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-kotlin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-swift.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-objectivec.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-json.min.js"></script>
+
+
+</head>
+
+<body>
+<nav class="topnav">
+    <img src="{% static 'images/light_blue_png.png' %}" alt="roniib icon" width="50" height="40"
+         style="margin-top:10px;margin-left:10px">
+    <ul class="topLinks">
+        <li><a href="#" class="active">Browse APIS</a></li>
+        <li><a href="{% url 'pricing' %}" class="inactive">Pricing</a></li>
+        <li><a href="{% url 'contact' %}" class="inactive">Contact Us</a></li>
+        {% if not request.user.is_authenticated %}
+        <li><a href="{% url 'login' %}" class="inactive">Sign In</a></li>
+        <li><a href="{% url 'register' %}" class="inactive">Register</a></li>
+        {% else %}
+        <li><a href="{% url 'logout' %}" class="inactive">Sign Out</a></li>
+        <img src="{% static 'images/bgimg.jpg' %}"
+             width="30" height="30" style="border-radius:30px;margin-top:5px">
+        {% endif %}
+    </ul>
+</nav>
+
+<div style="display: flex;margin-top: 50px;">
+    <div class="left-part">
+        <p style="font-size: 24px;">
+
+            Football API <br> Documentation
+        </p>
+        <p><span class="material-symbols-outlined">
+                    description
+                </span>
+            Overview</p>
+        <p>
+                <span class="material-symbols-outlined">
+                    network_node
+                </span>
+
+            Endpoints
+        </p>
+        <ul class="api-endpoints-side" style="color:green">
+            <a href="#glivema">
+                <li>getLiveMatches</li>
+            </a>
+            <a href="#gtdm">
+                <li>getTodaysMatches</li>
+            </a>
+            <a href="#gmbd">
+                <li>getMatchesByDate</li>
+            </a>
+            <a href="#gtom">
+                <li>getTomorrowsMatches</li>
+            </a>
+            <a href="#gym">
+                <li>getYesterdaysMatches</li>
+            </a>
+            <a href="#gli">
+                <li>getLeagueInfo</li>
+            </a>
+            <a href="#glf">
+                <li>getLeagueFixtures</li>
+            </a>
+            <a href="#glsh">
+                <li>getLeagueStandingsHome</li>
+            </a>
+            <a href="#glsa">
+                <li>getLeagueStandingsAway</li>
+            </a>
+            <a href="#glso">
+                <li>getLeagueStandingsOverall</li>
+            </a>
+            <a href="#glm">
+                <li>getLeagueLastMatches</li>
+            </a>
+            <a href="#gti">
+                <li>getTeamInfo</li>
+            </a>
+            <a href="#gtlm">
+                <li>getTeamLastMatches</li>
+            </a>
+            <a href="#gtnm">
+                <li>getTeamNextMatches</li>
+            </a>
+            <a href="#gtp">
+                <li>getTeamPlayers</li>
+            </a>
+            <a href="#gpi">
+                <li>getPlayersInfo</li>
+            </a>
+        </ul>
+        <a href="{% url 'browse' %}">
+            <p>
+                    <span>
+                        <i class="fa fa-arrow-left"></i>
+                    </span>
+                Back to categories
+            </p>
+
+        </a>
+
+    </div>
+    <div class="right-part">
+        <div class="with-search">
+            <h2>Overview</h2>
+        </div>
+
+
+        <h4>Introduction</h4>
+        <p>
+            Welcome to the Football API documentation! This comprehensive resource has been crafted to provide
+            developers with seamless access to a wealth of football-related data and
+            services. Whether you're building a sports app, conducting statistical analysis, or simply seeking to
+            stay up-to-date with the latest football scores and information, our API is designed to empower you with
+            accurate and up-to-the-minute data.
+        </p>
+
+
+        <h4>Getting Started</h4>
+        <p>
+            To get started with the Football API, you'll need to sign up for an API key, which will grant you access
+            to our data endpoints. The documentation provides detailed information on how to make API requests,
+            handle responses, and utilize various endpoints effectively.
+        </p>
+        <h4>Authentication</h4>
+        <p>To get started, you'll need to obtain an API key by signing up for an account on our developer portal
+            and<a href="#"> creating an app</a>.
+            Once you have your API key, include it as an "Authorization" header in your HTTP requests using the
+            "Bearer" scheme.
+        </p>
+        <p>
+            Please keep your API key confidential and do not share it publicly. If you suspect any unauthorized
+            access or have concerns about your API key's security, please contact our support team immediately.
+        </p>
+        <h4>Endpoint Reference</h4>
+        <h5>General requests</h5>
+        <p>Note: All requests follow the following code sample. Replace the apiUrl with the respective endpoint url
+            described below</p>
+        <p>Responses are in JSON Format</p>
+        <p style="color: black;">Sample request:</p>
+
+        <pre style="width:80%;margin-top: 0px;">
+    <div style="display: flex;justify-content: space-between;">
+        <select id="language-selector" style="font-family: poppins;background-color: azure;border-radius: 10px;">
+            <option value="javascript">JavaScript</option>
+            <option value="python">Python</option>
+            <option value="java">Java</option>
+            <option value="objective_c">Objective-C</option>
+            <option value="cplus">C++</option>
+            <option value="csharp">C#</option>
+            <option value="kotlin">Kotlin</option>
+            <option value="swift">Swift</option>
+            <option value="r">R</option>
+            <option value="dart">Dart</option>
+            <option value="ruby">Ruby</option>
+            <option value="go">Go</option>
+            <option value="php">PHP</option>
+            <!-- Add more language options here -->
+        </select>
+        <button id="copy-button"
+                style="border: none;background-color:rgb(206, 247, 254) ;border-radius: 10px;padding: 5px;">Copy Code</button>
+        
+    </div>
+
+<code id="code" class="language-javascript">
+    const axios = require('axios');
+
+    // Replace 'YOUR_API_KEY_HERE' with your actual API key
+    const apiKey = 'YOUR_API_KEY_HERE';
+    
+    // Define the API endpoint you want to access
+    const apiUrl = 'endpoint url';
+    
+    // Create headers with the Authorization header
+    const headers = {
+      Authorization: `Bearer ${apiKey}`,
+    };
+    
+    // Make a GET request with the headers
+    axios
+      .get(apiUrl, { headers })
+      .then((response) => {
+        if (response.status === 200) {
+          const data = response.data; // Access the response data
+          // Process the data as needed
+        } else {
+          console.error(`Error: ${response.status} - ${response.statusText}`);
+        }
+      })
+      .catch((error) => {
+        console.error('Request error:', error);
+      });
+    
+</code>
+</pre>
+        <p style="color: black;">Sample response:</p>
+        <ul class="api-endpoints-main">
+            <li id="glivema">getLiveMatches</li>
+            <p>This api endpoint returns matches that are currently in-play. It also returns more information such as
+                injuries substitutions,corners,scores, and bookings. Check out the sample request below</p>
+            <li id="gtdm">getTodaysMatches</li>
+            <p>This api returns a list of todays matches. It also returns more information such as injuries
+                substitutions,corners,scores, and bookings. Check out the sample request below</p>
+
+            <li id="gmbd">getMatchesByDate</li>
+            <li id="gtom">getTomorrowsMatches</li>
+            <li id="gym">getYesterdaysMatches</li>
+            <li id="gli">getLeagueInfo</li>
+            <li id="glf">getLeagueFixtures</li>
+            <li id="glsh">getLeagueStandingsHome</li>
+            <li id="glsa">getLeagueStandingsAway</li>
+            <li id="glso">getLeagueStandingsOverall</li>
+            <li id="gllm">getLeagueLastMatches</li>
+            <li id="glnm">getTeamInfo</li>
+            <li id="gtlm">getTeamLastMatches</li>
+            <li id="gtnm">getTeamNextMatches</li>
+            <li id="gtp">getTeamPlayers</li>
+            <li id="gpi">getPlayersInfo</li>
+        </ul>
+        <p></p>
+        <h4>Rate Limiting</h4>
+        <p> Our API enforces rate limits to ensure fair usage and to protect the system from abuse. Rate limiting is
+            based on the number of requests a client can make within a specific time window.If you exceed your rate
+            limit, you will receive a <strong>429 Too Many Requests</strong> response.
+        </p>
+
+        <h4>Error Handling</h4>
+        <p> The API uses standard HTTP status codes to indicate the success or failure of a request.</p> <br> Here are
+        some commonly used status codes:
+        <ul style="font-size:14px">
+            <p>
+                <li>200 OK: The request was successful, and the response contains the requested data.
+                </li>
+                <li>201 Created: The request has successfully created a new resource. The response contains the newly
+                    created resource.
+                </li>
+                <li>204 No Content: The request was successful, but there is no response body (often used for DELETE
+                    requests).
+                </li>
+                <li>400 Bad Request: The request was invalid, and the server could not understand it. The response may
+                    contain details about the error in the response body.
+                </li>
+                <li>401 Unauthorized: The request requires authentication, and the user's credentials are missing or
+                    invalid.
+                </li>
+                <li>403 Forbidden: The user does not have permission to access the requested resource.
+                </li>
+                <li>404 Not Found: The requested resource does not exist on the server.
+                </li>
+                <li>422 Unprocessable Entity: The server understands the request but cannot process it due to semantic
+                    errors (e.g., validation errors).
+                </li>
+                <li>500 Internal Server Error: An unexpected error occurred on the server. The client should not retry
+                    the
+                    request until the issue is resolved.
+                </li>
+            </p>
+        </ul>
+        <p>Error responses typically include a JSON object with information about the error.</p>
+        <pre>
+            <code class="language-json" tabindex="0px">
+{
+  "error": {
+    "status":401,
+    "code": "UNAUTHORIZED",
+    "message": "Authentication failed. Please provide a valid API key.",
+  }
+}
+            </code>
+        </pre>
+
+
+        <h4>FAQ and Support</h4>
+        <p style="margin-left:20px">
+            <span style="font-weight:bold;color:black">Frequently Asked Questions (FAQs)</span><br>
+
+            <span style="font-weight:normal;color:black">Q: What is the API's base URL?</span><br>
+
+            <span style="font-weight:500;color:green">A: The base URL for our API is https://api.roniib.com.</span><br><br>
+            <span style="font-weight:normal;color:black">Q: How do I authenticate with the API?</span><br>
+
+            <span style="font-weight:500;color:green">A: You can authenticate by including your API key in the Authorization header with a Bearer token. For
+                example: Authorization: Bearer YOUR_API_KEY.</span><br><br>
+            <span style="font-weight:normal;color:black">Q: What response format does the API support?</span><br>
+
+            <span style="font-weight:500;color:green">A: The API supports JSON format by default. You can specify the response format by setting the Accept header
+                to application/json in your request.</span><br><br>
+            <span style="font-weight:normal;color:black">Q: Are there any rate limits on API requests?</span><br>
+
+            <span style="font-weight:500;color:green">A: Yes, we have rate limits in place to ensure fair usage.Please refer to our Rate Limiting section at the pricing page
+                for more details.</span><br><br>
+            <span style="font-weight:bold;color:black">Support</span><br>
+
+            If you encounter any issues or have questions that are not covered in the FAQs, our support team is here to
+            help you. You can reach out to our support team through the following channels:<br>
+
+
+            Email: <a href="mailto:support@roniib.com">support@roniib.com </a><br>
+            Our support team is available during business hours (9:00 AM - 5:00 PM, Monday to Friday) and will respond
+            to your inquiries within 24 hours.
+
+        </p>
+
+        <h4>Terms of Use and Legal Information</h4>
+        <p>
+            By using the API provided by Roniib APIs, you agree to comply with these Terms of Use. If you do not agree
+            with any part of these terms, please do not use the API.
+        </p>
+        <p>You may not use the API for any illegal, unauthorized, or harmful purposes.</p>
+        <p>Roniib APIs provides the API "as-is" without warranties of any kind, either express or implied.<br>
+            Roniib APIs is not liable for any damages, losses, or harm caused by the use or inability to use the API.
+        </p>
+        <p>Roniib APIs reserves the right to update these Terms of Use and Legal Information at any time. It is
+            your responsibility to review these terms periodically.</p>
+        <p>If you have any questions or concerns regarding these Terms of Use or Legal Information, please contact us at
+            <a href="mailto:help@roniib.com">help@roniib.com </a></p>
+
+        <p><span style="font-weight:bold;color:black">Disclaimer Regarding Copyrighted Content</span><br>
+        <ul style="font-size:14px">
+            <li>Some content provided through the API may include images, media, or other materials for which Roniib
+                APIs
+                does not own the copyright.
+            </li>
+            <li>Users of the API are solely responsible for ensuring compliance with copyright and intellectual property
+                laws when using or distributing such content.
+            </li>
+            <li>Roniib APIs disclaims all liability for any copyright violations or legal issues arising from the use of
+                copyrighted materials retrieved via the API.
+            </li>
+            <li>It is your responsibility to obtain the necessary permissions or licenses to use copyrighted content in
+                your application or service.</p>
+            </li>
+        </ul>
+        <h4>Feedback</h4>
+        <p>
+            We value your feedback on our API! If you encounter any issues, have suggestions for improvements, or want
+            to report a bug, please don't hesitate to get in touch with us. You can provide feedback by:
+
+            Sending an email to <a href="mailto:api-feedback@roniib.com">api-feedback@roniib.com.</a><br>
+            Your feedback helps us improve the API and make it even better for all our users. We appreciate your input!
+        </p>
+
+
+    </div>
+
+
+</div>
+
+<p hidden id="javascript_code">
+    const axios = require('axios');
+
+    // Replace 'YOUR_API_KEY_HERE' with your actual API key
+    const apiKey = 'YOUR_API_KEY_HERE';
+
+    // Define the API endpoint you want to access
+    const apiUrl = 'endpoint url';
+
+    // Create headers with the Authorization header
+    const headers = {
+    Authorization: `Bearer ${apiKey}`,
+    };
+
+    // Make a GET request with the headers
+    axios
+    .get(apiUrl, { headers })
+    .then((response) => {
+    if (response.status === 200) {
+    const data = response.data; // Access the response data
+    // Process the data as needed
+    } else {
+    console.error(`Error: ${response.status} - ${response.statusText}`);
+    }
+    })
+    .catch((error) => {
+    console.error('Request error:', error);
+    });
+
+</p>
+
+<p hidden id="python_code">
+    import requests
+
+    # Replace these values with your actual API endpoint and Bearer token
+    api_endpoint = 'endpoint url'
+    bearer_token = 'YOUR_BEARER_TOKEN_HERE'
+
+    # Define the headers with the Authorization Bearer token
+    headers = {
+    'Authorization': f'Bearer {bearer_token}',
+    'Content-Type': 'application/json' # You can modify headers as needed
+    }
+
+    try:
+    # Make the HTTP GET request
+    response = requests.get(api_endpoint, headers=headers)
+
+    # Check if the request was successful (status code 200)
+    if response.status_code == 200:
+    # Process the API response here (e.g., print or parse the data)
+    print(response.json())
+    else:
+    # Handle errors or non-200 status codes here
+    print(f"Request failed with status code {response.status_code}")
+
+    except requests.exceptions.RequestException as e:
+    # Handle network or request-related exceptions
+    print(f"Request error: {e}")
+
+</p>
+
+<p hidden id="java_code">
+    import java.io.BufferedReader;
+    import java.io.IOException;
+    import java.io.InputStreamReader;
+    import java.net.HttpURLConnection;
+    import java.net.URL;
+
+    public class HttpGetWithBearerToken {
+    public static void main(String[] args) {
+    // Replace these values with your actual API endpoint and Bearer token
+    String apiEndpoint = "endpoint url";
+    String bearerToken = "YOUR_BEARER_TOKEN_HERE";
+
+    try {
+    // Create a URL object with the API endpoint
+    URL url = new URL(apiEndpoint);
+
+    // Open a connection to the URL
+    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+    // Set the request method to GET
+    connection.setRequestMethod("GET");
+
+    // Set the Authorization header with the Bearer token
+    connection.setRequestProperty("Authorization", "Bearer " + bearerToken);
+
+    // Get the response code
+    int responseCode = connection.getResponseCode();
+
+    // Check if the request was successful (status code 200)
+    if (responseCode == 200) {
+    // Read and print the response data
+    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+    String line;
+    StringBuilder response = new StringBuilder();
+
+    while ((line = reader.readLine()) != null) {
+    response.append(line);
+    }
+
+    reader.close();
+
+    System.out.println(response.toString());
+    } else {
+    // Handle errors or non-200 status codes here
+    System.out.println("Request failed with status code " + responseCode);
+    }
+
+    // Close the connection
+    connection.disconnect();
+
+    } catch (IOException e) {
+    // Handle network or IO exceptions
+    e.printStackTrace();
+    }
+    }
+    }
+
+</p>
+
+<p hidden id="kotlin_code">
+    import java.io.BufferedReader
+    import java.io.InputStreamReader
+    import java.net.HttpURLConnection
+    import java.net.URL
+
+    fun main() {
+    // Replace these values with your actual API endpoint and Bearer token
+    val apiEndpoint = "endpoint url"
+    val bearerToken = "YOUR_BEARER_TOKEN_HERE"
+
+    try {
+    // Create a URL object with the API endpoint
+    val url = URL(apiEndpoint)
+
+    // Open a connection to the URL
+    val connection = url.openConnection() as HttpURLConnection
+
+    // Set the request method to GET
+    connection.requestMethod = "GET"
+
+    // Set the Authorization header with the Bearer token
+    connection.setRequestProperty("Authorization", "Bearer $bearerToken")
+
+    // Get the response code
+    val responseCode = connection.responseCode
+
+    // Check if the request was successful (status code 200)
+    if (responseCode == 200) {
+    // Read and print the response data
+    val reader = BufferedReader(InputStreamReader(connection.inputStream))
+    var line: String?
+    val response = StringBuilder()
+
+    while (reader.readLine().also { line = it } != null) {
+    response.append(line)
+    }
+
+    reader.close()
+
+    println(response.toString())
+    } else {
+    // Handle errors or non-200 status codes here
+    println("Request failed with status code $responseCode")
+    }
+
+    // Close the connection
+    connection.disconnect()
+
+    } catch (e: Exception) {
+    // Handle network or IO exceptions
+    e.printStackTrace()
+    }
+    }
+</p>
+
+<p hidden id="swift_code">
+    import Foundation
+
+    // Replace these values with your actual API endpoint and Bearer token
+    let apiEndpoint = "endpoint url"
+    let bearerToken = "YOUR_BEARER_TOKEN_HERE"
+
+    // Create a URL object with the API endpoint
+    if let url = URL(string: apiEndpoint) {
+    var request = URLRequest(url: url)
+
+    // Set the HTTP method to GET
+    request.httpMethod = "GET"
+
+    // Set the Authorization header with the Bearer token
+    request.setValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+
+    let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+    if let error = error {
+    // Handle network or request-related errors here
+    print("Request error: \(error)")
+    return
+    }
+
+    if let httpResponse = response as? HTTPURLResponse {
+    // Check if the request was successful (status code 200)
+    if httpResponse.statusCode == 200 {
+    if let data = data {
+    // Process the API response data here (e.g., print or parse the data)
+    if let responseString = String(data: data, encoding: .utf8) {
+    print(responseString)
+    }
+    }
+    } else {
+    // Handle errors or non-200 status codes here
+    print("Request failed with status code \(httpResponse.statusCode)")
+    }
+    }
+    }
+
+
+</p>
+
+<p hidden id="objectivec_code">
+    #import &lt;Foundation/Foundation.h&gt;
+
+    int main(int argc, const char * argv[]) {
+    @autoreleasepool {
+    // Replace these values with your actual endpoint and Bearer token
+    NSString *apiEndpoint = @"endpoint url";
+    NSString *bearerToken = @"YOUR_BEARER_TOKEN_HERE";
+
+    // Create a URL object with the API endpoint
+    NSURL *url = [NSURL URLWithString:apiEndpoint];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+
+    // Set the HTTP method to GET
+    [request setHTTPMethod:@"GET"];
+
+    // Set the Authorization header with the Bearer token
+    NSString *authHeader = [NSString stringWithFormat:@"Bearer %@", bearerToken];
+    [request setValue:authHeader forHTTPHeaderField:@"Authorization"];
+
+    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData
+    *data, NSURLResponse *response, NSError *error) {
+    if (error) {
+    // Handle network or request-related errors here
+    NSLog(@"Request error: %@", error);
+    return;
+    }
+
+    if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+
+    // Check if the request was successful (status code 200)
+    if (httpResponse.statusCode == 200) {
+    if (data) {
+    // Process the API response data here (e.g., print or parse the data)
+    NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSLog(@"%@", responseString);
+    }
+    } else {
+    // Handle errors or non-200 status codes here
+    NSLog(@"Request failed with status code %ld", (long)httpResponse.statusCode);
+    }
+    }
+    }];
+
+    // Start the request task
+    [task resume];
+    }
+    return 0;
+    }
+</p>
+
+<p hidden id="dart_code">
+    import 'dart:convert';
+    import 'package:http/http.dart' as http;
+
+    void main() async {
+    // Replace these values with your actual API endpoint and Bearer token
+    final String apiEndpoint = 'endpoint url';
+    final String bearerToken = 'YOUR_BEARER_TOKEN_HERE';
+
+    try {
+    final response = await http.get(
+    Uri.parse(apiEndpoint),
+    headers: {
+    'Authorization': 'Bearer $bearerToken',
+    'Content-Type': 'application/json', // You can modify headers as needed
+    },
+    );
+
+    // Check if the request was successful (status code 200)
+    if (response.statusCode == 200) {
+    final jsonResponse = json.decode(response.body);
+    // Process the API response here (e.g., print or parse the data)
+    print(jsonResponse);
+    } else {
+    // Handle errors or non-200 status codes here
+    print('Request failed with status code ${response.statusCode}');
+    }
+    } catch (e) {
+    // Handle network or request-related exceptions
+    print('Request error: $e');
+    }
+    }
+
+</p>
+
+<p hidden id="php_code">
+    &lt;?php
+
+    // Replace these values with your actual API endpoint and Bearer token
+    $apiEndpoint = 'endpoint url';
+    $bearerToken = 'YOUR_BEARER_TOKEN_HERE';
+
+    // Initialize cURL session
+    $ch = curl_init($apiEndpoint);
+
+    // Set cURL options
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Return the response as a string
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer ' . $bearerToken,
+    'Content-Type: application/json', // You can modify headers as needed
+    ]);
+
+    // Execute cURL session and store the response in $response
+    $response = curl_exec($ch);
+
+    // Check for cURL errors
+    if (curl_errno($ch)) {
+    echo 'cURL Error: ' . curl_error($ch);
+    exit();
+    }
+
+    // Get the HTTP status code
+    $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    // Close the cURL session
+    curl_close($ch);
+
+    // Check if the request was successful (status code 200)
+    if ($httpStatus == 200) {
+    // Process the API response here (e.g., print or parse the data)
+    echo $response;
+    } else {
+    // Handle errors or non-200 status codes here
+    echo 'Request failed with status code ' . $httpStatus;
+    }
+    ?>
+
+</p>
+
+<p hidden id="ruby_code">
+    require 'net/http'
+    require 'uri'
+    require 'json'
+
+    # Replace these values with your actual API endpoint and Bearer token
+    api_endpoint = URI.parse('endpoint url')
+    bearer_token = 'YOUR_BEARER_TOKEN_HERE'
+
+    # Create an HTTP object for the API endpoint
+    http = Net::HTTP.new(api_endpoint.host, api_endpoint.port)
+    http.use_ssl = (api_endpoint.scheme == 'https')
+
+    # Create an HTTP request
+    request = Net::HTTP::Get.new(api_endpoint.request_uri)
+
+    # Set the Authorization header with the Bearer token
+    request['Authorization'] = "Bearer #{bearer_token}"
+    request['Content-Type'] = 'application/json' # You can modify headers as needed
+
+    # Send the request and get the response
+    response = http.request(request)
+
+    # Check if the request was successful (status code 200)
+    if response.code == '200'
+    # Process the API response here (e.g., print or parse the data)
+    puts response.body
+    else
+    # Handle errors or non-200 status codes here
+    puts "Request failed with status code #{response.code}"
+    end
+</p>
+
+<p hidden id="r_code">
+    library(httr)
+
+    # Replace these values with your actual API endpoint and Bearer token
+    api_endpoint <- "endpoint url"
+    bearer_token <- "YOUR_BEARER_TOKEN_HERE"
+
+    # Create a headers list with the Authorization Bearer token
+    headers <- add_headers(Authorization = paste("Bearer", bearer_token),
+    "Content-Type" = "application/json") # You can modify headers as needed
+
+    # Make the GET request with the specified headers
+    response <- GET(api_endpoint, headers = headers)
+
+    # Check if the request was successful (status code 200)
+    if (http_status(response)$status_code == 200) {
+    # Process the API response here (e.g., print or parse the data)
+    content <- content(response, "text")
+    cat(content)
+    } else {
+    # Handle errors or non-200 status codes here
+    cat("Request failed with status code", http_status(response)$status_code)
+    }
+
+</p>
+
+<p hidden id="go_code">
+    package main
+
+    import (
+    "fmt"
+    "net/http"
+    "io/ioutil"
+    )
+
+    func main() {
+    // Replace these values with your actual API endpoint and Bearer token
+    apiEndpoint := "endpoint url"
+    bearerToken := "YOUR_BEARER_TOKEN_HERE"
+
+    // Create an HTTP client
+    client := &http.Client{}
+
+    // Create a GET request
+    req, err := http.NewRequest("GET", apiEndpoint, nil)
+    if err != nil {
+    fmt.Println("Error creating request:", err)
+    return
+    }
+
+    // Set the Authorization header with the Bearer token
+    req.Header.Add("Authorization", "Bearer " + bearerToken)
+    req.Header.Add("Content-Type", "application/json") // You can modify headers as needed
+
+    // Send the request
+    resp, err := client.Do(req)
+    if err != nil {
+    fmt.Println("Error sending request:", err)
+    return
+    }
+    defer resp.Body.Close()
+
+    // Check if the request was successful (status code 200)
+    if resp.StatusCode == http.StatusOK {
+    // Read and process the response body
+    body, err := ioutil.ReadAll(resp.Body)
+    if err != nil {
+    fmt.Println("Error reading response body:", err)
+    return
+    }
+
+    // Process the API response here (e.g., print or parse the data)
+    fmt.Println(string(body))
+    } else {
+    // Handle errors or non-200 status codes here
+    fmt.Println("Request failed with status code", resp.StatusCode)
+    }
+    }
+</p>
+
+<p hidden id="csharp_code">
+    using System;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Threading.Tasks;
+
+    class Program
+    {
+    static async Task Main()
+    {
+    // Replace these values with your actual API endpoint and Bearer token
+    string apiEndpoint = "endpoint url";
+    string bearerToken = "YOUR_BEARER_TOKEN_HERE";
+
+    using (HttpClient client = new HttpClient())
+    {
+    // Set the Authorization header with the Bearer token
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json")); // You can modify
+    headers as needed
+
+    try
+    {
+    // Send a GET request to the API endpoint
+    HttpResponseMessage response = await client.GetAsync(apiEndpoint);
+
+    // Check if the request was successful (status code 200)
+    if (response.IsSuccessStatusCode)
+    {
+    // Read and process the response content
+    string responseBody = await response.Content.ReadAsStringAsync();
+    Console.WriteLine(responseBody);
+    }
+    else
+    {
+    // Handle errors or non-200 status codes here
+    Console.WriteLine($"Request failed with status code {response.StatusCode}");
+    }
+    }
+    catch (Exception ex)
+    {
+    // Handle network or request-related exceptions
+    Console.WriteLine($"Request error: {ex.Message}");
+    }
+    }
+    }
+    }
+</p>
+
+<p hidden id="cplus_code">
+    #include &lt;iostream&gt;
+    #include &lt;string&gt;
+    #include &lt;curl/curl.h&gt;
+
+    int main() {
+    std::string apiEndpoint = "endpoint url";
+    std::string bearerToken = "YOUR_BEARER_TOKEN_HERE";
+
+    // Initialize libcurl
+    CURL* curl = curl_easy_init();
+
+    if (curl) {
+    // Set the URL
+    curl_easy_setopt(curl, CURLOPT_URL, apiEndpoint.c_str());
+
+    // Set the HTTP headers, including Authorization
+    struct curl_slist* headers = NULL;
+    headers = curl_slist_append(headers, ("Authorization: Bearer " + bearerToken).c_str());
+    headers = curl_slist_append(headers, "Content-Type: application/json"); // You can modify headers as needed
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+
+    // Response data buffer
+    std::string responseData;
+
+    // Set the callback function to write response data
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, [](void* contents, size_t size, size_t nmemb, std::string* output) {
+    size_t totalSize = size * nmemb;
+    output->append(static_cast &lt;char*>(contents), totalSize);
+    return totalSize;
+    });
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseData);
+
+    // Perform the HTTP request
+    CURLcode res = curl_easy_perform(curl);
+
+    // Check for errors
+    if (res != CURLE_OK) {
+    std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+    } else {
+    // Check if the request was successful (status code 200)
+    long responseCode;
+    curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &responseCode);
+    if (responseCode == 200) {
+    // Process the API response here (e.g., print or parse the data)
+    std::cout << responseData << std::endl;
+    } else {
+    // Handle errors or non-200 status codes here
+    std::cerr << "Request failed with status code " << responseCode << std::endl;
+    }
+    }
+
+    // Clean up
+    curl_slist_free_all(headers);
+    curl_easy_cleanup(curl);
+    }
+
+    return 0;
+    }
+
+</p>
+<script>
+    Prism.highlightAll();
+    const languageSelector = document.getElementById("language-selector");
+    const codeElement = document.getElementById("code");
+    const copyButton = document.getElementById("copy-button");
+    languageSelector.addEventListener("change", () => {
+    $("#code").attr("class", "");
+        const selectedLanguage = languageSelector.value;
+        switch (selectedLanguage) {
+            case "javascript":
+                $("#code").attr("class", "language-javascript");
+                codeElement.textContent = $('#javascript_code').text();
+                break;
+            case "python":
+                $("#code").attr("class", "language-python");
+                codeElement.textContent =$('#python_code').text();
+                 break;
+            case "java":
+                $("#code").attr("class", "language-java");
+                codeElement.textContent =$('#java_code').text();
+                 break;
+            case "kotlin":
+                $("#code").attr("class", "language-kotlin");
+                codeElement.textContent =$('#kotlin_code').text();
+                 break;
+            case "swift":
+                $("#code").attr("class", "language-swift");
+                codeElement.textContent =$('#swift_code').text();
+                 break;
+            case "objective_c":
+                $("#code").attr("class", "language-javascript");
+                codeElement.textContent =$('#objectivec_code').text();
+                 break;
+            case "dart":
+                $("#code").attr("class", "language-dart");
+                codeElement.textContent =$('#dart_code').text();
+                 break;
+            case "php":
+                $("#code").attr("class", "language-javascript");
+                codeElement.textContent =$('#php_code').text();
+                 break;
+            case "ruby":
+                $("#code").attr("class", "language-ruby");
+                codeElement.textContent =$('#ruby_code').text();
+                 break;
+            case "r":
+                $("#code").attr("class", "language-python");
+                codeElement.textContent =$('#r_code').text();
+                 break;
+            case "go":
+                $("#code").attr("class", "language-go");
+                codeElement.textContent =$('#go_code').text();
+                 break;
+            case "cplus":
+                $("#code").attr("class", "language-javascript");
+                codeElement.textContent =$('#cplus_code').text();
+                 break;
+            case "csharp":
+                $("#code").attr("class", "language-csharp");
+                codeElement.textContent =$('#csharp_code').text();
+                 break;
+            default:
+                codeElement.textContent = `Select a language to display code.`;
+        }
+
+        // Format the code with Prism.js
+        Prism.highlightElement(codeElement);
+    });
+
+
+
+
+    copyButton.addEventListener("click", () => {
+        // Create a range object to select the code element
+        const range = document.createRange();
+        range.selectNode(codeElement);
+
+        // Create a selection object and add the range to it
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        // Copy the selected code to the clipboard
+        document.execCommand("copy");
+
+        // Deselect the text
+        selection.removeAllRanges();
+
+        // Change the button text to indicate successful copy
+        copyButton.textContent = "Copied!";
+        setTimeout(() => {
+            copyButton.textContent = "Copy Code";
+        }, 2000);
+    });
+</script>
+</body>
+
+</html>
+

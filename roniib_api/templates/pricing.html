@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Hezron Bii">
+    <meta name="description" content="This website serves APIs to developers to power their applications">
+    <meta
+            name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'images/light_blue_png.png' %}" type="image/x-image">
+    <link rel="stylesheet" href="{% static '/css/main.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>pricing plans</title>
+</head>
+
+<body>
+<nav class="topnav">
+    <img src="{% static 'images/light_blue_png.png' %}" alt="roniib icon" width="50" height="40"
+         style="margin-top:10px;margin-left:10px">
+    <ul class="topLinks">
+        <li><a href="{% url 'browse' %}" class="inactive">Browse APIS</a></li>
+        <li><a href="{% url 'pricing' %}" class="active">Pricing</a></li>
+        <li><a href="{% url 'contact' %}" class="inactive">Contact Us</a></li>
+        {% if not request.user.is_authenticated %}
+        <li><a href="{% url 'login' %}" class="inactive">Sign In</a></li>
+        <li><a href="{% url 'register' %}" class="inactive">Register</a></li>
+        {% else %}
+        <li><a href="{% url 'logout' %}" class="inactive">Sign Out</a></li>
+        <img src="{% static 'images/bgimg.jpg' %}"
+             width="30" height="30" style="border-radius:30px;margin-top:5px">
+        {% endif %}
+    </ul>
+</nav>
+<div style="overflow-y: scroll;height: 100vh">
+    <div class="bgprice">
+        <div>
+
+            <h3 id="flex_rates">FLEXIBLE <span id="pricing_rates">PRICING RATES</span></h3>
+            <div class="pricetags">
+
+                <div class="price_container">
+                    <p class="price_type">Basic</p>
+                    <p class="price_amt">$0<span>/mo</span></p>
+                    <div class="price_feat">
+                        <p class="">per API</p>
+                        <p class="">1K test requests</p>
+                        <p class="">2 requests per second</p>
+                    </div>
+                    <div class="sub_btn_align">
+                        <div class="sub_btn">
+                            {% if request.user.is_authenticated %}
+                            <p>Subscribe</p>
+                            {% else %}
+                            <a href="{% url 'login' %}"><p>Login to Subscribe</p></a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="price_container">
+                    <p class="price_type">Developer</p>
+                    <p class="price_amt">$29<span>/mo</span></p>
+                    <div class="price_feat">
+                        <p class="">per API</p>
+                        <p class="">50K requests/month</p>
+                        <p class="">20 requests per second</p>
+                    </div>
+                    <div class="sub_btn_align">
+                        <div class="sub_btn">
+                            {% if request.user.is_authenticated %}
+                            <p>Subscribe</p>
+                            {% else %}
+                            <a href="{% url 'login' %}"><p>Login to Subscribe</p></a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="price_container">
+                    <p class="price_type">Enterprise</p>
+                    <p class="price_amt">$69<span>/mo</span></p>
+                    <div class="price_feat">
+                        <p class="">per API</p>
+                        <p class="">500K requests/month</p>
+                        <p class="">100 requests per second</p>
+                    </div>
+                    <div class="sub_btn_align">
+                        <div class="sub_btn">
+                            {% if request.user.is_authenticated %}
+                            <p>Subscribe</p>
+                            {% else %}
+                            <a href="{% url 'login' %}"><p>Login to Subscribe</p></a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+            <div class="customrate">
+                <p>Need custom rate?</p>
+
+            </div>
+            <div class="customrate">
+                <div class="contact_btn">
+                    <p>CONTACT US</p>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+</body>
+
+</html>

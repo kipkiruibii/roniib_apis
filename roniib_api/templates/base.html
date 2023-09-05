@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Hezron Bii">
+    <meta name="description" content="This website serves APIs to developers to power their applications">
+    <meta
+        name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="{% static 'images/light_blue_png.png' %}" type="image/x-image">
+    <link rel="stylesheet" href="{% static '/css/main.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <title>Roniib APIs</title>
+</head>
+
+
+<body>
+    <nav class="topnav">
+        <img src="{% static 'images/light_blue_png.png' %}" alt="roniib icon" width="50" height="40">
+        <ul class="topLinks">
+            <li><a href="{% url 'browse' %}" class="inactive">Browse APIS</a></li>
+            <li><a href="{% url 'pricing' %}" class="inactive">Pricing</a></li>
+            <li><a href="{% url 'contact' %}" class="inactive">Contact Us</a></li>
+            <li><a href="{% url 'login' %}" class="inactive">Sign In</a></li>
+            <li><a href="{% url 'register' %}" class="inactive">Register</a></li>
+        </ul>
+    </nav>
+
+    {% block content %}
+
+
+    {% endblock content %}
+
+</body>
+
+</html>

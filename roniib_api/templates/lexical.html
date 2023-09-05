@@ -1,0 +1,271 @@
+
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Hezron Bii">
+    <meta name="description" content="This website serves APIs to developers to power their applications">
+    <meta
+        name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="{% static 'images/light_blue_png.png' %}" type="image/x-image">
+    <link rel="stylesheet" href="{% static '/css/main.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Lexical APIs</title>
+</head>
+
+<body>
+    <nav class="topnav">
+        <img src="{% static 'images/light_blue_png.png' %}" alt="roniib icon" width="50" height="40"
+        style="margin-top:10px;margin-left:10px">
+        <ul class="topLinks">
+            <li><a href="#" class="active">Browse APIS</a></li>
+            <li><a href="{% url 'pricing' %}" class="inactive">Pricing</a></li>
+            <li><a href="{% url 'contact' %}" class="inactive">Contact Us</a></li>
+            {% if not request.user.is_authenticated %}
+            <li><a href="{% url 'login' %}" class="inactive">Sign In</a></li>
+            <li><a href="{% url 'register' %}" class="inactive">Register</a></li>
+            {% else %}
+            <li><a href="{% url 'logout' %}" class="inactive">Sign Out</a></li>
+            <img src="{% static 'images/bgimg.jpg' %}"
+                      width="30" height="30" style="border-radius:30px;margin-top:5px">
+            {% endif %}
+        </ul>
+    </nav>
+
+    <div style="display: flex;margin-top: 50px;">
+        <div style="width: 20%;background: #EDEDED;;padding: 20px;">
+            <a href="{% url 'browse' %}" class="active">
+                <p>
+                    <span>
+                        <i class="fa fa-home"></i>
+                    </span>
+                    API Hub
+                </p>
+            </a>
+            <p><span>
+                    <i class="fa fa-list-alt"></i>
+                </span>
+                Categories</p>
+            <ul style=" list-style-type: none;">
+                <a class="lnk-inactive" href="{% url 'sports' %}">
+                    <li>Sports</li>
+                </a>
+                <a class="lnk-inactive" href="{% url 'entertainment' %}">
+                    <li>Entertainment</li>
+                </a>
+                <a class="lnk-inactive" href="{% url 'finance' %}">
+                    <li>Finance</li>
+                </a>
+                <a class="lnk-inactive" href="{% url 'weather' %}">
+                    <li>Weather</li>
+                </a>
+                <a class="lnk-inactive" href="{% url 'text' %}">
+                    <li>Text Analysis</li>
+                </a>
+                <a class="lnk-inactive" href="{% url 'lexical' %}">
+                    <li style="color: #0E7DA6;">Lexical</li>
+                </a>
+                <a class="lnk-inactive" href="{% url 'tools' %}">
+                    <li>Tools</li>
+                </a>
+                <a class="lnk-inactive" href="{% url 'music' %}">
+                    <li>Music</li>
+                </a>
+                <a class="lnk-inactive" href="{% url 'food' %}">
+                    <li>Food</li>
+                </a>
+                <a class="lnk-inactive" href="{% url 'education' %}">
+                    <li>Education</li>
+                </a>
+                <a class="lnk-inactive" href="{% url 'health' %}">
+                    <li>Health & Fitness</li>
+                </a>
+                <a class="lnk-inactive" href="{% url 'all' %}">
+                    <li>All -Alphabetical</li>
+                </a>
+            </ul>
+        </div>
+        <div class="right-part">
+            <div class="with-search">
+                <h2>Lexical</h2>
+                <div>
+                    <input type="text" placeholder="search api">
+                    <i class="fa fa-search" style="font-size:18px"></i>
+                </div>
+            </div>
+            <div class="api-list2">
+                <div class="apicontainer2">
+                    <div style="display: flex;padding-top: 10px;">
+                        <img src="https://img.freepik.com/premium-photo/green-soccer-field-football-field-top-view-with-realistic-grass-texture-realistic-football-pitch_167120-261.jpg"
+                            alt="">
+                        <h2>Football API</h2>
+                    </div>
+                    <p style="font-size: 12px;padding-left: 10px;">The Football API offers real-time and historical
+                        data
+                        on fixtures, live scores, player stats, transfer updates, and more, providing a
+                        comprehensive
+                        resource for football enthusiasts and developers worldwide.</p>
+                    <div style="display: flex;justify-content: center;">
+                        <div class="test-btn">
+                            <p>Test</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="apicontainer2">
+                    <div style="display: flex;padding-top: 10px;">
+                        <img src="https://img.freepik.com/premium-photo/green-soccer-field-football-field-top-view-with-realistic-grass-texture-realistic-football-pitch_167120-261.jpg"
+                            alt="">
+                        <h2>Football API</h2>
+                    </div>
+                    <p style="font-size: 12px;padding-left: 10px;">The Football API offers real-time and historical
+                        data
+                        on fixtures, live scores, player stats, transfer updates, and more, providing a
+                        comprehensive
+                        resource for football enthusiasts and developers worldwide.</p>
+                    <div style="display: flex;justify-content: center;">
+                        <div class="test-btn">
+                            <p>Test</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="apicontainer2">
+                    <div style="display: flex;padding-top: 10px;">
+                        <img src="https://img.freepik.com/premium-photo/green-soccer-field-football-field-top-view-with-realistic-grass-texture-realistic-football-pitch_167120-261.jpg"
+                            alt="">
+                        <h2>Football API</h2>
+                    </div>
+                    <p style="font-size: 12px;padding-left: 10px;">The Football API offers real-time and historical
+                        data
+                        on fixtures, live scores, player stats, transfer updates, and more, providing a
+                        comprehensive
+                        resource for football enthusiasts and developers worldwide.</p>
+                    <div style="display: flex;justify-content: center;">
+                        <div class="test-btn">
+                            <p>Test</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="api-list2">
+                <div class="apicontainer2">
+                    <div style="display: flex;padding-top: 10px;">
+                        <img src="https://img.freepik.com/premium-photo/green-soccer-field-football-field-top-view-with-realistic-grass-texture-realistic-football-pitch_167120-261.jpg"
+                            alt="">
+                        <h2>Football API</h2>
+                    </div>
+                    <p style="font-size: 12px;padding-left: 10px;">The Football API offers real-time and historical
+                        data
+                        on fixtures, live scores, player stats, transfer updates, and more, providing a
+                        comprehensive
+                        resource for football enthusiasts and developers worldwide.</p>
+                    <div style="display: flex;justify-content: center;">
+                        <div class="test-btn">
+                            <p>Test</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="apicontainer2">
+                    <div style="display: flex;padding-top: 10px;">
+                        <img src="https://img.freepik.com/premium-photo/green-soccer-field-football-field-top-view-with-realistic-grass-texture-realistic-football-pitch_167120-261.jpg"
+                            alt="">
+                        <h2>Football API</h2>
+                    </div>
+                    <p style="font-size: 12px;padding-left: 10px;">The Football API offers real-time and historical
+                        data
+                        on fixtures, live scores, player stats, transfer updates, and more, providing a
+                        comprehensive
+                        resource for football enthusiasts and developers worldwide.</p>
+                    <div style="display: flex;justify-content: center;">
+                        <div class="test-btn">
+                            <p>Test</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="apicontainer2">
+                    <div style="display: flex;padding-top: 10px;">
+                        <img src="https://img.freepik.com/premium-photo/green-soccer-field-football-field-top-view-with-realistic-grass-texture-realistic-football-pitch_167120-261.jpg"
+                            alt="">
+                        <h2>Football API</h2>
+                    </div>
+                    <p style="font-size: 12px;padding-left: 10px;">The Football API offers real-time and historical
+                        data
+                        on fixtures, live scores, player stats, transfer updates, and more, providing a
+                        comprehensive
+                        resource for football enthusiasts and developers worldwide.</p>
+                    <div style="display: flex;justify-content: center;">
+                        <div class="test-btn">
+                            <p>Test</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="api-list2">
+                <div class="apicontainer2">
+                    <div style="display: flex;padding-top: 10px;">
+                        <img src="https://img.freepik.com/premium-photo/green-soccer-field-football-field-top-view-with-realistic-grass-texture-realistic-football-pitch_167120-261.jpg"
+                            alt="">
+                        <h2>Football API</h2>
+                    </div>
+                    <p style="font-size: 12px;padding-left: 10px;">The Football API offers real-time and historical
+                        data
+                        on fixtures, live scores, player stats, transfer updates, and more, providing a
+                        comprehensive
+                        resource for football enthusiasts and developers worldwide.</p>
+                    <div style="display: flex;justify-content: center;">
+                        <div class="test-btn">
+                            <p>Test</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="apicontainer2">
+                    <div style="display: flex;padding-top: 10px;">
+                        <img src="https://img.freepik.com/premium-photo/green-soccer-field-football-field-top-view-with-realistic-grass-texture-realistic-football-pitch_167120-261.jpg"
+                            alt="">
+                        <h2>Football API</h2>
+                    </div>
+                    <p style="font-size: 12px;padding-left: 10px;">The Football API offers real-time and historical
+                        data
+                        on fixtures, live scores, player stats, transfer updates, and more, providing a
+                        comprehensive
+                        resource for football enthusiasts and developers worldwide.</p>
+                    <div style="display: flex;justify-content: center;">
+                        <div class="test-btn">
+                            <p>Test</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="apicontainer2">
+                    <div style="display: flex;padding-top: 10px;">
+                        <img src="https://img.freepik.com/premium-photo/green-soccer-field-football-field-top-view-with-realistic-grass-texture-realistic-football-pitch_167120-261.jpg"
+                            alt="">
+                        <h2>Football API</h2>
+                    </div>
+                    <p style="font-size: 12px;padding-left: 10px;">The Football API offers real-time and historical
+                        data
+                        on fixtures, live scores, player stats, transfer updates, and more, providing a
+                        comprehensive
+                        resource for football enthusiasts and developers worldwide.</p>
+                    <div style="display: flex;justify-content: center;">
+                        <div class="test-btn">
+                            <p>Test</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+
+</body>
+
+</html>

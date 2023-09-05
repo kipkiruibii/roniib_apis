@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login,logout,authenticate
-
+from .models import *
 
 # Create your views here.
 def home(request):
@@ -75,5 +75,20 @@ def health(request):
 #terms & condition
 def terms_conditions(request):
     return render(request,'terms_co.html')
+
+
 def documentation(request):
-    return render(request,'apidocumentation.html')
+    apiname=request.GET.get('api','')
+    if apiname:
+        apiN=ApiDocumentation.objects.filter(short_name=apiname).first()
+        if apiN:
+            context={
+                'api_name':apiN.api_name,
+                'api_intro':apiN.api_intro,
+                'endpoints':ApiEndpoints.objects.filter(api_name=apiN).all()
+            }
+            return render(request, 'apidocumentation.html', context=context)
+        else:
+            return redirect('browse')
+    else:
+        return redirect('browse')

@@ -60,68 +60,26 @@
     <div class="left-part">
         <p style="font-size: 24px;">
 
-            Football API <br> Documentation
+            {{api_name}} <br> Documentation
         </p>
-        <p><span class="material-symbols-outlined">
+        <p><span class="material-symbols-outlined" style="font-size:16px">
                     description
                 </span>
             Overview</p>
         <p>
-                <span class="material-symbols-outlined">
+                <span class="material-symbols-outlined" style="font-size:16px">
                     network_node
                 </span>
 
             Endpoints
         </p>
         <ul class="api-endpoints-side" style="color:green">
-            <a href="#glivema">
-                <li>getLiveMatches</li>
+
+            {% for e in endpoints %}
+            <a href="#{{e.endpoint_name}}">
+                <li>{{e.endpoint_name}}</li>
             </a>
-            <a href="#gtdm">
-                <li>getTodaysMatches</li>
-            </a>
-            <a href="#gmbd">
-                <li>getMatchesByDate</li>
-            </a>
-            <a href="#gtom">
-                <li>getTomorrowsMatches</li>
-            </a>
-            <a href="#gym">
-                <li>getYesterdaysMatches</li>
-            </a>
-            <a href="#gli">
-                <li>getLeagueInfo</li>
-            </a>
-            <a href="#glf">
-                <li>getLeagueFixtures</li>
-            </a>
-            <a href="#glsh">
-                <li>getLeagueStandingsHome</li>
-            </a>
-            <a href="#glsa">
-                <li>getLeagueStandingsAway</li>
-            </a>
-            <a href="#glso">
-                <li>getLeagueStandingsOverall</li>
-            </a>
-            <a href="#glm">
-                <li>getLeagueLastMatches</li>
-            </a>
-            <a href="#gti">
-                <li>getTeamInfo</li>
-            </a>
-            <a href="#gtlm">
-                <li>getTeamLastMatches</li>
-            </a>
-            <a href="#gtnm">
-                <li>getTeamNextMatches</li>
-            </a>
-            <a href="#gtp">
-                <li>getTeamPlayers</li>
-            </a>
-            <a href="#gpi">
-                <li>getPlayersInfo</li>
-            </a>
+            {% endfor %}
         </ul>
         <a href="{% url 'browse' %}">
             <p>
@@ -142,17 +100,13 @@
 
         <h4>Introduction</h4>
         <p>
-            Welcome to the Football API documentation! This comprehensive resource has been crafted to provide
-            developers with seamless access to a wealth of football-related data and
-            services. Whether you're building a sports app, conducting statistical analysis, or simply seeking to
-            stay up-to-date with the latest football scores and information, our API is designed to empower you with
-            accurate and up-to-the-minute data.
+            {{api_intro}}
         </p>
 
 
         <h4>Getting Started</h4>
         <p>
-            To get started with the Football API, you'll need to sign up for an API key, which will grant you access
+            To get started with the {{api_name}}, you'll need to sign up for an API key, which will grant you access
             to our data endpoints. The documentation provides detailed information on how to make API requests,
             handle responses, and utilize various endpoints effectively.
         </p>
@@ -173,7 +127,7 @@
         <p>Responses are in JSON Format</p>
         <p style="color: black;">Sample request:</p>
 
-        <pre style="width:80%;margin-top: 0px;">
+        <pre style="width:80%;padding-top: 0px;">
     <div style="display: flex;justify-content: space-between;">
         <select id="language-selector" style="font-family: poppins;background-color: azure;border-radius: 10px;">
             <option value="javascript">JavaScript</option>
@@ -227,29 +181,19 @@
     
 </code>
 </pre>
-        <p style="color: black;">Sample response:</p>
         <ul class="api-endpoints-main">
-            <li id="glivema">getLiveMatches</li>
-            <p>This api endpoint returns matches that are currently in-play. It also returns more information such as
-                injuries substitutions,corners,scores, and bookings. Check out the sample request below</p>
-            <li id="gtdm">getTodaysMatches</li>
-            <p>This api returns a list of todays matches. It also returns more information such as injuries
-                substitutions,corners,scores, and bookings. Check out the sample request below</p>
 
-            <li id="gmbd">getMatchesByDate</li>
-            <li id="gtom">getTomorrowsMatches</li>
-            <li id="gym">getYesterdaysMatches</li>
-            <li id="gli">getLeagueInfo</li>
-            <li id="glf">getLeagueFixtures</li>
-            <li id="glsh">getLeagueStandingsHome</li>
-            <li id="glsa">getLeagueStandingsAway</li>
-            <li id="glso">getLeagueStandingsOverall</li>
-            <li id="gllm">getLeagueLastMatches</li>
-            <li id="glnm">getTeamInfo</li>
-            <li id="gtlm">getTeamLastMatches</li>
-            <li id="gtnm">getTeamNextMatches</li>
-            <li id="gtp">getTeamPlayers</li>
-            <li id="gpi">getPlayersInfo</li>
+            {% for e in endpoints %}
+
+            <li id="{{e.endpoint_name}}">{{e.endpoint_name}}</li>
+            <p>{{e.endpoint_desc}}</p>
+            <p>apiURL:</p>
+            <pre style="width:80%">
+            <code class="language-javascript">{{e.endpoint_url}}</code>
+            </pre>
+            <br>
+            {% endfor %}
+
         </ul>
         <p></p>
         <h4>Rate Limiting</h4>
@@ -291,7 +235,7 @@
             </p>
         </ul>
         <p>Error responses typically include a JSON object with information about the error.</p>
-        <pre>
+        <pre style="width:80%">
             <code class="language-json" tabindex="0px">
 {
   "error": {

@@ -79,9 +79,6 @@ a.inactive {
 }
 
 .bgprice {
-    /* width: 1120px; */
-    /* margin-left: 200px;
-    margin-right: 200px; */
     padding-bottom: 80px;
     flex-shrink: 0;
     background: #EDEDED;
@@ -126,7 +123,6 @@ a.inactive {
 
 .left-part {
     width: 25%;
-    /* background: #EDEDED; */
     background-color: #f4ffff;
     padding: 20px;
     overflow-y: scroll;

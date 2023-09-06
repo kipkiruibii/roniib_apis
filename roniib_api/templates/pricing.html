@@ -21,7 +21,7 @@
     <img src="{% static 'images/light_blue_png.png' %}" alt="roniib icon" width="50" height="40"
          style="margin-top:10px;margin-left:10px">
     <ul class="topLinks">
-        <li><a href="{% url 'browse' %}" class="inactive">Browse APIS</a></li>
+        <li><a href="{% url 'apicategories' %}" class="inactive">Browse APIS</a></li>
         <li><a href="{% url 'pricing' %}" class="active">Pricing</a></li>
         <li><a href="{% url 'contact' %}" class="inactive">Contact Us</a></li>
         {% if not request.user.is_authenticated %}

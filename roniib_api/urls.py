@@ -28,6 +28,7 @@ urlpatterns = [
 
     #documentation
     path('documentation/', views.documentation, name='documentation'),
+    path('categories/', views.apicategories, name='apicategories'),
 
 
 

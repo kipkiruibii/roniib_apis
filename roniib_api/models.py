@@ -14,6 +14,7 @@ class ApiDocumentation(models.Model):
     api_brief_description=models.TextField(default='intro')
     api_image=models.CharField(max_length=255,default='url_img')
     api_subscribers=models.IntegerField(default=0)
+    api_total_requests=models.IntegerField(default=0)
     def __str__(self):
         return str(self.api_name)
 

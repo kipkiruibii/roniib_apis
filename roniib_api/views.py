@@ -95,3 +95,41 @@ def documentation(request):
             return redirect('browse')
     else:
         return redirect('browse')
+def group_into_subgroups(items):
+    subgroups = []
+    subgroup_size = 3
+
+    for i in range(0, len(items), subgroup_size):
+        subgroup = items[i:i+subgroup_size]
+        subgroups.append(subgroup)
+
+    return subgroups
+
+
+def apicategories(request):
+    category=request.GET.get('category','')
+    recommended=[]
+    popular=ApiDocumentation.objects.all().order_by('-api_subscribers')[:3]
+    rc=ApiDocumentation.objects.all().order_by('-api_total_requests')
+
+    count=0
+    for r in rc:
+        if count>=3:
+            break
+        if r not in popular:
+            recommended.append(r)
+            count+=1
+    context={
+        'categories': APICategories.objects.all(),
+        'popular':popular,
+        'recommended':recommended,
+    }
+    if category:
+        cat=APICategories.objects.filter(category_short=category).first()
+        if cat:
+            context={
+                'categories':APICategories.objects.all(),
+                'selected_category':group_into_subgroups(ApiDocumentation.objects.filter(api_category=cat)),
+                'selected_category_name':cat.category,
+            }
+    return render(request,'apicategories.html',context=context)

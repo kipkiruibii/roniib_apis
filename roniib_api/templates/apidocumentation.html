@@ -81,7 +81,7 @@
             </a>
             {% endfor %}
         </ul>
-        <a href="{% url 'browse' %}">
+        <a href="{% url 'apicategories' %}">
             <p>
                     <span>
                         <i class="fa fa-arrow-left"></i>
@@ -112,7 +112,7 @@
         </p>
         <h4>Authentication</h4>
         <p>To get started, you'll need to obtain an API key by signing up for an account on our developer portal
-            and<a href="#"> creating an app</a>.
+            and<a href="{% url 'myaccount' %}"> creating an app</a>.
             Once you have your API key, include it as an "Authorization" header in your HTTP requests using the
             "Bearer" scheme.
         </p>

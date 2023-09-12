@@ -40,6 +40,11 @@ body {
     /* padding: 10px; */
 
 }
+#nav {
+    background-color: rgba(4, 69, 106, 1);
+    /* padding: 10px; */
+
+}
 .api-endpoints-side{
     list-style-type: none;
     font-size:14px;
@@ -250,7 +255,7 @@ body {
     padding-left: 20px;
     height: 30px;
     margin-top: 20px;
-    width: 500px;
+    width: 300px;
     border-radius: 20px;
     border: none;
     background: #D9D9D9;
@@ -275,9 +280,9 @@ a {
     margin-top: 10px;
     margin-left: 50px;
     display: flex;
-    width: 200px;
+    width: 100%;
     height: 34px;
-    padding: 6px 300px 5px 24px;
+        padding-left:20px;
     align-items: center;
     flex-shrink: 0;
     border-radius: 10px;
@@ -292,9 +297,35 @@ a {
     margin-left: 50px;
     display: flex;
     height: 200px;
-    padding: 6px 300px 5px 24px;
+    border-radius: 10px;
+    background: #FFF;
+    border: #E0EFF2;
+
+
+}
+input{
+    font-family: Poppins;
+}
+.f-classmob input {
+    margin-top: 10px;
+    margin-left: 20px;
+    padding-left:20px;
+    display: flex;
+    height: 34px;
+        width: 80%;
     align-items: center;
-    flex-shrink: 0;
+    border-radius: 10px;
+    background: #FFF;
+    border: #E0EFF2;
+
+
+}
+
+.f-classmob textarea {
+    margin-top: 10px;
+    margin-left: 20px;
+    display: flex;
+    height: 200px;
     border-radius: 10px;
     background: #FFF;
     border: #E0EFF2;

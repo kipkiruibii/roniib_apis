@@ -6,11 +6,14 @@
     <meta name="author" content="Hezron Bii">
     <meta name="description" content="This website serves APIs to developers to power their applications">
     <meta
-        name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" href="{% static 'images/light_blue_png.png' %}" type="image/x-image">
+            name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'images/light_blue_png.png' %}" type="image/x-image">
     <link rel="stylesheet" href="{% static '/css/main.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3pro.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Get Started today </title>
@@ -18,220 +21,427 @@
 
 
 <body>
-    <nav class="topnav">
-        <img src="{% static 'images/light_blue_png.png' %}" alt="roniib icon" width="50" height="40"
-        style="margin-top:10px;margin-left:10px">
-        <ul class="topLinks">
-            <li><a href="{% url 'apicategories' %}" class="inactive">Browse APIS</a></li>
-            <li><a href="{% url 'pricing' %}" class="inactive">Pricing</a></li>
-            <li><a href="{% url 'contact' %}" class="inactive">Contact Us</a></li>
-            {% if not request.user.is_authenticated %}
-            <li><a href="{% url 'login' %}" class="inactive">Sign In</a></li>
-            <li><a href="{% url 'register' %}" class="inactive">Register</a></li>
-            {% else %}
-            <li><a href="{% url 'myaccount' %}" class="inactive">My account</a></li>
-            <img src="{% static 'images/bgimg.jpg' %}"
-                      width="30" height="30" style="border-radius:30px;margin-top:5px">
-            {% endif %}
-        </ul>
-    </nav>
-    <div class="svgtop">
-        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="337" viewBox="0 0 1512 337" fill="none">
-            <path d="M0 0H1512V201.378L0 337V0Z" fill="url(#paint0_linear_10_2)" />
-            <defs>
-                <linearGradient id="paint0_linear_10_2" x1="756" y1="0" x2="756" y2="337"
-                    gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#04456A" />
-                    <stop offset="1" stop-color="#04456A" stop-opacity="0.64" />
-                </linearGradient>
-            </defs>
-        </svg>
-        <article>
-            <h1 class="discover">DISCOVER <br>AND <span>CONNECT</span></h1>
-        </article>
+{% if request.user_agent.is_pc %}
+<nav class="topnav">
+    <a href="{% url 'home' %}" style="margin:5px"><img src="{% static 'images/light_blue_png.png' %}" alt="roniib icon" width="50"
+                                    height="40"
+                                    style="margin-left:0px;"></a>
+    <ul class="topLinks">
+        <li><a href="{% url 'apicategories' %}" class="inactive">Browse APIS</a></li>
+        <li><a href="{% url 'pricing' %}" class="inactive">Pricing</a></li>
+        <li><a href="{% url 'contact' %}" class="inactive">Contact Us</a></li>
+        {% if not request.user.is_authenticated %}
+        <li><a href="{% url 'login' %}" class="inactive">Sign In</a></li>
+        <li><a href="{% url 'register' %}" class="inactive">Register</a></li>
+        {% else %}
+        <li><a href="{% url 'myaccount' %}" class="inactive">My Account</a></li>
+        <img src="{% static 'images/bgimg.jpg' %}"
+             width="30" height="30" style="border-radius:30px;margin-top:5px">
+        {% endif %}
+    </ul>
+</nav>
+{% else %}
+<nav class="topnav"style="width:100%;display-flex:justify-content:space_between;align-items:center;" >
+    <a href="{% url 'home' %}" style="padding:5px;margin-top:0px"><img src="{% static 'images/light_blue_png.png' %}" alt="roniib icon" width="50"
+                                    height="40"
+                                    style="margin-left:0px;"></a>
+    <div style="margin-right:20px" id="menu-open"><i class="fa fa-bars" style="font-size:24px;color:white"></i></div>
+    <div style="margin-right:20px;display:none" id="menu-close"><i class="fa fa-close" style="font-size:24px;color:white"></i></div>
+</nav>
 
-    </div>
+<div id="nav" style="text-decoration:none;padding-top:70px;display:none;width:90%;height:800px;z-index:1000px;position: absolute;background-color: rgba(4, 69, 106, 1);" >
+    <ul class="topLinks">
+        <li><a href="{% url 'apicategories' %}" class="active">Browse APIS</a></li>
+        <li><a href="{% url 'pricing' %}" class="inactive">Pricing</a></li>
+        <li><a href="{% url 'contact' %}" class="inactive">Contact Us</a></li>
+        {% if not request.user.is_authenticated %}
+        <li><a href="{% url 'login' %}" class="inactive">Sign In</a></li>
+        <li><a href="{% url 'register' %}" class="inactive">Register</a></li>
+        {% else %}
+        <li><a href="{% url 'myaccount' %}" class="inactive">My Account</a></li>
+        <img src="{% static 'images/bgimg.jpg' %}"
+             width="60" height="60" style="border-radius:30px;margin-top:20px;margin-left:20px">
+        {% endif %}
+    </ul>
+</div>
 
-    <main class="mainBody">
+{% endif %}
+{% if request.user_agent.is_pc %}
+<div class="svgtop">
+    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="337" viewBox="0 0 1512 337" fill="none">
+        <path d="M0 0H1512V201.378L0 337V0Z" fill="url(#paint0_linear_10_2)"/>
+        <defs>
+            <linearGradient id="paint0_linear_10_2" x1="756" y1="0" x2="756" y2="337"
+                            gradientUnits="userSpaceOnUse">
+                <stop stop-color="#04456A"/>
+                <stop offset="1" stop-color="#04456A" stop-opacity="0.64"/>
+            </linearGradient>
+        </defs>
+    </svg>
+    <article>
+        <h1 class="discover">DISCOVER <br>AND <span>CONNECT</span></h1>
+    </article>
 
-        <article class="firstEl">
-            <section>
-                <img src="{% static 'images/image1.png' %}" alt="" width="300" height="300">
-            </section>
+</div>
+{% else %}
+    <article>
+        <h1 class="discover" style="color:black;padding-top:60px;padding-left:5px;font-size:35px">DISCOVER <br>AND <span>CONNECT</span></h1>
+    </article>
 
-            <section>
-                <h2>Build.Connect.Scale</h2>
+{% endif %}
+        {% if request.user_agent.is_pc %}
+<main class="mainBody" style="width:100%">
 
-                <p class="topdesc">
-                    Are you looking to supercharge your applications with powerful APIs? Look no further! Roniib API is
-                    your one-stop solution for all your integration needs. Our cutting-edge APIs are designed to
-                    streamline data access, boost functionality, and enhance the performance of your applications.
-                </p>
-                <div style="align-items: center;">
-                    <a href="register.html">
-                        <button class="gs-main-btn">
-                            <h2>GET STARTED</h2>
-                        </button>
-                    </a>
-                </div </section>
-        </article>
-        <article class="firstEl">
-            <section>
-                <h2>Why Choose Us?</h2>
-                <div class="why-desc">
-                    <h3>1. Comprehensive API Suite</h3>
-                    <p>
-                        Roniib API offers a wide range of APIs catering to various industries and use cases. Whether you
-                        need to process payments, access real-time data, manage user profiles, or anything else, we've
-                        got
-                        you covered.
-                    </p>
-                </div>
-                <div class="why-desc">
-                    <h3>2. Easy Integration</h3>
-                    <p>
-                        We understand that time is of the essence. That's why our APIs are developer-friendly and come
-                        with
-                        clear documentation. Integrating Roniib API into your applications is a breeze, enabling you to
-                        save
-                        valuable development hours.
-                    </p>
-                </div>
-                <div class="why-desc">
-                    <h3>3. Reliability and Scalability</h3>
-                    <p>
-                        Our robust infrastructure ensures seamless performance and high availability, even during peak
-                        usage. Scale your applications effortlessly as your user base grows, without worrying about
-                        performance bottlenecks.
-                    </p>
-                </div>
-            </section>
-            <div id="asideimg">
-                <img src="{% static 'images/image2.png' %}"  alt="vertical side image">
-                </div>
-        </article>
+    <article class="firstEl">
         <section>
-            <p class="text-desc">
-                Integrating Roniib API into your applications is just a few steps away. Sign up for a free trial and
-                experience the potential of our APIs firsthand. Our dedicated support team is always ready to assist you
-                at every step of the integration process.
+            <img src="{% static 'images/image1.png' %}" alt="" width="300" height="300">
+        </section>
+
+
+        <section>
+            <h2>Build.Connect.Scale</h2>
+
+            <p class="topdesc">
+                Are you looking to supercharge your applications with powerful APIs? Look no further! Roniib API is
+                your one-stop solution for all your integration needs. Our cutting-edge APIs are designed to
+                streamline data access, boost functionality, and enhance the performance of your applications.
             </p>
+            <div style="align-items: center;">
+                <a href="{% url 'register' %}">
+                    <button class="gs-main-btn">
+                        <h2>GET STARTED</h2>
+                    </button>
+                </a>
+            </div
         </section>
-        <div>
-            <a href="register.html">
-                <button class="major-btn">
-                    <h2>GET STARTED</h2>
-                </button>
-            </a>
+    </article>
+    <article class="firstEl">
+        <section>
+            <h2>Why Choose Us?</h2>
+            <div class="why-desc">
+                <h3>1. Comprehensive API Suite</h3>
+                <p>
+                    Roniib API offers a wide range of APIs catering to various industries and use cases. Whether you
+                    need to process payments, access real-time data, manage user profiles, or anything else, we've
+                    got
+                    you covered.
+                </p>
+            </div>
+            <div class="why-desc">
+                <h3>2. Easy Integration</h3>
+                <p>
+                    We understand that time is of the essence. That's why our APIs are developer-friendly and come
+                    with
+                    clear documentation. Integrating Roniib API into your applications is a breeze, enabling you to
+                    save
+                    valuable development hours.
+                </p>
+            </div>
+            <div class="why-desc">
+                <h3>3. Reliability and Scalability</h3>
+                <p>
+                    Our robust infrastructure ensures seamless performance and high availability, even during peak
+                    usage. Scale your applications effortlessly as your user base grows, without worrying about
+                    performance bottlenecks.
+                </p>
+            </div>
+        </section>
+        <div id="asideimg">
+            <img src="{% static 'images/image2.png' %}" alt="vertical side image">
         </div>
-        <section class="firstEl">
-            <div>
-                <h2>
-                    FLEXIBLE RATES
-                </h2>
-                <p>
-                    We understand that different businesses have unique needs and budgets. That's why we offer flexible
-                    rates to accommodate a wide range of requirements. Our transparent pricing structure allows you to
-                    choose a plan that suits your specific needs, whether you are a startup, small business, or an
-                    enterprise. With Roniib API, you'll have the flexibility to scale your API usage based on your
-                    application's demands, ensuring that you only pay for what you use. Our cost-effective pricing model
-                    empowers you to optimize your expenses and maximize the value you receive from our APIs. We believe
-                    in
-                    fostering long-term partnerships, and our flexible rates are designed to grow with your business,
-                    making
-                    Roniib API the ideal choice for all your integration needs.
+    </article>
+    <section>
+        <p class="text-desc">
+            Integrating Roniib API into your applications is just a few steps away. Sign up for a free trial and
+            experience the potential of our APIs firsthand. Our dedicated support team is always ready to assist you
+            at every step of the integration process.
+        </p>
+    </section>
+    <div>
+        <a href="register.html">
+            <button class="major-btn">
+                <h2>GET STARTED</h2>
+            </button>
+        </a>
+    </div>
+    <section class="firstEl">
+        <div>
+            <h2>
+                FLEXIBLE RATES
+            </h2>
+            <p>
+                We understand that different businesses have unique needs and budgets. That's why we offer flexible
+                rates to accommodate a wide range of requirements. Our transparent pricing structure allows you to
+                choose a plan that suits your specific needs, whether you are a startup, small business, or an
+                enterprise. With Roniib API, you'll have the flexibility to scale your API usage based on your
+                application's demands, ensuring that you only pay for what you use. Our cost-effective pricing model
+                empowers you to optimize your expenses and maximize the value you receive from our APIs. We believe
+                in
+                fostering long-term partnerships, and our flexible rates are designed to grow with your business,
+                making
+                Roniib API the ideal choice for all your integration needs.
 
-                </p>
-            </div>
-            <div>
-                <h2>
-                    24/7 CUSTOMER SUPPORT
-                </h2>
-                <p>
-                    At Roniib API, we value our customers and are committed to providing exceptional service at all
-                    times.
-                    Our 24/7 customer support ensures that you can reach out to us whenever you need assistance, no
-                    matter
-                    the time zone you're in. Whether you have a question about API integration, encounter an issue, or
-                    simply need guidance, our knowledgeable and friendly support team is just a call or email away. We
-                    pride
-                    ourselves on delivering prompt and reliable support to ensure a smooth and hassle-free experience
-                    for
-                    all our valued clients.
-                </p>
-            </div>
-        </section>
-    </main>
-    <footer>
-        <section class="secEl">
-            <article>
-                <h3>About Us</h3>
-                <p class="footdesc abt">
-                    At Roniib API, we are passionate about providing top-notch API solutions to businesses of all sizes.
-                    Our mission is to empower developers with seamless integration options, enabling them to create
-                    innovative and efficient applications.
+            </p>
+        </div>
+        <div>
+            <h2>
+                24/7 CUSTOMER SUPPORT
+            </h2>
+            <p>
+                At Roniib API, we value our customers and are committed to providing exceptional service at all
+                times.
+                Our 24/7 customer support ensures that you can reach out to us whenever you need assistance, no
+                matter
+                the time zone you're in. Whether you have a question about API integration, encounter an issue, or
+                simply need guidance, our knowledgeable and friendly support team is just a call or email away. We
+                pride
+                ourselves on delivering prompt and reliable support to ensure a smooth and hassle-free experience
+                for
+                all our valued clients.
+            </p>
+        </div>
+    </section>
+</main>
+<footer>
+    <section class="secEl">
+        <article>
+            <h3>About Us</h3>
+            <p class="footdesc abt">
+                At Roniib API, we are passionate about providing top-notch API solutions to businesses of all sizes.
+                Our mission is to empower developers with seamless integration options, enabling them to create
+                innovative and efficient applications.
 
+            </p>
+        </article>
+        <article>
+            <h3>
+                Contact Information
+            </h3>
+            <ul>
+<!--                <li>Address:-->
+<!--                    <address>123 Main Street, City, Country</address>-->
+<!--                </li>-->
+<!--                <li>Phone: <a href="tel: +254740714002">+(254) 792 608 312</a></li>-->
+                <li>Email: <a href="mailto:support@roniib.com">support@roniib.com</a></li>
+            </ul>
+        </article>
+        <article>
+            <h3>Stay Connected</h3>
+            <div class="abt">
+                <p style="color:white"> Follow us on social media to stay updated with the latest news, tips,
+                    and developments in the world of APIs.
                 </p>
-            </article>
-            <article>
-                <h3>
-                    Contact Information
-                </h3>
                 <ul>
-                    <li>Address: <address>123 Main Street, City, Country</address>
-                    </li>
-                    <li>Phone: <a href="tel: +254740714002">+(254) 792 608 312</a></li>
-                    <li>Email: <a href="mailto:support@roniib.com">support@roniib.com</a></li>
+                    <li>Twitter</li>
+                    <li>LinkedIn</li>
+                    <li>Github</li>
                 </ul>
-            </article>
-            <article>
-                <h3>Stay Connected</h3>
-                <div class="abt">
-                    <p style="color:white"> Follow us on social media to stay updated with the latest news, tips,
-                        and developments in the world of APIs.
-                    </p>
-                    <ul>
-                        <li>Twitter</li>
-                        <li>LinkedIn</li>
-                        <li>Github</li>
-                    </ul>
-                </div>
-            </article>
-        </section>
-        <section class="secEl">
-            <article>
-                <h3>Subscribe to Our Newsletter</h3>
-                <p class="abt">
-                    Don't miss out on important announcements and API updates. Subscribe to our newsletter and be the
-                    first to know.<br>
-                    <a href="#">Subscribe Now</a>
+            </div>
+        </article>
+    </section>
+    <section class="secEl">
+        <article>
+            <h3>Subscribe to Our Newsletter</h3>
+            <p class="abt">
+                Don't miss out on important announcements and API updates. Subscribe to our newsletter and be the
+                first to know.<br>
+                <a href="#">Subscribe Now</a>
 
-                </p>
-            </article>
-            <article>
-                <h3>
-                    Customer Support
-                </h3>
-                <p class="abt">
-                    Our dedicated support team is here to assist you. If you have any questions, concerns, or need help
-                    with our APIs, don't hesitate to get in touch.
-                </p>
-            </article>
-            <div class="">
-                <p><a href="#">Terms of Service </a>&nbsp;|&nbsp;<a href="#"> Privacy Policy </a>&nbsp;</p>
-                <p></p>
-                <p class="footdesc">
-                    Copyright © 2023 Roniib API. All rights reserved
+            </p>
+        </article>
+        <article>
+            <h3>
+                Customer Support
+            </h3>
+            <p class="abt">
+                Our dedicated support team is here to assist you. If you have any questions, concerns, or need help
+                with our APIs, don't hesitate to get in touch.
+            </p>
+        </article>
+        <div class="">
+            <p><a href="#">Terms of Service </a>&nbsp;|&nbsp;<a href="#"> Privacy Policy </a>&nbsp;</p>
+            <p></p>
+            <p class="footdesc">
+                Copyright © 2023 Roniib API. All rights reserved
+            </p>
+        </div>
+
+    </section>
+
+
+</footer>
+
+    {% else %}
+    <div style="margin-left:10px;padding-left:10px;padding-top:30px">
+
+            <h2>Build.Connect.Scale</h2>
+
+            <p class="">
+                Are you looking to supercharge your applications with powerful APIs? Look no further! Roniib API is
+                your one-stop solution for all your integration needs. Our cutting-edge APIs are designed to
+                streamline data access, boost functionality, and enhance the performance of your applications.
+            </p>
+            <div style="align-items: center;">
+                <a href="{% url 'register' %}">
+                    <button class="gs-main-btn" style="margin-left:10%" >
+                        <h2>GET STARTED</h2>
+                    </button>
+                </a>
+            </div>
+                </div>
+
+        <section style="margin-top:50px">
+            <h2>Why Choose Us?</h2>
+            <div class="why-desc">
+                <h3>1. Comprehensive API Suite</h3>
+                <p>
+                    Roniib API offers a wide range of APIs catering to various industries and use cases. Whether you
+                    need to process payments, access real-time data, manage user profiles, or anything else, we've
+                    got
+                    you covered.
                 </p>
             </div>
-
+            <div class="why-desc">
+                <h3>2. Easy Integration</h3>
+                <p>
+                    We understand that time is of the essence. That's why our APIs are developer-friendly and come
+                    with
+                    clear documentation. Integrating Roniib API into your applications is a breeze, enabling you to
+                    save
+                    valuable development hours.
+                </p>
+            </div>
+            <div class="why-desc">
+                <h3>3. Reliability and Scalability</h3>
+                <p>
+                    Our robust infrastructure ensures seamless performance and high availability, even during peak
+                    usage. Scale your applications effortlessly as your user base grows, without worrying about
+                    performance bottlenecks.
+                </p>
+            </div>
         </section>
+        <div style="padding:10px">
+            <h2>
+                FLEXIBLE RATES
+            </h2>
+            <p>
+                We understand that different businesses have unique needs and budgets. That's why we offer flexible
+                rates to accommodate a wide range of requirements. Our transparent pricing structure allows you to
+                choose a plan that suits your specific needs, whether you are a startup, small business, or an
+                enterprise. With Roniib API, you'll have the flexibility to scale your API usage based on your
+                application's demands, ensuring that you only pay for what you use. Our cost-effective pricing model
+                empowers you to optimize your expenses and maximize the value you receive from our APIs. We believe
+                in
+                fostering long-term partnerships, and our flexible rates are designed to grow with your business,
+                making
+                Roniib API the ideal choice for all your integration needs.
+
+            </p>
+        </div>
+        <div style="padding:10px">
+            <h2>
+                24/7 CUSTOMER SUPPORT
+            </h2>
+            <p>
+                At Roniib API, we value our customers and are committed to providing exceptional service at all
+                times.
+                Our 24/7 customer support ensures that you can reach out to us whenever you need assistance, no
+                matter
+                the time zone you're in. Whether you have a question about API integration, encounter an issue, or
+                simply need guidance, our knowledgeable and friendly support team is just a call or email away. We
+                pride
+                ourselves on delivering prompt and reliable support to ensure a smooth and hassle-free experience
+                for
+                all our valued clients.
+            </p>
+        </div>
 
 
+<footer>
+    <section class="" style="padding-top:20px;color:white">
+        <article>
+            <h3>About Us</h3>
+            <p class="" style="color:grey">
+                At Roniib API, we are passionate about providing top-notch API solutions to businesses of all sizes.
+                Our mission is to empower developers with seamless integration options, enabling them to create
+                innovative and efficient applications.
 
-    </footer>
+            </p>
+        </article>
+        <article>
+            <h3>
+                Contact Information
+            </h3>
+            <ul>
+<!--                <li>Address:-->
+<!--                    <address>123 Main Street, City, USA</address>-->
+<!--                </li>-->
+<!--                <li>Phone: <a href="tel: +254740714002">+(254) 792 608 312</a></li>-->
+                <li  style="color:grey">Email: <a href="mailto:support@roniib.com">support@roniib.com</a></li>
+            </ul>
+        </article>
+        <article>
+            <h3>Stay Connected</h3>
+            <div class="">
+                <p style="color:grey"> Follow us on social media to stay updated with the latest news, tips,
+                    and developments in the world of APIs.
+                </p>
+                <ul  style="color:grey">
+                    <li>Twitter</li>
+                    <li>LinkedIn</li>
+                    <li>Github</li>
+                </ul>
+            </div>
+        </article>
+    </section>
+    <section class="">
+        <article>
+            <h3>Subscribe to Our Newsletter</h3>
+            <p class=""  style="color:grey">
+                Don't miss out on important announcements and API updates. Subscribe to our newsletter and be the
+                first to know.<br>
+                <a href="#">Subscribe Now</a>
+
+            </p>
+        </article>
+        <article>
+            <h3>
+                Customer Support
+            </h3>
+            <p class="">
+                Our dedicated support team is here to assist you. If you have any questions, concerns, or need help
+                with our APIs, don't hesitate to get in touch.
+            </p>
+        </article>
+        <div class="">
+            <p><a href="#">Terms of Service </a>&nbsp;|&nbsp;<a href="#"> Privacy Policy </a>&nbsp;</p>
+            <p></p>
+            <p class="footdesc">
+                Copyright © 2023 Roniib API. All rights reserved
+            </p>
+        </div>
+
+    </section>
 
 
+</footer>
+
+
+    {% endif %}
+
+                <script>
+
+                $('#menu-open').click( function(){
+            $('#menu-open').css('display','none');
+            $('#nav').css('display','block');
+            $('#menu-close').css('display','block');
+                            });
+           $('#menu-close').click( function(){
+            $('#menu-close').css('display','none');
+            $('#nav').css('display','none');
+            $('#menu-open').css('display','block');
+                            });
+                </script>
 </body>
 
 </html>

@@ -10,17 +10,19 @@
     <link rel="icon" href="{% static 'images/light_blue_png.png' %}" type="image/x-image">
     <link rel="stylesheet" href="{% static '/css/main.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Education APIs</title>
 </head>
-
-
 <body>
+{% if request.user_agent.is_pc %}
+
 <nav class="topnav">
-    <img src="{% static 'images/light_blue_png.png' %}" alt="roniib icon" width="50" height="40"
-         style="margin-top:10px;margin-left:10px">
+    <a href="{% url 'home' %}"><img src="{% static 'images/light_blue_png.png' %}" alt="roniib icon" width="50"
+                                    height="40"
+                                    style="margin-left:10px;"></a>
     <ul class="topLinks">
         <li><a href="#" class="active">Browse APIS</a></li>
         <li><a href="{% url 'pricing' %}" class="inactive">Pricing</a></li>
@@ -29,14 +31,41 @@
         <li><a href="{% url 'login' %}" class="inactive">Sign In</a></li>
         <li><a href="{% url 'register' %}" class="inactive">Register</a></li>
         {% else %}
-        <li><a href="{% url 'myaccount' %}" class="inactive">My account</a></li>
+        <li><a href="{% url 'myaccount' %}" class="inactive">My Account</a></li>
         <img src="{% static 'images/bgimg.jpg' %}"
              width="30" height="30" style="border-radius:30px;margin-top:5px">
         {% endif %}
     </ul>
 </nav>
+{% else %}
+<nav class="topnav"style="width:100%;display-flex:justify-content:space_between;align-items:center;" >
+    <a href="{% url 'home' %}" style="padding:5px;margin-top:0px"><img src="{% static 'images/light_blue_png.png' %}" alt="roniib icon" width="50"
+                                    height="40"
+                                    style="margin-left:0px;"></a>
+    <div style="margin-right:20px" id="menu-open"><i class="fa fa-bars" style="font-size:24px;color:white"></i></div>
+    <div style="margin-right:20px;display:none" id="menu-close"><i class="fa fa-close" style="font-size:24px;color:white"></i></div>
+</nav>
+
+<div id="nav" style="text-decoration:none;padding-top:10px;display:none;width:90%;height:800px;z-index:1000px;position: absolute;background-color: rgba(4, 69, 106, 1);" >
+    <ul class="topLinks">
+        <li><a href="{% url 'apicategories' %}" class="active">Browse APIS</a></li>
+        <li><a href="{% url 'pricing' %}" class="inactive">Pricing</a></li>
+        <li><a href="{% url 'contact' %}" class="inactive">Contact Us</a></li>
+        {% if not request.user.is_authenticated %}
+        <li><a href="{% url 'login' %}" class="inactive">Sign In</a></li>
+        <li><a href="{% url 'register' %}" class="inactive">Register</a></li>
+        {% else %}
+        <li><a href="{% url 'myaccount' %}" class="inactive">My Account</a></li>
+        <img src="{% static 'images/bgimg.jpg' %}"
+             width="60" height="60" style="border-radius:30px;margin-top:20px;margin-left:20px">
+        {% endif %}
+    </ul>
+</div>
+
+{% endif %}
 
 <div style="display: flex;margin-top: 50px;">
+    {% if request.user_agent.is_pc %}
     <div style="width: 20%;background: #EDEDED;;padding: 20px;">
         {% if selected_category_name %}
         <a href="{% url 'apicategories' %}" class="active">
@@ -49,7 +78,7 @@
         </a>
         {% else %}
         <a href="#" class="active">
-            <p  style="color: #0E7DA6;">
+            <p style="color: #0E7DA6;">
                     <span>
                         <i class="fa fa-home"></i>
                     </span>
@@ -169,9 +198,174 @@
         </div>
     </div>
     {% endif %}
+    <!--    mobile view -->
+
+{% else %}
+    <i id="sidemenu"class="fa fa-bars" style="margin-top:50px;margin-left:10px"></i>
+        <div id="sidenav" style="width: 90%;background: #EDEDED;;padding: 20px;display:none">
+            <i id="sidemenuclose"class="fa fa-close" style=";margin-left:130px"></i>
+        {% if selected_category_name %}
+        <a href="{% url 'apicategories' %}" class="active">
+            <p>
+                    <span>
+                        <i class="fa fa-home"></i>
+                    </span>
+                API Hub
+            </p>
+        </a>
+        {% else %}
+        <a href="#" class="active">
+            <p style="color: #0E7DA6;">
+                    <span>
+                        <i class="fa fa-home"></i>
+                    </span>
+                API Hub
+            </p>
+        </a>
+        {% endif %}
+        <p>
+
+            <span>
+                    <i class="fa fa-list-alt"></i>
+                </span>
+            Categories</p>
+        <ul style=" list-style-type: none;">
+            {% for c in categories %}
+            {% if selected_category_name == c.category %}
+            <a class="lnk-inactive" href="{% url 'apicategories' %}?category={{c.category_short}}">
+                <li style="color: #0E7DA6;">{{c.category}}</li>
+            </a>
+            {% else %}
+            <a class="lnk-inactive" href="{% url 'apicategories' %}?category={{c.category_short}}">
+                <li>{{c.category}}</li>
+            </a>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% if selected_category_name %}
+    <div style="width: 100%;padding: 20px;overflow-y: scroll;height: 85vh;">
+                <div style="width:100%;padding-right:10px;">
+                        <div class="with-search" >
+                <input type="text" placeholder="search api">
+                <i class="fa fa-search" style="font-size:18px"></i>
+            </div>
+
+            <h2>{{selected_category_name}}</h2>
+        </div>
 
 
+
+        {% for api in selected_category_mob %}
+            <div class="apicontainer2" style="margin-top:40px;margin-left:10px">
+                <div style="display: flex;padding-top: 10px;">
+                    <img src="{{api.api_image}}"
+                         alt="">
+                    <h2>{{api.api_name}}</h2>
+                </div>
+                <p style="font-size: 12px;padding-left: 10px;">{{api.api_brief_description}}</p>
+                <div style="display: flex;justify-content: center;">
+                    <a href="{% url 'documentation'%}?api={{api.short_name}} ">
+                        <div class="test-btn">
+                            <p>Test</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        {% endfor %}
+
+
+    </div>
+    {% else %}
+    <div style="width: 100%;padding: 20px;overflow-y: scroll;height: 85vh">
+        <div style="width:100%;padding-right:10px;">
+                        <div class="with-search" >
+                <input type="text" placeholder="search api">
+                <i class="fa fa-search" style="font-size:18px"></i>
+            </div>
+
+            <h2>Popular</h2>
+        </div>
+        <div style="overflow-x: auto;width:100%;">
+
+            <div class="api-list">
+                {% for api in popular %}
+                <div class="apicontainer2">
+                    <div style="display: flex;padding-top: 10px;">
+                        <img src="{{api.api_image}}"
+                             alt="">
+                        <h2>{{api.api_name}}</h2>
+                    </div>
+                    <p style="font-size: 12px;padding-left: 10px;">{{api.api_brief_description}}</p>
+                    <div style="display: flex;justify-content: center;">
+                        <a href="{% url 'documentation'%}?api={{api.short_name}} ">
+                            <div class="test-btn">
+                                <p>Test</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                {% endfor %}
+
+            </div>
+        </div>
+        <h2>Recommended</h2>
+        <div style="overflow-x: auto;width:100%">
+            <div class="api-list">
+                {% for api in recommended %}
+                <div class="apicontainer2">
+                    <div style="display: flex;padding-top: 10px;">
+                        <img src="{{api.api_image}}"
+                             alt="">
+                        <h2>{{api.api_name}}</h2>
+                    </div>
+                    <p style="font-size: 12px;padding-left: 10px;">{{api.api_brief_description}}</p>
+                    <div style="display: flex;justify-content: center;">
+                        <a href="{% url 'documentation'%}?api={{api.short_name}} ">
+                            <div class="test-btn">
+                                <p>Test</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+{% endif %}
 </div>
+<script>
+
+    $('#sidemenu').click( function(){
+    $('#sidenav').css('display','block');
+    $('#sidemenu').css('display','none');
+
+
+    });
+    $('#sidemenuclose').click( function(){
+    $('#sidenav').css('display','none');
+    $('#sidemenu').css('display','block');
+
+
+    });
+
+
+                $('#menu-open').click( function(){
+            $('#menu-open').css('display','none');
+            $('#nav').css('display','block');
+            $('#menu-close').css('display','block');
+                            });
+           $('#menu-close').click( function(){
+            $('#menu-close').css('display','none');
+            $('#nav').css('display','none');
+            $('#menu-open').css('display','block');
+                            });
+                </script>
 
 </body>
 

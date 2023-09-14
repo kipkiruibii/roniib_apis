@@ -78,7 +78,7 @@
             </linearGradient>
         </defs>
     </svg>
-    <article>
+    <article style="top:30px">
         <h1 class="discover">DISCOVER <br>AND <span>CONNECT</span></h1>
     </article>
 
@@ -272,7 +272,8 @@
 </footer>
 
     {% else %}
-    <div style="margin-left:10px;padding-left:10px;padding-top:30px">
+<div id="page_content">
+    <div style="margin-left:10px;padding-left:10px;padding-top:30px;">
 
             <h2>Build.Connect.Scale</h2>
 
@@ -290,7 +291,7 @@
             </div>
                 </div>
 
-        <section style="margin-top:50px">
+        <section style="margin-top:30px">
             <h2>Why Choose Us?</h2>
             <div class="why-desc">
                 <h3>1. Comprehensive API Suite</h3>
@@ -373,10 +374,6 @@
                 Contact Information
             </h3>
             <ul>
-<!--                <li>Address:-->
-<!--                    <address>123 Main Street, City, USA</address>-->
-<!--                </li>-->
-<!--                <li>Phone: <a href="tel: +254740714002">+(254) 792 608 312</a></li>-->
                 <li  style="color:grey">Email: <a href="mailto:support@roniib.com">support@roniib.com</a></li>
             </ul>
         </article>
@@ -426,22 +423,24 @@
 
 </footer>
 
-
+</div>
     {% endif %}
 
-                <script>
+        <script>
 
-                $('#menu-open').click( function(){
-            $('#menu-open').css('display','none');
-            $('#nav').css('display','block');
-            $('#menu-close').css('display','block');
-                            });
-           $('#menu-close').click( function(){
-            $('#menu-close').css('display','none');
-            $('#nav').css('display','none');
-            $('#menu-open').css('display','block');
-                            });
-                </script>
+        $('#menu-open').click( function(){
+    $('#menu-open').css('display','none');
+    $('#page_content').css('display','none');
+    $('#nav').css('display','block');
+    $('#menu-close').css('display','block');
+                    });
+   $('#menu-close').click( function(){
+    $('#menu-close').css('display','none');
+    $('#nav').css('display','none');
+    $('#menu-open').css('display','block');
+    $('#page_content').css('display','block');
+                    });
+        </script>
 </body>
 
 </html>

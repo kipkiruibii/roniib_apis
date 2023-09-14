@@ -12,8 +12,10 @@ SECRET_KEY = 'django-insecure-)k@in1=8v46u-kkc=y!qqvw(yz$4@+z1!q)shf3%a%fbwj^)wo
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = ['roniib.com','www.roniib.com']
+if DEBUG:
+    ALLOWED_HOSTS = []
+else:
+    ALLOWED_HOSTS = ['roniib.com','www.roniib.com']
 
 # Application definition
 
@@ -66,8 +68,17 @@ WSGI_APPLICATION = 'roniib.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-DATABASES={
-    'default': {
+
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'roninkhl_roniib_main',
             'USER': 'roninkhl_hezronbii',
@@ -75,7 +86,7 @@ DATABASES={
             'HOST': 'localhost',
             'PORT': '3306',
         }
-}
+    }
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 

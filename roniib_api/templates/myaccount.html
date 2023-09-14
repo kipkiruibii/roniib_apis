@@ -75,10 +75,10 @@
 
         <ul style=" list-style-type: none;">
             <a href="#">
-                <li class="tab_btn" onclick="switchTab('basic_info')" style="color:#0E7DA6" id="bs_inf">Basic Info</li>
+                <li class="tab_btn" onclick="switchTab('basic_info')" style="color:black" id="bs_inf">Basic Info</li>
             </a>
             <a href="#">
-                <li class="tab_btn" onclick="switchTab('analytics')" style="color:black" id="bs_ana">Analytics</li>
+                <li class="tab_btn" onclick="switchTab('analytics')" style="color:#0E7DA6" id="bs_ana">Analytics</li>
             </a>
             <a href="#">
                 <li class="tab_btn" onclick="switchTab('billing')" style="color:black" id="bs_bil">Billing</li>
@@ -103,7 +103,7 @@
 
     </div>
     <div style="width: 80%;padding: 20px;overflow-y: scroll;height: 85vh">
-        <div class="disp_content" id="basic_info" style="display:block">
+        <div class="disp_content" id="basic_info" style="display:none">
             <div class="with-search">
                 <h2>Basic Info</h2>
             </div>
@@ -225,7 +225,7 @@
                 </div>
             </div>
         </div>
-        <div class="disp_content" id="analytics" style="display:none">
+        <div class="disp_content" id="analytics" style="display:block">
             <div class="with-search">
                 <h2>Analytics</h2>
             </div>
@@ -410,7 +410,22 @@
 
 </div>
 {% else %}
-<div style="padding-top:150px;align-items:center;display:flex;margin-left:40px"><p>KINDLY OPEN THIS PAGE IN A DESKTOP</p> </div>
+<div style="padding-top:150px;">
+    <div style="align-items:center;border:grey;width:100%;margin-left:50px;">
+            <a href="{% url 'logout' %}">
+            <p>
+                    <span>
+                        <i class="fa fa-sign-out"></i>
+                    </span>
+                SIGN OUT
+            </p>
+
+        </a>
+        </div>
+    <div style="align-items:center;display:flex;margin-left:40px">
+      <p>KINDLY OPEN THIS PAGE IN A DESKTOP</p>
+    </div>
+     </div>
 {% endif %}
 <script>
     function switchTab(val){

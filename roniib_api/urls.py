@@ -1,6 +1,5 @@
 from django.urls import path
 from .import views
-from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('',views.home,name='home'),
@@ -13,4 +12,6 @@ urlpatterns = [
     path('myaccount/', views.myAccount, name='myaccount'),
     path('documentation/', views.documentation, name='documentation'),
     path('categories/', views.apicategories, name='apicategories'),
+    path('verify/', views.verificationPage, name='verify'),
+    path('req_verify/', views.request_ver_link, name='req_verify'),
 ]

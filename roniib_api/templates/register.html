@@ -2,20 +2,19 @@
 <html lang="en">
 {% load static %}
 <head>
-    <meta charset="UTF-8">
-    <meta name="author" content="Hezron Bii">
-    <meta name="description" content="This website serves APIs to developers to power their applications">
-    <meta
-            name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="{% static 'images/light_blue_png.png' %}" type="image/x-image">
-    <link rel="stylesheet" href="{% static '/css/main.css' %}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Register now</title>
+        <meta charset="UTF-8">
+        <meta name="author" content="Hezron Bii">
+        <meta name="description" content="This website serves APIs to developers to power their applications">
+        <meta
+        name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="{% static 'images/light_blue_png.png' %}" type="image/x-image">
+        <link rel="stylesheet" href="{% static '/css/main.css' %}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <title>Register now</title>
 </head>
 
 <body>
@@ -73,18 +72,23 @@
             <h1 class="regtext">Register</h1>
             <hr style="background-color: #013b51;height:2px;margin-top:0px">
 
-            <form class="f-class" style="margin-left:30px">
+            <form class="f-class" style="margin-left:30px" id="user-registration" onsubmit="return validateForm()" method="post">
+                {% csrf_token %}
                 <label for="username" style="font-size:15px">Username: </label>
-                <input type="text" id="username" placeholder="Username" style="background-color: #f4f4f4;"><br>
+                <input type="text" id="username" placeholder="Username" name="username" style="background-color: #f4f4f4;" required><br>
 
-                <label for="email" style="font-size:15px">Email: </label>
-                <input type="email" id="email" placeholder="Email" style="background-color: #f4f4f4;"><br>
-                <label for="password" style="font-size:15px">Password:</label>
-                <input type="password" id="password" placeholder="Password" style="background-color: #f4f4f4;"><br>
+                <label for="email" style="font-size:15px">Email: <small style="font-size:10px;margin-left:10px;margin-top:5px;margin-bottom:10px">To be verified</small></label>
+                <input type="email" id="email" placeholder="Email" name="email" style="background-color: #f4f4f4;" required><br>
+                <label for="password" style="font-size:15px">Password: </label>
+                <div style="display:flex;justify-content:space_between;align-items:center">
+                <input type="password" id="password" name="password" placeholder="Password" style="background-color: #f4f4f4;" required>
+                <span style="margin-left:20px;color:grey"><i class="fa fa-eye" id="visibility"></i></span>
+                </div><br>
                 <label for="cpassword" style="font-size:15px">Confirm Password:</label>
-                <input type="password" id="cpassword" placeholder="Confirm password" style="background-color: #f4f4f4;"><br>
+                <input type="password" id="cpassword" name="cpassword"  placeholder="Confirm password" style="background-color: #f4f4f4;" required><br>
 
-            </form>
+
+
             <div style="justify-content: center;display: flex;">
                 <p>Already have an account? <a href="{% url 'login' %}"> Sign in</a></p>
             </div>
@@ -92,12 +96,13 @@
                 <p>By clicking sign up below you accept the <a href="#">Terms and Conditions</a></p>
             </div>
             <div style="justify-content: center;display: flex;">
-                <div class="signupbtn">
+                <button type="submit" class="signupbtn">
                     <p>SIGN UP</p>
-                </div>
+                </button>
 
 
             </div>
+                 </form>
 
         </div>
         {% else %}
@@ -109,18 +114,20 @@
                 <h1 class="regtext" style="padding-left:10px">Register</h1>
                 <hr style="background-color: #013b51;height:2px;margin-top:0px;width:100%;">
 
-                <form method="post" class="f-classmob" style="margin-left:30px;width:100%;" action="/register/">
-                    {% csrf_token %}
+                <form method="post" class="f-classmob" style="margin-left:30px;width:100%;" action="/register/" onsubmit="return validateForm()" id="user-registration" >
+                {% csrf_token %}
                 <label for="username" style="font-size:15px">Username: </label>
-                <input type="text" id="username" placeholder="Username" style="background-color: #f4f4f4;"><br>
+                <input type="text" id="username" placeholder="Username" name="username" style="background-color: #f4f4f4;" required><br>
 
-                <label for="email" style="font-size:15px">Email: </label>
-                <input type="email" id="email" placeholder="Email" style="background-color: #f4f4f4;"><br>
-                <label for="password" style="font-size:15px">Password:</label>
-                <input type="password" id="password" placeholder="Password" style="background-color: #f4f4f4;"><br>
+                <label for="email" style="font-size:15px">Email: <small style="font-size:10px;margin-left:10px;margin-top:5px;margin-bottom:10px">To be verified</small></label>
+                <input type="email" id="email" placeholder="Email" name="email" style="background-color: #f4f4f4;" required><br>
+                <label for="password" style="font-size:15px">Password: </label>
+                <div style="display:flex;justify-content:space_between;align-items:center">
+                <input type="password" id="password" name="password" placeholder="Password" style="background-color: #f4f4f4;" required>
+                <span style="margin-left:20px;color:grey"><i class="fa fa-eye" id="visibility"></i></span>
+                </div><br>
                 <label for="cpassword" style="font-size:15px">Confirm Password:</label>
-                <input type="password" id="cpassword" placeholder="Confirm password" style="background-color: #f4f4f4;"><br>
-
+                <input type="password" id="cpassword" name="cpassword"  placeholder="Confirm password" style="background-color: #f4f4f4;" required><br>
 
                 <div style="align-items: center;display: flex;width:100%">
                     <p>Already have an account? <a href="{% url 'login' %}"> Sign in</a></p>
@@ -142,19 +149,54 @@
 
     </div>
 </div>
-                <script>
+<script>
 
-                $('#menu-open').click( function(){
-            $('#menu-open').css('display','none');
-            $('#nav').css('display','block');
-            $('#menu-close').css('display','block');
-                            });
-           $('#menu-close').click( function(){
-            $('#menu-close').css('display','none');
-            $('#nav').css('display','none');
-            $('#menu-open').css('display','block');
-                            });
-                </script>
+$('#menu-open').click( function(){
+$('#menu-open').css('display','none');
+$('#nav').css('display','block');
+$('#menu-close').css('display','block');
+            });
+$('#menu-close').click( function(){
+$('#menu-close').css('display','none');
+$('#nav').css('display','none');
+$('#menu-open').css('display','block');
+            });
+
+$('#visibility').click(function(){
+    if($('#visibility').hasClass('fa-eye')){
+        $('#visibility').removeClass('fa-eye');
+        $('#cpassword').attr('type','text');
+        $('#password').attr('type','text');
+        $('#visibility').addClass('fa-eye-slash');
+
+    }else{
+        $('#visibility').removeClass('fa-eye-slash');
+        $('#visibility').addClass('fa-eye');
+        $('#cpassword').attr('type','password');
+        $('#password').attr('type','password');
+
+    }
+
+});
+
+function validateForm() {
+
+    let username=document.forms["user-registration"]["username"].value;
+    let email=document.forms["user-registration"]["email"].value;
+    let cpassword=document.forms["user-registration"]["cpassword"].value;
+    let password=document.forms["user-registration"]["password"].value;
+    if(username==''){
+        $('#username').css('background-color', '#dfc3c3');
+        return false;
+    }
+    if(cpassword != password){
+        $('#cpassword').css('background-color', '#decfcf');
+        return false;
+    }
+
+
+}
+</script>
 </body>
 
 </html>

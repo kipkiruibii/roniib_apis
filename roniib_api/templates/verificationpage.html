@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Hezron Bii">
+    <meta name="description" content="This website serves APIs to developers to power their applications">
+    <meta
+            name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'images/light_blue_png.png' %}" type="image/x-image">
+    <link rel="stylesheet" href="{% static '/css/main.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Register now</title>
+</head>
+
+<body>
+{% if request.user_agent.is_pc %}
+<nav class="topnav">
+    <a href="{% url 'home' %}"><img src="{% static 'images/light_blue_png.png' %}" alt="roniib icon" width="50"
+                                    height="40"
+                                    style="margin-left:10px;"></a>
+    <ul class="topLinks">
+        <li><a href="{% url 'apicategories' %}" class="inactive">Browse APIS</a></li>
+        <li><a href="{% url 'pricing' %}" class="inactive">Pricing</a></li>
+        <li><a href="{% url 'contact' %}" class="inactive">Contact Us</a></li>
+        {% if not request.user.is_authenticated %}
+        <li><a href="{% url 'login' %}" class="inactive">Sign In</a></li>
+        <li><a href="{% url 'register' %}" class="active">Register</a></li>
+        {% else %}
+        <li><a href="{% url 'myaccount' %}" class="inactive">My Account</a></li>
+        <img src="{% static 'images/bgimg.jpg' %}"
+             width="30" height="30" style="border-radius:30px;margin-top:5px">
+        {% endif %}
+    </ul>
+</nav>
+
+{% else %}
+<nav class="topnav" style="width:100%;display-flex:justify-content:space_between;align-items:center;">
+    <a href="{% url 'home' %}" style="padding:5px;margin-top:0px"><img src="{% static 'images/light_blue_png.png' %}"
+                                                                       alt="roniib icon" width="50"
+                                                                       height="40"
+                                                                       style="margin-left:0px;"></a>
+    <div style="margin-right:20px" id="menu-open"><i class="fa fa-bars" style="font-size:24px;color:white"></i></div>
+    <div style="margin-right:20px;display:none" id="menu-close"><i class="fa fa-close"
+                                                                   style="font-size:24px;color:white"></i></div>
+</nav>
+
+<div id="nav"
+     style="text-decoration:none;padding-top:70px;display:none;width:90%;height:800px;z-index:1000px;position: absolute;background-color: rgba(4, 69, 106, 1);">
+    <ul class="topLinks">
+        <li><a href="{% url 'apicategories' %}" class="inactive">Browse APIS</a></li>
+        <li><a href="{% url 'pricing' %}" class="inactive">Pricing</a></li>
+        <li><a href="{% url 'contact' %}" class="inactive">Contact Us</a></li>
+        {% if not request.user.is_authenticated %}
+        <li><a href="{% url 'login' %}" class="inactive">Sign In</a></li>
+        <li><a href="{% url 'register' %}" class="active">Register</a></li>
+        {% else %}
+        <li><a href="{% url 'myaccount' %}" class="inactive">My Account</a></li>
+        <img src="{% static 'images/bgimg.jpg' %}"
+             width="60" height="60" style="border-radius:30px;margin-top:20px;margin-left:20px">
+        {% endif %}
+    </ul>
+</div>
+
+{% endif %}
+
+<div style="overflow-y: scroll;height: 100vh">
+    <div class="witc">
+        {% if request.user_agent.is_pc %}
+        <div style="display:flex">
+            <div style="width:100%;margin-top:100px;margin-left:20px;">
+                {% if is_verified %}
+                <p><strong style="color:green">CONGRATULATIONS!</strong> Your email has been verified</p>
+                <a href="{% url 'apicategories' %}">
+                    <div style="background-color:#0E7DA6;width:150px;border-radius:30px">
+                        <p style="color:white;padding:5px;text-align:center">Browse APIs</p>
+                    </div>
+                </a>
+
+
+                {% else %}
+
+                {% if isMessPositive %}
+                <p style="color:green">{{disp_message}}</p>
+                {% else %}
+                <p style="color:red">{{disp_message}}</p>
+                {% endif %}
+                <p>Email is not verified. A link has been sent to your email <strong>({{email}})</strong>. Kindly verify
+                    the
+                    email to continue using this service</p>
+                <div style="width:100%;">
+                    <div style="display:flex;justify-content:center">
+                        <div>
+                            <p>Did not get verification link?</p>
+                            <div id="resendver"
+                                 style="background-color:#0E7DA6;width:70px;border-radius:30px;padding-left:10px">
+                                <p style="color:white">Resend</p>
+                            </div>
+                            <p>Already verified?</p>
+                            <div id="refreshbtn"
+                                 style="background-color:#0E7DA6;width:70px;border-radius:30px;padding-left:10px">
+                                <p style="color:white">Refresh</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% else %}
+        <div style="width:100%;margin-top:100px;margin-left:20px;">
+            {% if is_verified %}
+            <p><strong style="color:green">CONGRATULATIONS!</strong> Your email has been verified</p>
+            <a href="{% url 'apicategories' %}">
+                <div style="background-color:#0E7DA6;width:150px;border-radius:30px">
+                    <p style="color:white;padding:5px;text-align:center">Browse APIs</p>
+                </div>
+            </a>
+
+
+            {% else %}
+            {% if isMessPositive %}
+            <p style="color:green">{{disp_message}}</p>
+            {% else %}
+            <p style="color:red">{{disp_message}}</p>
+            {% endif %}
+            <p>Email is not verified. A link has been sent to your email <strong>({{email}})</strong>. Kindly verify the
+                email to continue using this service</p>
+            <div style="">
+                <p>Did not get verification link?</p>
+                <div id="resendver" style="background-color:#0E7DA6;width:70px;border-radius:30px;padding-left:10px">
+                    <p style="color:white">Resend</p>
+                </div>
+                <p>Already verified?</p>
+                <div id="refreshbtn" style="background-color:#0E7DA6;width:70px;border-radius:30px;padding-left:10px">
+                    <p style="color:white">Refresh</p>
+                </div>
+
+            </div>
+            {% endif %}
+        </div>
+
+        {% endif %}
+
+    </div>
+</div>
+<script>
+    $('#refreshbtn').click(function(){
+        location.href="{% url 'verify' %}"
+    });
+       $('#resendver').click(function(){
+        location.href="{% url 'req_verify' %}"
+    });
+
+</script>
+</body>
+
+
+</html>

@@ -1,0 +1,1 @@
+from roniib.wsgi import application

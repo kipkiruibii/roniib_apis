@@ -38,7 +38,7 @@ class UserDetails(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     api_key = models.CharField(max_length=255)
     is_verified = models.BooleanField(default=False)
+    verf_code = models.CharField(max_length=255, default='verfx')
 
     def __str__(self):
         return str(self.user.username)
-

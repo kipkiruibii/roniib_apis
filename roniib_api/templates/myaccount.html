@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <title>Roniib APIs| My Account</title>
+    <script src="{% static '/js/main.js' %}"></script>
 </head>
 
 <body>
@@ -32,21 +33,24 @@
         <li><a href="{% url 'login' %}" class="inactive">Sign In</a></li>
         <li><a href="{% url 'register' %}" class="inactive">Register</a></li>
         {% else %}
-        <img src="{% static 'images/bgimg.jpg' %}"
+        <img src="{% static 'images/account.png' %}"
              width="30" height="30" style="border-radius:30px;margin-top:5px">
         {% endif %}
     </ul>
 </nav>
 {% else %}
-<nav class="topnav"style="width:100%;display-flex:justify-content:space_between;align-items:center;margin-top:0px;" >
-    <a href="{% url 'home' %}" style="padding:5px;margin-top:0px"><img src="{% static 'images/light_blue_png.png' %}" alt="roniib icon" width="50"
-                                    height="40"
-                                    style="margin-left:0px;"></a>
+<nav class="topnav" style="width:100%;display-flex:justify-content:space_between;align-items:center;margin-top:0px;">
+    <a href="{% url 'home' %}" style="padding:5px;margin-top:0px"><img src="{% static 'images/light_blue_png.png' %}"
+                                                                       alt="roniib icon" width="50"
+                                                                       height="40"
+                                                                       style="margin-left:0px;"></a>
     <div style="margin-right:20px" id="menu-open"><i class="fa fa-bars" style="font-size:24px;color:white"></i></div>
-    <div style="margin-right:20px;display:none" id="menu-close"><i class="fa fa-close" style="font-size:24px;color:white"></i></div>
+    <div style="margin-right:20px;display:none" id="menu-close"><i class="fa fa-close"
+                                                                   style="font-size:24px;color:white"></i></div>
 </nav>
 
-<div id="nav" style="margin-top:0px;text-decoration:none;padding-top:70px;display:none;width:90%;height:800px;z-index:1000px;position: absolute;background-color: rgba(4, 69, 106, 1);" >
+<div id="nav"
+     style="margin-top:0px;text-decoration:none;padding-top:70px;display:none;width:90%;height:800px;z-index:1000px;position: absolute;background-color: rgba(4, 69, 106, 1);">
     <ul class="topLinks">
         <li><a href="{% url 'apicategories' %}" class="inactive">Browse APIS</a></li>
         <li><a href="{% url 'pricing' %}" class="inactive">Pricing</a></li>
@@ -56,7 +60,7 @@
         <li><a href="{% url 'register' %}" class="inactive">Register</a></li>
         {% else %}
         <li><a href="{% url 'myaccount' %}" class="active">My Account</a></li>
-        <img src="{% static 'images/bgimg.jpg' %}"
+        <img src="{% static 'images/account.png' %}"
              width="60" height="60" style="border-radius:30px;margin-top:20px;margin-left:20px">
         {% endif %}
     </ul>
@@ -84,7 +88,7 @@
                 <li class="tab_btn" onclick="switchTab('billing')" style="color:black" id="bs_bil">Billing</li>
             </a>
             <a href="#">
-                <li class="tab_btn" onclick="switchTab('my_apps')" style="color:black" id="bs_mya">My Apps</li>
+                <li class="tab_btn" onclick="switchTab('my_apis')" style="color:black" id="bs_mya">API Keys</li>
             </a>
             <a href="#">
                 <li class="tab_btn" onclick="switchTab('my_sub')" style="color:black" id="bs_mysub">My Subscriptions
@@ -108,20 +112,15 @@
                 <h2>Basic Info</h2>
             </div>
             <div style="margin-left:30px">
-                <img src="https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80"
+                <img id="previewImage"
+                     src="{% static 'images/account.png' %}"
                      alt="my profile picture" width="100" height="100" style="border-radius:200px">
+
                 <div>
-                    <p>Username: <span style="font-weight:bold">JohnDoe</span></p>
-                    <p>First Name: <span style="font-weight:bold">JohnDoe</span></p>
-                    <p>Last Name: <span style="font-weight:bold">JohnDoe</span></p>
-                    <p>Email: <span style="font-weight:bold">JohnDoe </span></p>
-                    <p>Address: <span style="font-weight:bold">JohnDoe@gmail.com</span></p>
+                    <p>Username: <span style="font-weight:bold">{{ request.user.username }}</span></p>
+                    <p>Email: <span style="font-weight:bold">{{ request.user.email }} </span></p>
 
 
-                </div>
-                <div style="border-color:blue;border-radius:10px;border-style: solid; width:100px;display:flex;justify-content:center;margin-left:40px">
-                    <p style="margin:0px;padding:5px;color:blue"><i class="fa fa-edit"
-                                                                    style="color:blue"></i> Edit</p>
                 </div>
 
 
@@ -133,13 +132,9 @@
             </div>
             <div style="margin-left:30px">
                 <div>
-                    <p>You have not added a billing method</p>
-                    <div style="border-color:green;border-radius:10px;border-style: solid; width:150px;display:flex;justify-content:center">
-                        <p style="margin:0px;padding:5px;color:green">Add Billing Method</p>
+                    <div style="border-color:green;border-radius:10px;border-style: solid; width:200px;display:flex;justify-content:center">
+                        <p style="margin:0px;padding:5px;color:green">Resume Subscription</p>
                     </div>
-                </div>
-                <div>
-                    <p>Visa .... .... 3194 </p>
                 </div>
                 <div>
                     <h5><u>Last Transactions</u></h5>
@@ -230,10 +225,9 @@
                 <h2>Analytics</h2>
             </div>
             <div style="margin-left:30px">
-                <p>Filter</p>
                 <div style="display:flex;">
                     <div style="display:flex;justify-content:space-between;margin-right:50px">
-                        <p style="margin-right:10px">Time duration</p>
+                        <p style="margin-right:10px">Duration</p>
                         <select
                                 style="font-family: poppins;background-color: azure;border-radius: 10px;">
                             <option value="javascript">Last 24 hours</option>
@@ -241,16 +235,6 @@
                             <option value="java">Last 1 month(30days)</option>
                         </select>
                     </div>
-                    <div style="display:flex;justify-content:space-between">
-                        <p style="margin-right:10px">API </p>
-                        <select
-                                style="font-family: poppins;background-color: azure;border-radius: 10px;">
-                            <option value="javascript">All</option>
-                            <option value="python">Football API</option>
-                            <option value="java">Basketball API</option>
-                        </select>
-                    </div>
-
 
                 </div>
                 <hr style="margin:5px">
@@ -273,45 +257,25 @@
 
             </div>
         </div>
-        <div class="disp_content" id="my_apps" style="display:none">
+        <div class="disp_content" id="my_apis" style="display:none">
             <div class="with-search">
-                <h2>My Apps</h2>
+                <h2>My Api Keys</h2>
             </div>
             <div style="margin-left:30px">
-                <div style="border-color:green;border-radius:10px;border-style: solid; width:150px;display:flex;justify-content:center">
-                    <p style="margin:0px;padding:5px;color:green">Add New App</p>
+                <div style="border-color:green;border-radius:10px;border-style: solid; width:200px;display:flex;justify-content:center">
+                    <p style="margin:0px;padding:5px;color:green">Generate API Key</p>
                 </div>
                 <div style="margin-top:40px">
-                    <p>App Name: <span style="font-weight:bold">Myfooty</span></p>
-                    <p>Date Created: <span style="font-weight:bold">06/03/2022</span></p>
                     <p>API Token: <span style="font-weight:bold">Myfotrherhrthtrreg45e437554y765h54woty </span> <i
-                            class="fa fa-edit"
-                            style="color:blue"> Generate New</i></p>
-                    <div style="border-color:red;border-radius:10px;border-style: solid; width:200px;display:flex;justify-content:center;margin-left:40px">
-                        <p style="margin:0px;padding:5px;color:red">Delete Myfooty App</p>
-                    </div>
-                </div>
-                <div style="margin-top:40px">
-                    <p>App Name: <span style="font-weight:bold">Myfooty</span></p>
+                            class="fa fa-eye"
+                            style="color:black;margin-left:20px"> </i><i
+                            class="fa fa-copy"
+                            style="color:black;margin-left:20px"> </i></p>
                     <p>Date Created: <span style="font-weight:bold">06/03/2022</span></p>
-                    <p>API Token: <span style="font-weight:bold">Myfotrherhrthtrreg45e437554y765h54woty </span> <i
-                            class="fa fa-edit"
-                            style="color:blue"> Generate New</i></p>
-                    <div style="border-color:red;border-radius:10px;border-style: solid; width:200px;display:flex;justify-content:center;margin-left:40px">
-                        <p style="margin:0px;padding:5px;color:red">Delete Myfooty App</p>
-                    </div>
-                </div>
 
-                <div style="margin-top:40px">
-                    <p>App Name: <span style="font-weight:bold">Myfooty</span></p>
-                    <p>Date Created: <span style="font-weight:bold">06/03/2022</span></p>
-                    <p>API Token: <span style="font-weight:bold">Myfotrherhrthtrreg45e437554y765h54woty </span> <i
-                            class="fa fa-edit"
-                            style="color:blue"> Generate New</i></p>
                     <div style="border-color:red;border-radius:10px;border-style: solid; width:200px;display:flex;justify-content:center;margin-left:40px">
-                        <p style="margin:0px;padding:5px;color:red">Delete Myfooty App</p>
+                        <p style="margin:0px;padding:5px;color:red">Delete Key</p>
                     </div>
-                    <hr style="width:100%;height:3px;color:red">
                 </div>
 
             </div>
@@ -376,7 +340,7 @@
                     <tr>
                         <td>
                             <div style="display:flex">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Football_pictogram.svg/2048px-Football_pictogram.svg.png"
+                                <img src="{% static 'images/account.png' %}"
                                      alt=""
                                      width="50" height="50" style="border-radius:50px">
                                 <p style="margin-left:20px">Football API</p>
@@ -412,7 +376,7 @@
 {% else %}
 <div style="padding-top:150px;">
     <div style="align-items:center;border:grey;width:100%;margin-left:50px;">
-            <a href="{% url 'logout' %}">
+        <a href="{% url 'logout' %}">
             <p>
                     <span>
                         <i class="fa fa-sign-out"></i>
@@ -421,74 +385,90 @@
             </p>
 
         </a>
-        </div>
-    <div style="align-items:center;display:flex;margin-left:40px">
-      <p>KINDLY OPEN THIS PAGE IN A DESKTOP</p>
     </div>
-     </div>
+    <div style="align-items:center;display:flex;margin-left:40px">
+        <p>KINDLY OPEN THIS PAGE IN A DESKTOP</p>
+    </div>
+</div>
 {% endif %}
 <script>
-    function switchTab(val){
-        swid='#'+val;
-        $('.tab_btn').css('color','black');
-        if( val == 'basic_info'){
-            $('#bs_inf').css('color','#0E7DA6');
-        }else if(val =='analytics' ){
-            $('#bs_ana').css('color','#0E7DA6');
-        }else if(val == 'billing'){
-            $('#bs_bil').css('color','#0E7DA6');
-        }else if(val =='my_apps' ){
-            $('#bs_mya').css('color','#0E7DA6');
-        }else{
-            $('#bs_mysub').css('color','#0E7DA6');
-        }
-        $('.disp_content').css('display','none');
-        $(swid).css('display','block');
-    }
-</script>
-<script>
-    const xValues = ['05/12','06/12','07/12','08/12','09/12','10/12','11/12'];
-
-    new Chart("chartAnalytics", {
-      type: "line",
-      data: {
+const xValues = ['05/12', '06/12', '07/12', '08/12', '09/12', '10/12', '11/12', '11/12', '11/12', '11/12',];
+new Chart("chartAnalytics", {
+    type: "line",
+    data: {
         labels: xValues,
         datasets: [{
-          data: [860,1140,1060,1060,1070,1110,1330,2210,7830,2478],
-          borderColor: "red",
-          fill: false
-        }, {
-          data: [1600,1700,1700,1900,2000,2700,4000],
-          borderColor: "green",
-          fill: false
-        }, {
-          data: [300,700,2000,5000,6000,4000,2000,1000],
-          borderColor: "blue",
-          fill: false
+            data: [860, 1140, 1060, 1060, 1070, 1110, 1330, 2210, 830, 1478],
+            borderColor: "#018787",
+            fill: false,
+            borderWidth: 1,
+        }
+        ],
+
+    },
+    options: {
+        legend: {
+
+            display: false,
+            title: {
+                text: 'performance'
+            }
+
         },
-        {
-          data: [800,100,2500,5800,6780,4050,2100],
-          borderColor: "yellow",
-          fill: false
+        title: {
+            display: true,
+            text: 'App Performance', // Set your chart title here
+            fontSize: 18, // Font size for the title
+            fontColor: 'black' // Font color for the title
         },
-        ]
-      },
-      options: {
-        legend: {display: false}
-      }
-    });
+
+        scales: {
+            x: {
+                display: true,
+                title: {
+                    display: true,
+                    text: 'X-Axis Label', // Set your X-axis label here
+                    fontSize: 16, // Font size for the X-axis label
+                    fontColor: 'black' // Font color for the X-axis label
+                }
+            },
+        }
+    }
+
+});
 
 
-                $('#menu-open').click( function(){
-            $('#menu-open').css('display','none');
-            $('#nav').css('display','block');
-            $('#menu-close').css('display','block');
-                            });
-           $('#menu-close').click( function(){
-            $('#menu-close').css('display','none');
-            $('#nav').css('display','none');
-            $('#menu-open').css('display','block');
-                            });
+function switchTab(val) {
+    swid = '#' + val;
+    $('.tab_btn').css('color', 'black');
+    if (val == 'basic_info') {
+        $('#bs_inf').css('color', '#0E7DA6');
+    } else if (val == 'analytics') {
+        $('#bs_ana').css('color', '#0E7DA6');
+    } else if (val == 'billing') {
+        $('#bs_bil').css('color', '#0E7DA6');
+    } else if (val == 'my_apis') {
+        $('#bs_mya').css('color', '#0E7DA6');
+    } else {
+        $('#bs_mysub').css('color', '#0E7DA6');
+    }
+    $('.disp_content').css('display', 'none');
+    $(swid).css('display', 'block');
+}
+
+
+
+$('#menu-open').click(function () {
+    $('#menu-open').css('display', 'none');
+    $('#nav').css('display', 'block');
+    $('#menu-close').css('display', 'block');
+});
+$('#menu-close').click(function () {
+    $('#menu-close').css('display', 'none');
+    $('#nav').css('display', 'none');
+    $('#menu-open').css('display', 'block');
+});
+
 
 </script>
 </body>

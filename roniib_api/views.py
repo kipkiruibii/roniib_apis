@@ -5,6 +5,17 @@ from .models import *
 from django.contrib import messages
 from django.contrib.auth.models import User
 
+from django.core.mail import send_mail
+import mimetypes
+import random
+import string
+
+
+def generate_random_code(length=6):
+    characters = string.ascii_letters + string.digits
+    random_code = ''.join(random.choice(characters) for _ in range(length))
+    return random_code
+
 
 # Create your views here.
 def home(request):
@@ -19,16 +30,53 @@ def move_page():
     pass
 
 
+def sendVerMail(request, username, email):
+    try:
+        rc = generate_random_code()
+        usrr = UserDetails.objects.filter(user=request.user).first()
+        if usrr:
+            usrr.verf_code = rc
+            usrr.save()
+
+        message = (f"Hello {username},\nTo verify your email address and secure your account, please use the "
+                   f"following 6-character\n \nverification code:{rc} \n\nSimply copy this code "
+                   "and paste it on our website to complete the verification process.\n\nThank you for choosing "
+                   "us.\n\nBest regards,\nRoniib Team")
+        subject = 'Email Verification Code for Your Account'
+        message = message
+        from_email = 'support@roniib.com'
+        recipient_list = [email]
+
+        send_mail(subject, message, from_email, recipient_list)
+        return 'success'
+    except Exception as e:
+        return str(e)
+
+
+def change_email(request):
+    if request.user.is_authenticated:
+        User.objects.filter(username=request.user.username).first().delete()
+    return redirect('register')
+
+
 def request_ver_link(request):
     if request.user.is_authenticated:
         usr = UserDetails.objects.filter(user=request.user).first()
         if not usr.is_verified:
             user_email = request.user.email
+
+            val = sendVerMail(request, request.user.username, user_email)
+            isMessPositive = True,
+            disp_message = 'Verification link has been sent to your email. Check your inbox or spam box'
+            if val != 'success':
+                isMessPositive = False
+                disp_message = f'Failed {val}'
+
             context = {
                 'is_verified': False,
                 'email': user_email,
-                'isMessPositive': True,
-                'disp_message': 'Verification link has been sent to your email. Check your inbox or spam box'
+                'isMessPositive': isMessPositive,
+                'disp_message': disp_message
             }
             return render(request, 'verificationpage.html', context=context)
     else:
@@ -75,7 +123,6 @@ def register(request):
         username = request.POST['username']
         email = request.POST['email']
         password = request.POST['password']
-
         try:
             user = User.objects.filter(username=username)
             if not user:
@@ -84,6 +131,7 @@ def register(request):
                 user = authenticate(request, username=username, password=password)
                 if user is not None:
                     login(request, user)
+                    sendVerMail(request, request.user.username, request.user.email)
                     usdet = UserDetails(
                         user=user,
                         api_key='to be stored later'
@@ -92,7 +140,7 @@ def register(request):
 
                 return redirect('verify')
             else:
-                message = 'User already exists'
+                message = 'An account with this username/email already exists. Please try a different one'
                 return render(request, 'register.html', context={'message': message})
         except:
             return render(request, 'register.html')
@@ -182,6 +230,31 @@ def apicategories(request):
 
 
 def verificationPage(request):
+    if request.method == 'POST':
+        verfcode = request.POST['verfcode']
+
+        saved_ver = UserDetails.objects.filter(user=request.user).first()
+        if saved_ver:
+            verifyc = saved_ver.verf_code
+            if verifyc == verfcode:
+                saved_ver.is_verified = True
+                saved_ver.save()
+                return redirect('apicategories')
+            else:
+                context = {
+                    'is_verified': False,
+                    'email': request.user.email,
+                    'isMessPositive': False,
+                    'disp_message': 'Failed: Try again'
+                }
+
+            return render(request, 'verificationpage.html', context=context)
+        else:
+            context = {
+                'is_verified': False,
+                'email': request.user.email,
+            }
+        return render(request, 'verificationpage.html', context=context)
     if request.user.is_authenticated:
         usr = UserDetails.objects.filter(user=request.user).first()
         if not usr.is_verified:
@@ -197,3 +270,4 @@ def verificationPage(request):
         return render(request, 'verificationpage.html', context=context)
     else:
         return redirect('register')
+

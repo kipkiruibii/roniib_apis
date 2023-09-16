@@ -32,7 +32,7 @@
         <li><a href="{% url 'register' %}" class="active">Register</a></li>
         {% else %}
         <li><a href="{% url 'myaccount' %}" class="inactive">My Account</a></li>
-        <img src="{% static 'images/bgimg.jpg' %}"
+        <img src="{% static 'images/account.png' %}"
              width="30" height="30" style="border-radius:30px;margin-top:5px">
         {% endif %}
     </ul>
@@ -60,7 +60,7 @@
         <li><a href="{% url 'register' %}" class="active">Register</a></li>
         {% else %}
         <li><a href="{% url 'myaccount' %}" class="inactive">My Account</a></li>
-        <img src="{% static 'images/bgimg.jpg' %}"
+        <img src="{% static 'images/account.png' %}"
              width="60" height="60" style="border-radius:30px;margin-top:20px;margin-left:20px">
         {% endif %}
     </ul>
@@ -89,21 +89,43 @@
                 {% else %}
                 <p style="color:red">{{disp_message}}</p>
                 {% endif %}
-                <p>Email is not verified. A link has been sent to your email <strong>({{email}})</strong>. Kindly verify
+                <p>Email is not verified. A verification code has been sent to your email <strong>({{email}})</strong>.
+                    Kindly paste
                     the
-                    email to continue using this service</p>
+                    code below to continue using this service</p>
                 <div style="width:100%;">
                     <div style="display:flex;justify-content:center">
+
                         <div>
+                            <div>
+                                <form method="post" action="{% url 'verify' %}">
+                                    {% csrf_token %}
+                                    <p>Verification Code:</p>
+                                    <input name="verfcode"
+                                           style="background-color:#D9D9D9;border-radius: 20px;border: none;margin-left:20px;padding-left:20px"
+                                           required>
+                                    <br>
+                                    <button style="background-color:#0E7DA6;width:80px;border-radius:30px;color:white;border: none;padding:5px;margin-left:20px;margin-top:10px"
+                                            type="submit">
+                                        submit
+                                    </button>
+                                </form>
+
+                            </div>
                             <p>Did not get verification link?</p>
                             <div id="resendver"
-                                 style="background-color:#0E7DA6;width:70px;border-radius:30px;padding-left:10px">
-                                <p style="color:white">Resend</p>
+                                 style="background-color:#0E7DA6;width:150px;border-radius:30px;">
+                                <p style="color:white;text-align:center">Resend</p>
                             </div>
                             <p>Already verified?</p>
                             <div id="refreshbtn"
-                                 style="background-color:#0E7DA6;width:70px;border-radius:30px;padding-left:10px">
-                                <p style="color:white">Refresh</p>
+                                 style="background-color:#0E7DA6;width:150px;border-radius:30px;">
+                                <p style="color:white;text-align:center">Refresh</p>
+                            </div>
+                            <p>Not correct email?</p>
+                            <div id="changeemail"
+                                 style="background-color:#0E7DA6;width:150px;border-radius:30px;">
+                                <p style="color:white;text-align:center">Change email</p>
                             </div>
                         </div>
                     </div>
@@ -114,7 +136,7 @@
         </div>
 
         {% else %}
-        <div style="width:100%;margin-top:100px;margin-left:20px;">
+        <div style="width:100%;margin-top:50px;margin-left:20px;">
             {% if is_verified %}
             <p><strong style="color:green">CONGRATULATIONS!</strong> Your email has been verified</p>
             <a href="{% url 'apicategories' %}">
@@ -130,16 +152,42 @@
             {% else %}
             <p style="color:red">{{disp_message}}</p>
             {% endif %}
-            <p>Email is not verified. A link has been sent to your email <strong>({{email}})</strong>. Kindly verify the
-                email to continue using this service</p>
+            <p>Email is not verified. A verification code has been sent to your email <strong>({{email}})</strong>.
+                Kindly paste
+                the
+                code below to continue using this service</p>
             <div style="">
+                <div>
+                    <form method="post" action="{% url 'verify' %}">
+                        {% csrf_token %}
+                        <p>Verification Code:</p>
+                        <input name="verfcode"
+                               style="background-color:#D9D9D9;border-radius: 20px;border: none;margin-left:20px;padding-left:20px"
+                               required>
+                        <br>
+                        <button style="background-color:#0E7DA6;width:80px;border-radius:30px;color:white;border: none;padding:5px;margin-left:20px;margin-top:10px"
+                                type="submit">
+                            submit
+                        </button>
+                    </form>
+
+                </div>
+
+
                 <p>Did not get verification link?</p>
-                <div id="resendver" style="background-color:#0E7DA6;width:70px;border-radius:30px;padding-left:10px">
-                    <p style="color:white">Resend</p>
+                <div id="resendver"
+                     style="background-color:#0E7DA6;width:150px;border-radius:30px;">
+                    <p style="color:white;text-align:center">Resend</p>
                 </div>
                 <p>Already verified?</p>
-                <div id="refreshbtn" style="background-color:#0E7DA6;width:70px;border-radius:30px;padding-left:10px">
-                    <p style="color:white">Refresh</p>
+                <div id="refreshbtn"
+                     style="background-color:#0E7DA6;width:150px;border-radius:30px;">
+                    <p style="color:white;text-align:center">Refresh</p>
+                </div>
+                <p>Not correct email?</p>
+                <div id="changeemail"
+                     style="background-color:#0E7DA6;width:150px;border-radius:30px;">
+                    <p style="color:white;text-align:center">Change email</p>
                 </div>
 
             </div>
@@ -157,8 +205,12 @@
        $('#resendver').click(function(){
         location.href="{% url 'req_verify' %}"
     });
+       $('#changeemail').click(function(){
+        location.href="{% url 'change_email' %}"
+    });
 
 </script>
+
 </body>
 
 

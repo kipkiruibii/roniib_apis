@@ -159,6 +159,8 @@ def terms_conditions(request):
 
 @login_required
 def myAccount(request):
+    if request.method == 'GET':
+        pass
     usr = UserDetails.objects.filter(user=request.user).first()
     if not usr.is_verified:
         user_email = request.user.email
@@ -168,7 +170,15 @@ def myAccount(request):
         }
         return render(request, 'verificationpage.html', context=context)
 
-    return render(request, 'myaccount.html')
+    user_email = request.user.email
+    if usr.api_key == 'to be stored later':
+        apitoken = 'absent'
+    else:
+        apitoken = usr.api_key
+    context = {
+        'apitoken': apitoken
+    }
+    return render(request, 'myaccount.html', context=context)
 
 
 def documentation(request):
@@ -270,4 +280,5 @@ def verificationPage(request):
         return render(request, 'verificationpage.html', context=context)
     else:
         return redirect('register')
+
 

@@ -262,21 +262,25 @@
                 <h2>My Api Keys</h2>
             </div>
             <div style="margin-left:30px">
-                <div style="border-color:green;border-radius:10px;border-style: solid; width:200px;display:flex;justify-content:center">
+                <div id="generate_token" style="border-color:green;border-radius:10px;border-style: solid; width:200px;display:flex;justify-content:center">
                     <p style="margin:0px;padding:5px;color:green">Generate API Key</p>
                 </div>
-                <div style="margin-top:40px">
-                    <p>API Token: <span style="font-weight:bold">Myfotrherhrthtrreg45e437554y765h54woty </span> <i
-                            class="fa fa-eye"
-                            style="color:black;margin-left:20px"> </i><i
+                {% if apitoken != 'absent' %}
+                <div style="margin-top:40px;">
+                    <div style="display:flex;width:600px;">
+                    <p>API Token: <span style="font-weight:bold;" id="token">****************************************</span>
+                        <i class="fa fa-eye" id="visibility"
+                            style="color:grey;margin-left:20px"> </i><i
                             class="fa fa-copy"
-                            style="color:black;margin-left:20px"> </i></p>
+                            style="color:grey;margin-left:20px"> </i></p>
+                        </div>
                     <p>Date Created: <span style="font-weight:bold">06/03/2022</span></p>
 
                     <div style="border-color:red;border-radius:10px;border-style: solid; width:200px;display:flex;justify-content:center;margin-left:40px">
                         <p style="margin:0px;padding:5px;color:red">Delete Key</p>
                     </div>
                 </div>
+                {% endif %}
 
             </div>
         </div>
@@ -392,6 +396,7 @@
 </div>
 {% endif %}
 <script>
+
 const xValues = ['05/12', '06/12', '07/12', '08/12', '09/12', '10/12', '11/12', '11/12', '11/12', '11/12',];
 new Chart("chartAnalytics", {
     type: "line",
@@ -456,6 +461,35 @@ function switchTab(val) {
     $(swid).css('display', 'block');
 }
 
+$('#visibility').click(function(){
+    if($('#visibility').hasClass('fa-eye')){
+        $('#visibility').removeClass('fa-eye');
+        $('#token').text('{{ apitoken }}');
+        $('#visibility').addClass('fa-eye-slash');
+    }else{
+        $('#visibility').removeClass('fa-eye-slash');
+        $('#visibility').addClass('fa-eye');
+        $('#token').text('****************************************');
+    }
+
+});
+
+$(document).ready(function() {
+    $('#generate_token').click(function() {
+        $.ajax({
+            url: "{% url 'myaccount' %}",
+            type: 'GET',
+            dataType: 'html',
+            success: function(data) {
+                    $('#token').text('{{ apitoken }}');
+                    $('#visibility').addClass('fa-eye-slash');
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+});
 
 
 $('#menu-open').click(function () {

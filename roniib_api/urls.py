@@ -15,4 +15,5 @@ urlpatterns = [
     path('verify/', views.verificationPage, name='verify'),
     path('req_verify/', views.request_ver_link, name='req_verify'),
     path('changeemail/', views.change_email, name='change_email'),
+    path('generateNewToken/', views.generateNewToken, name='generateNewToken'),
 ]

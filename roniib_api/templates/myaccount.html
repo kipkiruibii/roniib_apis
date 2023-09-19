@@ -20,7 +20,10 @@
 </head>
 
 <body>
+<p style="display:none" id="apitokenkey">{{apitoken}}</p>
+
 {% if request.user_agent.is_pc %}
+
 <nav class="topnav">
     <a href="{% url 'home' %}"><img src="{% static 'images/light_blue_png.png' %}" alt="roniib icon" width="50"
                                     height="40"
@@ -262,23 +265,26 @@
                 <h2>My Api Keys</h2>
             </div>
             <div style="margin-left:30px">
-                <div id="generate_token" style="border-color:green;border-radius:10px;border-style: solid; width:200px;display:flex;justify-content:center">
-                    <p style="margin:0px;padding:5px;color:green">Generate API Key</p>
+                <div id="generate_token"
+                     style="border-color:green;border-radius:10px;border-style: solid; width:200px;display:flex;justify-content:center">
+                    <p style="margin:0px;padding:5px;color:green;cursor: pointer;">Generate API Key</p>
                 </div>
+                <p style="color:red"> Kindly note that Generating new API Key will automatically delete the current API Key. proceed with caution</p>
+
                 {% if apitoken != 'absent' %}
                 <div style="margin-top:40px;">
                     <div style="display:flex;width:600px;">
-                    <p>API Token: <span style="font-weight:bold;" id="token">****************************************</span>
-                        <i class="fa fa-eye" id="visibility"
-                            style="color:grey;margin-left:20px"> </i><i
-                            class="fa fa-copy"
-                            style="color:grey;margin-left:20px"> </i></p>
-                        </div>
+                        <p>API Token: <span style="font-weight:bold;" id="token">**********************************************</span>
+                            <i class="fa fa-eye" id="visibility"
+                               style="color:grey;margin-left:20px"> </i>
+                            <i id="copyButton"
+                               class="fa fa-copy"
+                               style="background:#d3fdfe;color:#097085;margin-left:20px;padding:3px;cursor: pointer;">
+                                Copy</i></a>
+                        </p>
+                    </div>
                     <p>Date Created: <span style="font-weight:bold">06/03/2022</span></p>
 
-                    <div style="border-color:red;border-radius:10px;border-style: solid; width:200px;display:flex;justify-content:center;margin-left:40px">
-                        <p style="margin:0px;padding:5px;color:red">Delete Key</p>
-                    </div>
                 </div>
                 {% endif %}
 
@@ -395,115 +401,145 @@
     </div>
 </div>
 {% endif %}
+
+
 <script>
 
-const xValues = ['05/12', '06/12', '07/12', '08/12', '09/12', '10/12', '11/12', '11/12', '11/12', '11/12',];
-new Chart("chartAnalytics", {
-    type: "line",
-    data: {
-        labels: xValues,
-        datasets: [{
-            data: [860, 1140, 1060, 1060, 1070, 1110, 1330, 2210, 830, 1478],
-            borderColor: "#018787",
-            fill: false,
-            borderWidth: 1,
-        }
-        ],
-
-    },
-    options: {
-        legend: {
-
-            display: false,
-            title: {
-                text: 'performance'
+    const xValues = ['05/12', '06/12', '07/12', '08/12', '09/12', '10/12', '11/12', '11/12', '11/12', '11/12',];
+    new Chart("chartAnalytics", {
+        type: "line",
+        data: {
+            labels: xValues,
+            datasets: [{
+                data: [860, 1140, 1060, 1060, 1070, 1110, 1330, 2210, 830, 1478],
+                borderColor: "#018787",
+                fill: false,
+                borderWidth: 1,
             }
+            ],
 
         },
-        title: {
-            display: true,
-            text: 'App Performance', // Set your chart title here
-            fontSize: 18, // Font size for the title
-            fontColor: 'black' // Font color for the title
-        },
+        options: {
+            legend: {
 
-        scales: {
-            x: {
-                display: true,
+                display: false,
                 title: {
-                    display: true,
-                    text: 'X-Axis Label', // Set your X-axis label here
-                    fontSize: 16, // Font size for the X-axis label
-                    fontColor: 'black' // Font color for the X-axis label
+                    text: 'performance'
                 }
+
             },
-        }
-    }
-
-});
-
-
-function switchTab(val) {
-    swid = '#' + val;
-    $('.tab_btn').css('color', 'black');
-    if (val == 'basic_info') {
-        $('#bs_inf').css('color', '#0E7DA6');
-    } else if (val == 'analytics') {
-        $('#bs_ana').css('color', '#0E7DA6');
-    } else if (val == 'billing') {
-        $('#bs_bil').css('color', '#0E7DA6');
-    } else if (val == 'my_apis') {
-        $('#bs_mya').css('color', '#0E7DA6');
-    } else {
-        $('#bs_mysub').css('color', '#0E7DA6');
-    }
-    $('.disp_content').css('display', 'none');
-    $(swid).css('display', 'block');
-}
-
-$('#visibility').click(function(){
-    if($('#visibility').hasClass('fa-eye')){
-        $('#visibility').removeClass('fa-eye');
-        $('#token').text('{{ apitoken }}');
-        $('#visibility').addClass('fa-eye-slash');
-    }else{
-        $('#visibility').removeClass('fa-eye-slash');
-        $('#visibility').addClass('fa-eye');
-        $('#token').text('****************************************');
-    }
-
-});
-
-$(document).ready(function() {
-    $('#generate_token').click(function() {
-        $.ajax({
-            url: "{% url 'myaccount' %}",
-            type: 'GET',
-            dataType: 'html',
-            success: function(data) {
-                    $('#token').text('{{ apitoken }}');
-                    $('#visibility').addClass('fa-eye-slash');
+            title: {
+                display: true,
+                text: 'App Performance',
+                fontSize: 18,
+                fontColor: 'black'
             },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
+
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'X-Axis Label',
+                        fontSize: 16,
+                        fontColor: 'black'
+                    }
+                },
             }
+        }
+
+    });
+
+
+    function switchTab(val) {
+        swid = '#' + val;
+        $('.tab_btn').css('color', 'black');
+        if (val == 'basic_info') {
+            $('#bs_inf').css('color', '#0E7DA6');
+        } else if (val == 'analytics') {
+            $('#bs_ana').css('color', '#0E7DA6');
+        } else if (val == 'billing') {
+            $('#bs_bil').css('color', '#0E7DA6');
+        } else if (val == 'my_apis') {
+            $('#bs_mya').css('color', '#0E7DA6');
+        } else {
+            $('#bs_mysub').css('color', '#0E7DA6');
+        }
+        $('.disp_content').css('display', 'none');
+        $(swid).css('display', 'block');
+    }
+
+    $('#visibility').click(function(){
+        var tokenK=$('#apitokenkey').text();
+        if($('#visibility').hasClass('fa-eye')){
+            $('#visibility').removeClass('fa-eye');
+            $('#token').text(tokenK);
+            $('#visibility').addClass('fa-eye-slash');
+        }else{
+            $('#visibility').removeClass('fa-eye-slash');
+            $('#visibility').addClass('fa-eye');
+            $('#token').text('**********************************************');
+        }
+
+    });
+
+
+
+    $('#menu-open').click(function () {
+        $('#menu-open').css('display', 'none');
+        $('#nav').css('display', 'block');
+        $('#menu-close').css('display', 'block');
+    });
+    $('#menu-close').click(function () {
+        $('#menu-close').css('display', 'none');
+        $('#nav').css('display', 'none');
+        $('#menu-open').css('display', 'block');
+    });
+
+    $(document).ready(function () {
+        $("#generate_token").click(function () {
+            $.ajax({
+                url: '{% url 'generateNewToken' %}',
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                        $('#token').text(data.result);
+                        $('#apitokenkey').text(data.result);
+                        $('#visibility').addClass('fa-eye-slash');
+                },
+                error: function (error) {
+                }
+            });
         });
     });
-});
 
+    $(document).ready(function () {
+        var tokenToCopy = $('#token');
+        var copyButton = $('#copyButton');
 
-$('#menu-open').click(function () {
-    $('#menu-open').css('display', 'none');
-    $('#nav').css('display', 'block');
-    $('#menu-close').css('display', 'block');
-});
-$('#menu-close').click(function () {
-    $('#menu-close').css('display', 'none');
-    $('#nav').css('display', 'none');
-    $('#menu-open').css('display', 'block');
-});
+        copyButton.on('click', function () {
+            var textarea = $('<textarea>')
+                .val(tokenToCopy.text())
+                .css({
+                    position: 'absolute',
+                    left: '-9999px'
+                })
+                .appendTo('body');
+            textarea.select();
+            document.execCommand('copy');
+            textarea.remove();
+            copyButton.text('Copied!');
+            copyButton.css('background','#d3fee4');
+            copyButton.css('color','#09853a');
+            setTimeout(function () {
+                copyButton.text('Copy');
+                copyButton.css('background','#d3fdfe');
+                copyButton.css('color','#097085');
 
-
+            }, 2000);
+        });
+    });
 </script>
 </body>
 

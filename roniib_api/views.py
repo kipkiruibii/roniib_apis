@@ -1,14 +1,16 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
-from .models import *
-from django.contrib import messages
-from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
 
+from .models import *
+from django.contrib.auth.models import User
 from django.core.mail import send_mail
-import mimetypes
 import random
 import string
+import requests
+from django.http import JsonResponse
+import json
 
 
 def generate_random_code(length=6):
@@ -93,15 +95,16 @@ def log_in(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             usr = UserDetails.objects.filter(user=user).first()
+            login(request, user)
+
             if not usr.is_verified:
-                user_email = request.user.email
+                user_email = user.email
                 context = {
                     'is_verified': False,
                     'email': user_email
                 }
                 return render(request, 'verificationpage.html', context=context)
             else:
-                login(request, user)
                 return redirect('apicategories')
         else:
             message = 'Invalid credentials. Try again'
@@ -137,6 +140,12 @@ def register(request):
                         api_key='to be stored later'
                     )
                     usdet.save()
+                    url = f"https://api.roniib.com/r-api-end/generateToken/?username={username}"
+                    response = requests.get(url).json()
+                    token = response['token']
+                    ud = UserDetails.objects.filter(user=request.user).first()
+                    ud.api_key = token
+                    ud.save()
 
                 return redirect('verify')
             else:
@@ -155,6 +164,26 @@ def contact(request):
 # terms & condition
 def terms_conditions(request):
     return render(request, 'terms_co.html')
+
+@csrf_exempt
+def generateNewToken(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            url = f"https://api.roniib.com/r-api-end/generateNewToken/?username={request.user.username}"
+            response = requests.get(url).json()
+            token = response['token']
+            ud = UserDetails.objects.filter(user=request.user).first()
+            ud.api_key = token
+            ud.save()
+
+            response_data = {
+                'result': token  # You can include any data you want in the response
+            }
+            return JsonResponse(response_data)
+        else:
+            return JsonResponse({'result': 'Try again'})
+    else:
+        return JsonResponse({'result': 'Try again'})
 
 
 @login_required
@@ -280,5 +309,3 @@ def verificationPage(request):
         return render(request, 'verificationpage.html', context=context)
     else:
         return redirect('register')
-
-

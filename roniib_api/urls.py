@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path,include
 from .import views
 
 urlpatterns = [
@@ -16,4 +16,10 @@ urlpatterns = [
     path('req_verify/', views.request_ver_link, name='req_verify'),
     path('changeemail/', views.change_email, name='change_email'),
     path('generateNewToken/', views.generateNewToken, name='generateNewToken'),
+
+
+    path('payment_successful/', views.payment_successful, name='payment_successful'),
+    path('payment_failed/', views.payment_failed, name='payment_failed'),
+
+    path('paypal/', include("paypal.standard.ipn.urls")),
 ]

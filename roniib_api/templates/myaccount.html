@@ -17,10 +17,79 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <title>Roniib APIs| My Account</title>
     <script src="{% static '/js/main.js' %}"></script>
+
+    <style>
+        .loader {
+          border: 2px solid #f3f3f3;
+          border-radius: 50%;
+          border-top: 2px solid #06D85F;
+          width: 30px;
+          height: 30px;
+          -webkit-animation: spin 0s linear infinite;
+          animation: spin 0.5s linear infinite;
+        }
+
+
+        @-webkit-keyframes spin {
+          0% { -webkit-transform: rotate(0deg); }
+          100% { -webkit-transform: rotate(360deg); }
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        .modal {
+          display: none;
+          position: fixed;
+          z-index: 1;
+          padding-top: 100px;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          overflow: auto;
+          background-color: rgb(0,0,0);
+          background-color: rgba(0,0,0,0.6);
+        }
+
+        .modal-content {
+          background-color: #fefefe;
+          margin: auto;
+          padding: 20px;
+          border: 1px solid #888;
+          width: 50%;
+          border-radius:20px;
+        }
+        .button{
+         padding:5px;
+         border-radius:10px;
+         background-color: #019a41;
+         color:white;
+         cursor:pointer;
+
+        }
+
+
+        .close {
+          color: #aaaaaa;
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+          color: #000;
+          text-decoration: none;
+          cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
 <p style="display:none" id="apitokenkey">{{apitoken}}</p>
+
 
 {% if request.user_agent.is_pc %}
 
@@ -71,6 +140,7 @@
 
 {% endif %}
 {% if request.user_agent.is_pc %}
+
 <div style="display: flex;margin-top: 50px;">
     <div style="width: 20%;background: #EDEDED;;padding: 20px;">
         <p style="color: #0E7DA6;">
@@ -79,7 +149,6 @@
                 </span>
             MY ACCOUNT
         </p>
-
         <ul style=" list-style-type: none;">
             <a href="#">
                 <li class="tab_btn" onclick="switchTab('basic_info')" style="color:black" id="bs_inf">Basic Info</li>
@@ -267,12 +336,15 @@
             <div style="margin-left:30px">
                 <div id="generate_token"
                      style="border-color:green;border-radius:10px;border-style: solid; width:200px;display:flex;justify-content:center">
-                    <p style="margin:0px;padding:5px;color:green;cursor: pointer;">Generate API Key</p>
+                    <p id="api_btn" style="margin:0px;padding:5px;color:green;cursor: pointer;">Generate API Key</p>
                 </div>
-                <p style="color:red"> Kindly note that Generating new API Key will automatically delete the current API Key. proceed with caution</p>
+                <div id="spinner_loads" style="display:none;align-items:center;margin-top:60px;">
+                    <div style="color:#06D85F">Generating...</div>
+                    <div class="loader" style="margin-left:40px"></div>
+                </div>
 
                 {% if apitoken != 'absent' %}
-                <div style="margin-top:40px;">
+                <div id="apiview" style="margin-top:40px;">
                     <div style="display:flex;width:600px;">
                         <p>API Token: <span style="font-weight:bold;" id="token">**********************************************</span>
                             <i class="fa fa-eye" id="visibility"
@@ -283,7 +355,9 @@
                                 Copy</i></a>
                         </p>
                     </div>
-                    <p>Date Created: <span style="font-weight:bold">06/03/2022</span></p>
+                    <p>Date Created: <span style="font-weight:bold" id="date_id">{{datecreated}}</span></p>
+                    <p>Remember to include the token above in the headers of every request you make.</p>
+                    <p>Keep this token a secret.</p>
 
                 </div>
                 {% endif %}
@@ -402,54 +476,23 @@
 </div>
 {% endif %}
 
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 style="color:red">WARNING!!</h2>
+        <p> Kindly note that generating a new API Key will revoke the current API Key.Please proceed with
+            caution</p>
+        <div style="display:flex;justify-content:space-between">
+
+            <div class="button" id="cancel_generating">cancel</div>
+            <div class="button" style="background-color:red" id="continue_generating">continue</div>
+        </div>
+
+    </div>
+
+</div>
 
 <script>
-
-    const xValues = ['05/12', '06/12', '07/12', '08/12', '09/12', '10/12', '11/12', '11/12', '11/12', '11/12',];
-    new Chart("chartAnalytics", {
-        type: "line",
-        data: {
-            labels: xValues,
-            datasets: [{
-                data: [860, 1140, 1060, 1060, 1070, 1110, 1330, 2210, 830, 1478],
-                borderColor: "#018787",
-                fill: false,
-                borderWidth: 1,
-            }
-            ],
-
-        },
-        options: {
-            legend: {
-
-                display: false,
-                title: {
-                    text: 'performance'
-                }
-
-            },
-            title: {
-                display: true,
-                text: 'App Performance',
-                fontSize: 18,
-                fontColor: 'black'
-            },
-
-            scales: {
-                x: {
-                    display: true,
-                    title: {
-                        display: true,
-                        text: 'X-Axis Label',
-                        fontSize: 16,
-                        fontColor: 'black'
-                    }
-                },
-            }
-        }
-
-    });
-
 
     function switchTab(val) {
         swid = '#' + val;
@@ -498,19 +541,33 @@
 
     $(document).ready(function () {
         $("#generate_token").click(function () {
-            $.ajax({
-                url: '{% url 'generateNewToken' %}',
-                type: 'POST',
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data);
-                        $('#token').text(data.result);
-                        $('#apitokenkey').text(data.result);
-                        $('#visibility').addClass('fa-eye-slash');
-                },
-                error: function (error) {
-                }
+        modal.style.display = "block";
+        $('#cancel_generating').click(function (){
+            modal.style.display = "none";
+        });
+        $('#continue_generating').click(function (){
+            modal.style.display = "none";
+             $('#spinner_loads').css('display','flex');
+            $('#apiview').css('display','none');
+                $.ajax({
+                    url: '{% url 'generateNewToken' %}',
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (data) {
+                            $('#spinner_loads').css('display','none');
+                            $('#apiview').css('display','block');
+                            $('#token').text(data.result);
+                            $('#apitokenkey').text(data.result);
+                            $('#date_id').text(data.datec);
+                            $('#visibility').addClass('fa-eye-slash');
+                    },
+                    error: function (error) {
+                         $('#spinner_loads').css('display','none')
+                         $('#apiview').css('display','block');
+                    }
+                });
             });
+
         });
     });
 
@@ -540,6 +597,68 @@
             }, 2000);
         });
     });
+
+    var modal = document.getElementById("myModal");
+
+    var span = document.getElementsByClassName("close")[0];
+
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+</script>
+<script>
+const xValues = ['05/12', '06/12', '07/12', '08/12', '09/12', '10/12', '11/12', '11/12', '11/12', '11/12',];
+
+new Chart("chartAnalytics", {
+    type: "line",
+    data: {
+        labels: xValues,
+        datasets: [{
+            data: [10, 100, 10, 0, 0, 0, 0, 0, 0, 0],
+            borderColor: "#018787",
+            fill: false,
+            borderWidth: 1,
+        }
+        ],
+
+    },
+    options: {
+        legend: {
+
+            display: false,
+            title: {
+                text: 'performance'
+            }
+
+        },
+        title: {
+            display: true,
+            text: 'App Performance',
+            fontSize: 18,
+            fontColor: 'black'
+        },
+
+        scales: {
+            x: {
+                display: true,
+                title: {
+                    display: true,
+                    text: 'X-Axis Label',
+                    fontSize: 16,
+                    fontColor: 'black'
+                }
+            },
+        }
+    }
+
+});
+
 </script>
 </body>
 

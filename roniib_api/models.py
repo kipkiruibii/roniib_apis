@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime, timezone
 
 
 class APICategories(models.Model):
@@ -39,6 +40,21 @@ class UserDetails(models.Model):
     api_key = models.CharField(max_length=255)
     is_verified = models.BooleanField(default=False)
     verf_code = models.CharField(max_length=255, default='verfx')
+    date_created = models.DateTimeField(default=datetime.now(timezone.utc))
 
     def __str__(self):
         return str(self.user.username)
+
+
+class UserTransactions(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    transactionId = models.CharField(max_length=255)
+    subscription_type = models.CharField(max_length=255, default='Basic')
+    amount = models.IntegerField(default=0)
+    dateSub = models.DateTimeField(default=datetime.now(timezone.utc))
+    is_successful = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.user.username)
+
+

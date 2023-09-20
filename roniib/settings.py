@@ -15,7 +15,7 @@ DEBUG = True
 if DEBUG:
     ALLOWED_HOSTS = []
 else:
-    ALLOWED_HOSTS = ['roniib.com','www.roniib.com']
+    ALLOWED_HOSTS = ['roniib.com', 'www.roniib.com']
 
 # Application definition
 
@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'roniib_api',
     'django_user_agents',
+    'paypal.standard.ipn',
 ]
 # settings.py
 AUTHENTICATION_BACKENDS = [
@@ -125,9 +126,7 @@ LOGIN_REDIRECT_URL = '/categories/'  # Replace with your desired URL
 
 STATIC_URL = '/static/'
 
-
 STATIC_ROOT = '/home/roninkhl/public_html/static/'
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

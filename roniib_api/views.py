@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-
+from django.urls import reverse
+from django.shortcuts import render
+from paypal.standard.forms import PayPalPaymentsForm
 from .models import *
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -10,6 +12,7 @@ import random
 import string
 import requests
 from django.http import JsonResponse
+from django.conf import settings
 import json
 
 
@@ -25,11 +28,55 @@ def home(request):
 
 
 def pricing(request):
-    return render(request, 'pricing.html')
+    paypal_dict = {
+        "cmd": "_xclick-subscriptions",
+        "business": 'checkout@roniib.com',
+        "a3": "29",
+        "p3": 1,
+        "t3": "M",
+        "src": "1",
+        "sra": "1",
+        "no_note": "1",
+        "item_name": "Developer Subscription",
+        "notify_url": request.build_absolute_uri(reverse('payment_successful')),
+        "return": request.build_absolute_uri(reverse('payment_failed')),
+        "cancel_return": request.build_absolute_uri(reverse('payment_failed')),
+    }
+    paypal_dict1 = {
+        "cmd": "_xclick-subscriptions",
+        "business": 'checkout@roniib.com',
+        "a3": "69",
+        "p3": 1,
+        "t3": "M",
+        "src": "1",
+        "sra": "1",
+        "no_note": "1",
+        "item_name": "Enterprise Subscription",
+        "notify_url": request.build_absolute_uri(reverse('payment_successful')),
+        "return": request.build_absolute_uri(reverse('payment_failed')),
+        "cancel_return": request.build_absolute_uri(reverse('payment_failed')),
+    }
+
+    developer = PayPalPaymentsForm(initial=paypal_dict)
+    enterprise = PayPalPaymentsForm(initial=paypal_dict1)
+    context = {"developer": developer,
+               "enterprise": enterprise
+               }
+    return render(request, "pricing.html", context)
 
 
 def move_page():
     pass
+
+
+@csrf_exempt
+def payment_successful(request):
+    return render(request, "payment_successful.html")
+
+
+@csrf_exempt
+def payment_failed(request):
+    return render(request, "payment_failed.html")
 
 
 def sendVerMail(request, username, email):
@@ -57,6 +104,7 @@ def sendVerMail(request, username, email):
 
 def change_email(request):
     if request.user.is_authenticated:
+        # delete user tokens and other credentials from the api.roniib.com
         User.objects.filter(username=request.user.username).first().delete()
     return redirect('register')
 
@@ -134,18 +182,11 @@ def register(request):
                 user = authenticate(request, username=username, password=password)
                 if user is not None:
                     login(request, user)
-                    sendVerMail(request, request.user.username, request.user.email)
                     usdet = UserDetails(
-                        user=user,
-                        api_key='to be stored later'
+                        user=user
                     )
                     usdet.save()
-                    url = f"https://api.roniib.com/r-api-end/generateToken/?username={username}"
-                    response = requests.get(url).json()
-                    token = response['token']
-                    ud = UserDetails.objects.filter(user=request.user).first()
-                    ud.api_key = token
-                    ud.save()
+                    sendVerMail(request, request.user.username, request.user.email)
 
                 return redirect('verify')
             else:
@@ -165,6 +206,7 @@ def contact(request):
 def terms_conditions(request):
     return render(request, 'terms_co.html')
 
+
 @csrf_exempt
 def generateNewToken(request):
     if request.method == 'POST':
@@ -174,10 +216,13 @@ def generateNewToken(request):
             token = response['token']
             ud = UserDetails.objects.filter(user=request.user).first()
             ud.api_key = token
+            ud.date_created = datetime.now(timezone.utc)
             ud.save()
-
+            datecreated = datetime.now(timezone.utc)
+            dt = datecreated.strftime("%d/%m/%Y at %H:%M UTC")
             response_data = {
-                'result': token  # You can include any data you want in the response
+                'result': token,
+                'datec': dt
             }
             return JsonResponse(response_data)
         else:
@@ -188,8 +233,6 @@ def generateNewToken(request):
 
 @login_required
 def myAccount(request):
-    if request.method == 'GET':
-        pass
     usr = UserDetails.objects.filter(user=request.user).first()
     if not usr.is_verified:
         user_email = request.user.email
@@ -199,13 +242,16 @@ def myAccount(request):
         }
         return render(request, 'verificationpage.html', context=context)
 
-    user_email = request.user.email
     if usr.api_key == 'to be stored later':
         apitoken = 'absent'
+        dt = ''
     else:
         apitoken = usr.api_key
+        datecreated = usr.date_created
+        dt = datecreated.strftime("%d/%m/%Y at %H:%M UTC")
     context = {
-        'apitoken': apitoken
+        'apitoken': apitoken,
+        'datecreated': dt
     }
     return render(request, 'myaccount.html', context=context)
 
@@ -278,6 +324,14 @@ def verificationPage(request):
             if verifyc == verfcode:
                 saved_ver.is_verified = True
                 saved_ver.save()
+
+                url = f"https://api.roniib.com/r-api-end/generateToken/?username={request.user.username}"
+                response = requests.get(url).json()
+                token = response['token']
+                ud = UserDetails.objects.filter(user=request.user).first()
+                ud.api_key = token
+                ud.save()
+
                 return redirect('apicategories')
             else:
                 context = {

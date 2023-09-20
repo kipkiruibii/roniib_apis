@@ -20,6 +20,7 @@ urlpatterns = [
 
     path('payment_successful/', views.payment_successful, name='payment_successful'),
     path('payment_failed/', views.payment_failed, name='payment_failed'),
+    path('paypal_notification/', views.paypal_notification, name='paypal_notification'),
 
     path('paypal/', include("paypal.standard.ipn.urls")),
 ]

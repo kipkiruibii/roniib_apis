@@ -132,3 +132,6 @@ STATIC_ROOT = '/home/roninkhl/public_html/static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+RECEIVER_EMAIL = 'checkout@roniib.coom'
+PAYPAL_TEST = False

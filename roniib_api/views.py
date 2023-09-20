@@ -38,8 +38,8 @@ def pricing(request):
         "sra": "1",
         "no_note": "1",
         "item_name": "Developer Subscription",
-        "notify_url": request.build_absolute_uri(reverse('payment_successful')),
-        "return": request.build_absolute_uri(reverse('payment_failed')),
+        "notify_url": request.build_absolute_uri(reverse('paypal_notification')),
+        "return": request.build_absolute_uri(reverse('payment_successful')),
         "cancel_return": request.build_absolute_uri(reverse('payment_failed')),
     }
     paypal_dict1 = {
@@ -52,13 +52,13 @@ def pricing(request):
         "sra": "1",
         "no_note": "1",
         "item_name": "Enterprise Subscription",
-        "notify_url": request.build_absolute_uri(reverse('payment_successful')),
-        "return": request.build_absolute_uri(reverse('payment_failed')),
+        "notify_url": request.build_absolute_uri(reverse('paypal_notification')),
+        "return": request.build_absolute_uri(reverse('payment_successful')),
         "cancel_return": request.build_absolute_uri(reverse('payment_failed')),
     }
 
-    developer = PayPalPaymentsForm(initial=paypal_dict)
-    enterprise = PayPalPaymentsForm(initial=paypal_dict1)
+    developer = PayPalPaymentsForm(initial=paypal_dict, button_type="subscribe")
+    enterprise = PayPalPaymentsForm(initial=paypal_dict1, button_type="subscribe")
     context = {"developer": developer,
                "enterprise": enterprise
                }
@@ -77,6 +77,49 @@ def payment_successful(request):
 @csrf_exempt
 def payment_failed(request):
     return render(request, "payment_failed.html")
+
+
+@csrf_exempt
+def paypal_notification(request):
+    if request.method == "POST":
+        data = request.POST
+        payment_status = data['payment_status']
+        currency = data['mc_currency']
+        amount = data['mc_gross']
+        email = data['payer_email']
+        transaction_id = data['payer_email']
+
+        if payment_status == 'Completed':
+            if currency == 'USD':
+                if amount >= 29:
+                    status = True
+                    subtype = 'Developer'
+
+                elif amount >= 69:
+                    status = True
+                    subtype = 'Enterprise'
+
+                else:
+                    status = False
+                    subtype = 'Null'
+            else:
+                status = False
+                subtype = 'Null'
+        else:
+            status = False
+            subtype = 'Null'
+
+        us = UserTransactions(
+            user=request.user,
+            transactionId=transaction_id,
+            subscription_type=subtype,
+            amount=amount,
+            is_successful=status
+
+        )
+        us.save()
+
+    return render(request, "index.html")
 
 
 def sendVerMail(request, username, email):

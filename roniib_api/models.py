@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 
 
 class APICategories(models.Model):
-    category = models.CharField(max_length=255)
+    category = models.CharField(max_length=50)
     category_short = models.CharField(max_length=255)
 
     def __str__(self):
@@ -13,11 +13,11 @@ class APICategories(models.Model):
 
 class ApiDocumentation(models.Model):
     api_category = models.ForeignKey(APICategories, on_delete=models.CASCADE, default='')
-    api_name = models.CharField(max_length=255)
-    short_name = models.CharField(max_length=255, default='s_name')
+    api_name = models.CharField(max_length=50)
+    short_name = models.CharField(max_length=50, default='s_name')
     api_intro = models.TextField(default='intro')
     api_brief_description = models.TextField(default='intro')
-    api_image = models.CharField(max_length=255, default='url_img')
+    api_image = models.TextField(default='url_img')
     api_subscribers = models.IntegerField(default=0)
     api_total_requests = models.IntegerField(default=0)
 
@@ -27,8 +27,8 @@ class ApiDocumentation(models.Model):
 
 class ApiEndpoints(models.Model):
     api_name = models.ForeignKey(ApiDocumentation, on_delete=models.CASCADE)
-    endpoint_name = models.CharField(max_length=255)
-    endpoint_url = models.CharField(max_length=255)
+    endpoint_name = models.TextField(default='fgfgf')
+    endpoint_url = models.TextField(default='ghfghghgh')
     endpoint_desc = models.TextField(default='api description')
 
     def __str__(self):
@@ -37,9 +37,9 @@ class ApiEndpoints(models.Model):
 
 class UserDetails(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    api_key = models.CharField(max_length=255)
+    api_key = models.TextField(default='verfx')
     is_verified = models.BooleanField(default=False)
-    verf_code = models.CharField(max_length=255, default='verfx')
+    verf_code = models.TextField(default='verfx')
     date_created = models.DateTimeField(default=datetime.now(timezone.utc))
 
     def __str__(self):
@@ -48,9 +48,9 @@ class UserDetails(models.Model):
 
 class UserTransactions(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    transactionId = models.CharField(max_length=255)
-    subscription_type = models.CharField(max_length=255, default='Basic')
-    amount = models.IntegerField(default=0)
+    transactionId = models.TextField(default='WRDfdFF')
+    subscription_type = models.TextField(default='Basic')
+    amount = models.FloatField(default=0)
     dateSub = models.DateTimeField(default=datetime.now(timezone.utc))
     is_successful = models.BooleanField(default=False)
 

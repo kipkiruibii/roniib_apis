@@ -1,10 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <meta name="author" content="Hezron Bii">
+    <meta name="description" content="This website serves APIs to developers to power their applications">
+    <meta
+            name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'images/light_blue_png.png' %}" type="image/x-image">
+    <link rel="stylesheet" href="{% static '/css/main.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3pro.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Payment successful</title>
+</head>
+
+
+<body>
+{% if request.user_agent.is_pc %}
+<nav class="topnav">
+    <a href="{% url 'home' %}" style="margin:5px"><img src="{% static 'images/light_blue_png.png' %}" alt="roniib icon"
+                                                       width="50"
+                                                       height="40"
+                                                       style="margin-left:0px;"></a>
+    <ul class="topLinks">
+        <li><a href="{% url 'apicategories' %}" class="inactive">Browse APIS</a></li>
+        <li><a href="{% url 'pricing' %}" class="inactive">Pricing</a></li>
+        <li><a href="{% url 'contact' %}" class="inactive">Contact Us</a></li>
+        {% if not request.user.is_authenticated %}
+        <li><a href="{% url 'login' %}" class="inactive">Sign In</a></li>
+        <li><a href="{% url 'register' %}" class="inactive">Register</a></li>
+        {% else %}
+        <li><a href="{% url 'myaccount' %}" class="inactive">My Account</a></li>
+        <img src="{% static 'images/account.png' %}"
+             width="30" height="30" style="border-radius:30px;margin-top:5px">
+        {% endif %}
+    </ul>
+</nav>
+{% else %}
+<nav class="topnav" style="width:100%;display-flex:justify-content:space_between;align-items:center;">
+    <a href="{% url 'home' %}" style="padding:5px;margin-top:0px"><img src="{% static 'images/light_blue_png.png' %}"
+                                                                       alt="roniib icon" width="50"
+                                                                       height="40"
+                                                                       style="margin-left:0px;"></a>
+    <div style="margin-right:20px" id="menu-open"><i class="fa fa-bars" style="font-size:24px;color:white"></i></div>
+    <div style="margin-right:20px;display:none" id="menu-close"><i class="fa fa-close"
+                                                                   style="font-size:24px;color:white"></i></div>
+</nav>
+
+<div id="nav"
+     style="text-decoration:none;padding-top:70px;display:none;width:90%;height:800px;z-index:1000px;position: absolute;background-color: rgba(4, 69, 106, 1);">
+    <ul class="topLinks">
+        <li><a href="{% url 'apicategories' %}" class="active">Browse APIS</a></li>
+        <li><a href="{% url 'pricing' %}" class="inactive">Pricing</a></li>
+        <li><a href="{% url 'contact' %}" class="inactive">Contact Us</a></li>
+        {% if not request.user.is_authenticated %}
+        <li><a href="{% url 'login' %}" class="inactive">Sign In</a></li>
+        <li><a href="{% url 'register' %}" class="inactive">Register</a></li>
+        {% else %}
+        <li><a href="{% url 'myaccount' %}" class="inactive">My Account</a></li>
+        <img src="{% static 'images/account.png' %}"
+             width="60" height="60" style="border-radius:30px;margin-top:20px;margin-left:20px">
+        {% endif %}
+    </ul>
+</div>
+
+{% endif %}
+
+<div style="display:flex;justify-content:center;padding-top:100px;">
+    <p style="color:#019a41;">CONGRATULATIONS! <br>Your subscription was successful</p>
+</div>
+<div style="display:flex;justify-content:center;">
+    <p>Go to <a href="{% url 'myaccount' %}" style="color:#0E7DA6">My Account </a> to manage your API Usage</p>
+</div>
+
+
+<script>
+
+    $('#menu-open').click( function(){
+$('#menu-open').css('display','none');
+$('#page_content').css('display','none');
+$('#nav').css('display','block');
+$('#menu-close').css('display','block');
+                });
+$('#menu-close').click( function(){
+$('#menu-close').css('display','none');
+$('#nav').css('display','none');
+$('#menu-open').css('display','block');
+$('#page_content').css('display','block');
+                });
+</script>
 </body>
+
 </html>

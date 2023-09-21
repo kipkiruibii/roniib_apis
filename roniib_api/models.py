@@ -4,8 +4,8 @@ from datetime import datetime, timezone
 
 
 class APICategories(models.Model):
-    category = models.CharField(max_length=50)
-    category_short = models.CharField(max_length=255)
+    category = models.TextField(default='i')
+    category_short = models.TextField(default='i')
 
     def __str__(self):
         return str(self.category)
@@ -13,8 +13,8 @@ class APICategories(models.Model):
 
 class ApiDocumentation(models.Model):
     api_category = models.ForeignKey(APICategories, on_delete=models.CASCADE, default='')
-    api_name = models.CharField(max_length=50)
-    short_name = models.CharField(max_length=50, default='s_name')
+    api_name = models.TextField(default='i')
+    short_name = models.TextField(default='i')
     api_intro = models.TextField(default='intro')
     api_brief_description = models.TextField(default='intro')
     api_image = models.TextField(default='url_img')
@@ -56,5 +56,6 @@ class UserTransactions(models.Model):
 
     def __str__(self):
         return str(self.user.username)
+
 
 

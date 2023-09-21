@@ -70,24 +70,17 @@ WSGI_APPLICATION = 'roniib.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
+DATABASES={
+    'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'roninkhl_roniib_main',
-            'USER': 'roninkhl_hezronbii',
-            'PASSWORD': 'ylN?Zss_6#q]',
-            'HOST': 'localhost',
+            'NAME': '',
+            'USER': '',
+            'PASSWORD': '',
+            'HOST': '',
             'PORT': '3306',
         }
-    }
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 

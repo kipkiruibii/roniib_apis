@@ -30,7 +30,7 @@ def home(request):
 def pricing(request):
     paypal_dict = {
         "cmd": "_xclick-subscriptions",
-        "business": 'checkout@roniib.com',
+        "business": 'sb-2oxwm27426392@business.example.com',
         "a3": "29",
         "p3": 1,
         "t3": "M",
@@ -44,7 +44,7 @@ def pricing(request):
     }
     paypal_dict1 = {
         "cmd": "_xclick-subscriptions",
-        "business": 'checkout@roniib.com',
+        "business": 'sb-2oxwm27426392@business.example.com',
         "a3": "69",
         "p3": 1,
         "t3": "M",
@@ -83,41 +83,51 @@ def payment_failed(request):
 def paypal_notification(request):
     if request.method == "POST":
         data = request.POST
-        payment_status = data['payment_status']
-        currency = data['mc_currency']
-        amount = data['mc_gross']
-        email = data['payer_email']
-        transaction_id = data['payer_email']
 
-        if payment_status == 'Completed':
-            if currency == 'USD':
-                if amount >= 29:
-                    status = True
-                    subtype = 'Developer'
 
-                elif amount >= 69:
-                    status = True
-                    subtype = 'Enterprise'
+        subject = 'paypal post'
+        message = f'data received {data}'
+        from_email = 'support@roniib.com'
+        recipient_list = ['infopack254@gmail.com']
 
-                else:
-                    status = False
-                    subtype = 'Null'
-            else:
-                status = False
-                subtype = 'Null'
-        else:
-            status = False
-            subtype = 'Null'
+        send_mail(subject, message, from_email, recipient_list)
 
-        us = UserTransactions(
-            user=request.user,
-            transactionId=transaction_id,
-            subscription_type=subtype,
-            amount=amount,
-            is_successful=status
 
-        )
-        us.save()
+        # payment_status = data['payment_status']
+        # currency = data['mc_currency']
+        # amount = data['mc_gross']
+        # email = data['payer_email']
+        # transaction_id = data['payer_email']
+        #
+        # if payment_status == 'Completed':
+        #     if currency == 'USD':
+        #         if amount >= 29:
+        #             status = True
+        #             subtype = 'Developer'
+        #
+        #         elif amount >= 69:
+        #             status = True
+        #             subtype = 'Enterprise'
+        #
+        #         else:
+        #             status = False
+        #             subtype = 'Null'
+        #     else:
+        #         status = False
+        #         subtype = 'Null'
+        # else:
+        #     status = False
+        #     subtype = 'Null'
+        #
+        # us = UserTransactions(
+        #     user=request.user,
+        #     transactionId=transaction_id,
+        #     subscription_type=subtype,
+        #     amount=amount,
+        #     is_successful=status
+        #
+        # )
+        # us.save()
 
     return render(request, "index.html")
 

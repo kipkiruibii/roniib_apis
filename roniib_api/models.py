@@ -48,6 +48,9 @@ class UserDetails(models.Model):
 
 class UserTransactions(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    subscriber_id = models.TextField(default='WRDfdFF')
+    receiver_email = models.TextField(default='WRDfdFF')
+    payment_date = models.TextField(default='WRDfdFF')
     transactionId = models.TextField(default='WRDfdFF')
     subscription_type = models.TextField(default='Basic')
     amount = models.FloatField(default=0)

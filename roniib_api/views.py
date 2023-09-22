@@ -12,8 +12,7 @@ import random
 import string
 import requests
 from django.http import JsonResponse
-from django.conf import settings
-import json
+import traceback
 
 
 def generate_random_code(length=6):
@@ -21,8 +20,6 @@ def generate_random_code(length=6):
     random_code = ''.join(random.choice(characters) for _ in range(length))
     return random_code
 
-
-# Create your views here.
 def home(request):
     return render(request, 'index.html')
 
@@ -30,7 +27,8 @@ def home(request):
 def pricing(request):
     paypal_dict = {
         "cmd": "_xclick-subscriptions",
-        "business": 'sb-2oxwm27426392@business.example.com',
+        "business": 'checkout@gmail.com',
+        "custom": request.user.username,
         "a3": "29",
         "p3": 1,
         "t3": "M",
@@ -44,7 +42,8 @@ def pricing(request):
     }
     paypal_dict1 = {
         "cmd": "_xclick-subscriptions",
-        "business": 'sb-2oxwm27426392@business.example.com',
+        "business": 'checkout@gmail.com',
+        "custom": request.user.username,
         "a3": "69",
         "p3": 1,
         "t3": "M",
@@ -83,51 +82,57 @@ def payment_failed(request):
 def paypal_notification(request):
     if request.method == "POST":
         data = request.POST
+        try:
+            payment_status = data.get('payment_status', '')
+            currency = data.get('mc_currency', '')
+            amount = data.get('mc_gross', '')
+            email = data.get('payer_email', '')
+            transaction_id = data.get('txn_id', '')
+            transaction_subject = data.get('transaction_subject', '')
+            payment_date = data.get('payment_date', '')
+            receiver_email = data.get('receiver_email', '')
+            profile_id = data.get('subscr_id', '')
+            userDetails = request.POST.get('custom', '')
 
+            status = False
+            subtype = 'Null'
 
-        subject = 'paypal post'
-        message = f'data received {data}'
-        from_email = 'support@roniib.com'
-        recipient_list = ['infopack254@gmail.com']
+            if payment_status == 'Completed':
+                if userDetails:
+                    user_paying = User.objects.filter(username=userDetails).first()
+                    if user_paying:
+                        if currency == 'USD':
+                            if float(amount) >= 29:
+                                status = True
+                                subtype = 'Developer'
 
-        send_mail(subject, message, from_email, recipient_list)
+                            elif float(amount) >= 69:
+                                status = True
+                                subtype = 'Enterprise'
 
+                            us = UserTransactions(
+                                user=user_paying,
+                                subscriber_id=profile_id,
+                                receiver_email=receiver_email,
+                                payment_date=payment_date,
+                                transactionId=transaction_id,
+                                subscription_type=subtype,
+                                amount=amount,
+                                is_successful=status
+                            )
+                            us.save()
 
-        # payment_status = data['payment_status']
-        # currency = data['mc_currency']
-        # amount = data['mc_gross']
-        # email = data['payer_email']
-        # transaction_id = data['payer_email']
-        #
-        # if payment_status == 'Completed':
-        #     if currency == 'USD':
-        #         if amount >= 29:
-        #             status = True
-        #             subtype = 'Developer'
-        #
-        #         elif amount >= 69:
-        #             status = True
-        #             subtype = 'Enterprise'
-        #
-        #         else:
-        #             status = False
-        #             subtype = 'Null'
-        #     else:
-        #         status = False
-        #         subtype = 'Null'
-        # else:
-        #     status = False
-        #     subtype = 'Null'
-        #
-        # us = UserTransactions(
-        #     user=request.user,
-        #     transactionId=transaction_id,
-        #     subscription_type=subtype,
-        #     amount=amount,
-        #     is_successful=status
-        #
-        # )
-        # us.save()
+                            subject = 'Successful subscription'
+                            message = (f'Hello {user_paying.username},\nYour subscription to Roniib API {subtype} was '
+                                       f'successful.\n'
+                                       f"Incase you need assistance or query don't hesitate to contact our support team."
+                                       f"Click here to get started https://www.roniib.com/myaccount ")
+                            from_email = 'support@roniib.com'
+                            recipient_list = [user_paying.email]
+                            send_mail(subject, message, from_email, recipient_list)
+
+        except:
+            traceback.print_exc()
 
     return render(request, "index.html")
 

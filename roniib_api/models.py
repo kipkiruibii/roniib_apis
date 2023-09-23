@@ -61,4 +61,21 @@ class UserTransactions(models.Model):
         return str(self.user.username)
 
 
+class UserNotifications(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.TextField(default='title')
+    message = models.TextField(default='message')
+    dateSent = models.TextField(default='datesent')
+
+    def __str__(self):
+        return str(self.user.username)
+
+
+class CustomerQueries(models.Model):
+    email = models.TextField(default='title')
+    message = models.TextField(default='message')
+    is_member = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.email)
 

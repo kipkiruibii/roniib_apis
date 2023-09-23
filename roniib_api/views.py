@@ -13,12 +13,15 @@ import string
 import requests
 from django.http import JsonResponse
 import traceback
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 
 def generate_random_code(length=6):
     characters = string.ascii_letters + string.digits
     random_code = ''.join(random.choice(characters) for _ in range(length))
     return random_code
+
 
 def home(request):
     return render(request, 'index.html')
@@ -27,7 +30,7 @@ def home(request):
 def pricing(request):
     paypal_dict = {
         "cmd": "_xclick-subscriptions",
-        "business": 'checkout@gmail.com',
+        "business": 'checkout@roniib.com',
         "custom": request.user.username,
         "a3": "29",
         "p3": 1,
@@ -42,7 +45,7 @@ def pricing(request):
     }
     paypal_dict1 = {
         "cmd": "_xclick-subscriptions",
-        "business": 'checkout@gmail.com',
+        "business": 'checkout@roniib.com',
         "custom": request.user.username,
         "a3": "69",
         "p3": 1,
@@ -123,10 +126,11 @@ def paypal_notification(request):
                             us.save()
 
                             subject = 'Successful subscription'
-                            message = (f'Hello {user_paying.username},\nYour subscription to Roniib API {subtype} was '
-                                       f'successful.\n'
-                                       f"Incase you need assistance or query don't hesitate to contact our support team."
-                                       f"Click here to get started https://www.roniib.com/myaccount ")
+                            message = (
+                                f'Hello {user_paying.username},\nYour subscription to Roniib API {subtype} plan was '
+                                f'successful.\n'
+                                f"Incase you need assistance or query don't hesitate to contact our support team."
+                                f"Click here to get started https://www.roniib.com/myaccount ")
                             from_email = 'support@roniib.com'
                             recipient_list = [user_paying.email]
                             send_mail(subject, message, from_email, recipient_list)
@@ -257,7 +261,27 @@ def register(request):
 
 
 def contact(request):
-    return render(request, 'contact.html')
+    context = {
+        'mess': ''
+    }
+    if request.method == 'POST':
+        is_member = False
+        if request.user.is_authenticated:
+            is_member = True
+        email = request.POST['email']
+        message = request.POST['message']
+
+        un = CustomerQueries(
+            email=email,
+            is_member=is_member,
+            message=message
+        )
+        un.save()
+        context = {
+            'mess': 'Successful! Your message has been sent'
+        }
+
+    return render(request, 'contact.html', context)
 
 
 # terms & condition
@@ -291,7 +315,16 @@ def generateNewToken(request):
 
 @login_required
 def myAccount(request):
+    lat = 0
+    err = 0
+    calls = 0
+    graph_x_dat = []
+    graph_y_dat = []
+    if request.method == 'POST':
+        pass
+
     usr = UserDetails.objects.filter(user=request.user).first()
+    currplan = 'Basic'
     if not usr.is_verified:
         user_email = request.user.email
         context = {
@@ -303,13 +336,32 @@ def myAccount(request):
     if usr.api_key == 'to be stored later':
         apitoken = 'absent'
         dt = ''
+        dtc = ''
     else:
         apitoken = usr.api_key
         datecreated = usr.date_created
         dt = datecreated.strftime("%d/%m/%Y at %H:%M UTC")
+        lastt = UserTransactions.objects.filter(user=request.user).first()
+
+        dtc = ''
+        if lastt:
+            lt = lastt.dateSub + relativedelta(months=1)
+            dtc = lt.strftime("%d/%m/%Y")
+            currplan = lastt.subscription_type
+
     context = {
         'apitoken': apitoken,
-        'datecreated': dt
+        'datecreated': dt,
+        'transactions': UserTransactions.objects.filter(user=request.user),
+        'last_transactions': dtc,
+        'current_plan': currplan,
+        'notifications': UserNotifications.objects.filter(user=request.user),
+        'lat': lat,
+        'err': err,
+        'calls': calls,
+        'graph_x_dat': graph_x_dat,
+        'graph_y_dat': graph_y_dat,
+
     }
     return render(request, 'myaccount.html', context=context)
 

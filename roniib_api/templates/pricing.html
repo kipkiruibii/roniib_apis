@@ -25,7 +25,7 @@
                                     style="margin-left:10px;"></a>
     <ul class="topLinks">
         <li><a href="{% url 'apicategories' %}" class="inactive">Browse APIS</a></li>
-        <li><a href="{% url 'pricing' %}" class="active">Pricing</a></li>
+        <li><a class="active">Pricing</a></li>
         <li><a href="{% url 'contact' %}" class="inactive">Contact Us</a></li>
         {% if not request.user.is_authenticated %}
         <li><a href="{% url 'login' %}" class="inactive">Sign In</a></li>
@@ -113,8 +113,8 @@
                                 <p class="price_type">Developer</p>
                                 <p class="price_amt">$29<span>/mo</span></p>
                                 <div class="price_feat">
-                                    <p class="">5K POST requests/30 days</p>
-                                    <p class="">50K GET requests/30 days</p>
+                                    <p class="">50K POST requests/30 days</p>
+                                    <p class="">300K GET requests/30 days</p>
                                     <p class="">20 requests per second</p>
                                 </div>
                                 <div class="sub_btn_align" style="cursor:pointer">
@@ -139,9 +139,9 @@
                                     <p class="price_type">Enterprise</p>
                                     <p class="price_amt">$69<span>/mo</span></p>
                                     <div class="price_feat">
-                                        <p class="">50K POST requests/30 days</p>
-                                        <p class="">500K GET requests/30 days</p>
-                                        <p class="">100 requests per second</p>
+                                        <p class="">150K POST requests/30 days</p>
+                                        <p class="">1M GET requests/30 days</p>
+                                        <p class="">50 requests per second</p>
                                     </div>
                                     <div class="sub_btn_align" style="cursor:pointer">
                                         <div class="sub_btn">

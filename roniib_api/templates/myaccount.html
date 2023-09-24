@@ -10,6 +10,7 @@
     <link rel="icon" href="{% static 'images/light_blue_png.png' %}" type="image/x-image">
     <link rel="stylesheet" href="{% static '/css/main.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -291,11 +292,11 @@
                 <div style="display:flex;">
                     <div style="display:flex;justify-content:space-between;margin-right:50px">
                         <p style="margin-right:10px">Duration</p>
-                        <select
+                        <select id="time_filter"
                                 style="font-family: poppins;background-color: azure;border-radius: 10px;">
-                            <option value="javascript">Last 24 hours</option>
-                            <option value="python">Last 7 days</option>
-                            <option value="java">Last 30days</option>
+                            <option value="twen4">Last 24 hours</option>
+                            <option value="seven">Last 7 days</option>
+                            <option value="thirty">Last 30days</option>
                         </select>
                     </div>
 
@@ -304,19 +305,25 @@
 
                 <div style="display:flex;justify-content:space-evenly;margin-right:50px">
                     <div style="background-color:red;width:200px;height:100px:display:flex;justify-content:center;border-radius:10px">
-                        <p style="font-size:40px;margin-left:70px;color:white;margin-top:0px;margin-bottom:0px">{{err}}%</p>
+                        <p style="font-size:40px;margin-left:70px;color:white;margin-top:0px;margin-bottom:0px">
+                            {{err}}%</p>
                         <p style="color:white;margin-left:70px">Errors</p>
                     </div>
                     <div style="background-color:blue;width:200px;height:100px:display:flex;justify-content:center;border-radius:10px">
-                        <p style="font-size:40px;margin-left:70px;color:white;margin-top:0px;margin-bottom:0px">{{lat}}%</p>
+                        <p style="font-size:40px;margin-left:70px;color:white;margin-top:0px;margin-bottom:0px">
+                            {{lat}}%</p>
                         <p style="color:white;margin-left:70px">Latency</p>
                     </div>
                     <div style="background-color:green;width:200px;height:100px:display:flex;justify-content:center;border-radius:10px">
-                        <p style="font-size:40px;margin-left:70px;color:white;margin-top:0px;margin-bottom:0px">{{calls}}</p>
+                        <p style="font-size:40px;margin-left:70px;color:white;margin-top:0px;margin-bottom:0px">
+                            {{calls}}</p>
                         <p style="color:white;margin-left:70px">Api Calls</p>
                     </div>
                 </div>
                 <canvas id="chartAnalytics" style="width:100%;margin-top:40px;margin-right:50px"></canvas>
+                <div id="graph_loader" style="display:none;justify-content:center;margin-top:100px">
+                    <div class="loader" style="margin-left:40px"></div>
+                </div>
 
             </div>
         </div>
@@ -384,22 +391,195 @@
 
 </div>
 {% else %}
-<div style="padding-top:150px;">
-    <div style="align-items:center;border:grey;width:100%;margin-left:50px;">
-        <a href="{% url 'logout' %}">
-            <p>
+<di>
+    <div style="align-items:center;border:grey;width:100%;margin-left:10px;padding-top:80px">
+
+        <div class="disp_content" style="display:block">
+            <div class="with-search">
+                <h2>Basic Info</h2>
+            </div>
+            <div style="margin-left:30px">
+                <img id="previewImage"
+                     src="{% static 'images/account.png' %}"
+                     alt="my profile picture" width="100" height="100" style="border-radius:200px">
+
+                <div>
+                    <p>Username: <span style="font-weight:bold">{{ request.user.username }}</span></p>
+                    <p>Email: <span style="font-weight:bold">{{ request.user.email }} </span></p>
+
+
+                </div>
+                <div>
+                    <a href="{% url 'logout' %}">
+                        <p>
                     <span>
                         <i class="fa fa-sign-out"></i>
                     </span>
-                SIGN OUT
-            </p>
+                            SIGN OUT
+                        </p>
 
-        </a>
+                    </a>
+
+                </div>
+
+
+            </div>
+        </div>
+        <hr style="color:grey;background-color:grey;height:2px">
+        <div class="disp_content" style="display:block">
+            <div class="with-search">
+                <h2>My Api Keys</h2>
+            </div>
+            <div style="margin-left:30px">
+                <div id="generate_token"
+                     style="border-color:green;border-radius:10px;border-style: solid; width:200px;display:flex;justify-content:center">
+                    <p id="api_btn" style="margin:0px;padding:5px;color:green;cursor: pointer;">Generate API Key</p>
+                </div>
+                <div id="spinner_loads" style="display:none;align-items:center;margin-top:60px;">
+                    <div style="color:#06D85F">Generating...</div>
+                    <div class="loader" style="margin-left:40px"></div>
+                </div>
+
+                {% if apitoken != 'absent' %}
+                <div id="apiview" style="margin-top:40px;">
+                    <div style="display:flex;width:100%;">
+                        <p>API Token: <br><span style="font-weight:bold;" id="token">**********************************************</span>
+                            <i class="fa fa-eye" id="visibility"
+                               style="color:grey;margin-left:20px"> </i>
+                            <i id="copyButton"
+                               class="fa fa-copy"
+                               style="background:#d3fdfe;color:#097085;margin-left:20px;padding:3px;cursor: pointer;">
+                                Copy</i></a>
+                        </p>
+                    </div>
+                    <p>Date Created: <span style="font-weight:bold" id="date_id">{{datecreated}}</span></p>
+                    <p>Remember to include the token above in the headers of every request you make.</p>
+                    <p>Keep this token a secret.</p>
+
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+        <hr style="color:grey;background-color:grey;height:2px">
+
+        <div class="disp_content" style="display:block">
+            <div class="with-search">
+                <h2>Billing</h2>
+            </div>
+            <div>
+                <div>
+                    <div style="display:flex;justify-content:start">
+                        <p style="color:green;font-weight:bold">Current Plan: {{current_plan}}</p>
+                    </div>
+                </div>
+                <div>
+                    <h5><u>Last Transactions</u></h5>
+                    {% if transactions|length > 0 %}
+                    <p>NEXT BILLING ON : <span style="color:blue">{{last_transactions}}</span></p>
+                    {% endif %}
+                    <div style="overflow-x:auto;">
+                    <table class="w3-table w3-striped w3-center" style="width:100%">
+                        <tr>
+                            <th>
+                                <div style="display:flex">
+                                    <p style="margin-left:20px">Transaction ID</p>
+                                </div>
+                            </th>
+                            <th>
+                                <div style="display:flex">
+                                    <p style="margin-left:20px">Amount</p>
+                                </div>
+                            </th>
+                            <th>
+                                <div style="display:flex">
+                                    <p style="margin-left:20px">Transaction date</p>
+                                </div>
+                            </th>
+                            <th>
+                                <div style="display:flex">
+                                    <p style="margin-left:20px">status</p>
+                                </div>
+                            </th>
+                        </tr>
+                        {% for t in transactions %}
+                        <tr>
+                            <td>
+                                <div style="display:flex">
+                                    <p style="margin-left:20px">{{t.transactionId}}</p>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="display:flex;margin-left:20px">
+                                    <p>${{t.amount}}</p>
+                                </div>
+
+                            </td>
+                            <td>
+                                <div style="display:flex;margin-left:20px">
+                                    <p style="color:blue">{{t.payment_date}}</p>
+                                </div>
+
+                            </td>
+                            <td>
+                                <div style="display:flex;margin-left:20px">
+                                    {% if t.is_successful %}
+                                    <p style="color:green">Success</p>
+                                    {% else %}
+                                    <p style="color:red">Failed</p>
+
+                                    {% endif %}
+                                </div>
+
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    </div>
+                    {% if transactions|length == 0 %}
+                    <div style="display:flex;justify-content:center;">
+                        <p>You have no recent transactions</p>
+                    </div>
+                    {% endif %}
+
+                </div>
+                <hr style="color:red;width:100%;height:3px">
+
+            </div>
+        </div>
+        <hr style="color:grey;background-color:grey;height:2px">
+
+        <div class="disp_content" style="display:block">
+            <div class="with-search">
+                <h2>Notifications</h2>
+            </div>
+
+            <div style="margin-left:30px">
+                {% if notifications %}
+
+                {% for n in notifications %}
+                <div style="padding-bottom:20px;margin-bottom:10px;display:flex;background-color:#ddfaff">
+                    <div style="width:5px;background-color:#6E6E6E;margin-right:10px"></div>
+                    <div>
+                        <p>{{n.dateSent}}</p>
+                        <p>{{n.message}}.</p>
+                    </div>
+                </div>
+
+                {% endfor %}
+                {% else %}
+                <p>Looks like there is nothing here</p>
+                {% endif %}
+
+            </div>
+        </div>
+
+
     </div>
     <div style="align-items:center;display:flex;margin-left:40px">
-        <p>KINDLY OPEN THIS PAGE IN A DESKTOP</p>
+        <p>FOR ANALYTICS, KINDLY OPEN THIS PAGE IN A DESKTOP</p>
     </div>
-</div>
+</di>
 {% endif %}
 
 <div id="myModal" class="modal">
@@ -417,7 +597,7 @@
     </div>
 
 </div>
-
+<p id="csrf" hidden="">{% csrf_token %}</p>
 <script>
 
     function switchTab(val) {
@@ -539,28 +719,26 @@
     }
 </script>
 <script>
-    const xValues = ['05/12', '06/12', '07/12', '08/12', '09/12', '10/12', '11/12', '11/12', '11/12', '11/12',];
-
+    var Xvalues = [{% for item in graph_x_dat %}"{{ item }}"{% if not forloop.last %},{% endif %}{% endfor %}];
+    var Yvalues=[{% for item in graph_y_dat %}"{{ item }}"{% if not forloop.last %},{% endif %}{% endfor %}];
     new Chart("chartAnalytics", {
         type: "line",
         data: {
-            labels: xValues,
+            labels: Xvalues,
             datasets: [{
-                data: [10, 100, 10, 0, 0, 0, 0, 0, 0, 0],
+                data: Yvalues,
                 borderColor: "#018787",
-                fill: false,
+                fill: true,
                 borderWidth: 1,
+                label:'no. of requests'
             }
             ],
 
         },
-        options: {
+      options: {
             legend: {
 
                 display: false,
-                title: {
-                    text: 'performance'
-                }
 
             },
             title: {
@@ -571,19 +749,99 @@
             },
 
             scales: {
-                x: {
-                    display: true,
-                    title: {
-                        display: true,
-                        text: 'X-Axis Label',
-                        fontSize: 16,
-                        fontColor: 'black'
-                    }
+                 yAxes: [{
+                     ticks: {
+                         beginAtZero: true
+                     }
+                 }]
                 },
             }
-        }
+
 
     });
+
+
+</script>
+<script>
+    $(document).ready(function () {
+        $("#time_filter").change(function () {
+            var selectedOption = $(this).val();
+
+            $('#chartAnalytics').css('display','none');
+            $('#graph_loader').css('display','flex');
+            var postData = {
+                type: selectedOption,
+            };
+            $.ajax({
+                type: "POST",
+                url: "{% url 'myaccount' %}",
+                data: postData,
+                dataType: "json",
+                success: function (response) {
+                    X_values=response.x_values;
+                    Y_values=response.y_values;
+                    setTimeout(function () {
+                        generateGraph(X_values,Y_values);
+                    }, 1000);
+
+                    },
+                error: function (error) {
+                alert('error');
+                    $('#chartAnalytics').css('display','block');
+                    $('#graph_loader').css('display','none');
+
+                }
+            });
+
+        });
+            function generateGraph(Xvalues,Yvalues){
+                new Chart("chartAnalytics", {
+                    type: "line",
+                    data: {
+                        labels: Xvalues,
+                        datasets: [{
+                            data: Yvalues,
+                            borderColor: "#018787",
+                            fill: true,
+                            borderWidth: 1,
+                            label:'no. of requests'
+                        }
+                        ],
+
+                    },
+                  options: {
+                        legend: {
+
+                            display: false,
+
+                        },
+                        title: {
+                            display: true,
+                            text: 'App Performance',
+                            fontSize: 18,
+                            fontColor: 'black'
+                        },
+
+                        scales: {
+                             yAxes: [{
+                                 ticks: {
+                                     beginAtZero: true
+                                 }
+                             }]
+                            },
+                        }
+
+
+                });
+
+                $('#chartAnalytics').css('display','block');
+                $('#graph_loader').css('display','none');
+
+
+    }
+
+    });
+
 
 </script>
 </body>

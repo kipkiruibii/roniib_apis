@@ -3,7 +3,6 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
-from django.shortcuts import render
 from paypal.standard.forms import PayPalPaymentsForm
 from .models import *
 from django.contrib.auth.models import User
@@ -13,8 +12,10 @@ import string
 import requests
 from django.http import JsonResponse
 import traceback
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
+import pytz
+import geocoder
 
 
 def generate_random_code(length=6):
@@ -108,11 +109,13 @@ def paypal_notification(request):
                             if float(amount) >= 29:
                                 status = True
                                 subtype = 'Developer'
-
+                                url = f'https://api.roniib.com/r-api-end/receiveSubscription/?username={user_paying.username}&subtype={subtype}'
+                                requests.get(url)
                             elif float(amount) >= 69:
                                 status = True
                                 subtype = 'Enterprise'
-
+                                url = f'https://api.roniib.com/r-api-end/receiveSubscription/?username={user_paying.username}&subtype={subtype}'
+                                requests.get(url)
                             us = UserTransactions(
                                 user=user_paying,
                                 subscriber_id=profile_id,
@@ -124,6 +127,8 @@ def paypal_notification(request):
                                 is_successful=status
                             )
                             us.save()
+
+
 
                             subject = 'Successful subscription'
                             message = (
@@ -313,15 +318,98 @@ def generateNewToken(request):
         return JsonResponse({'result': 'Try again'})
 
 
+def getLast24hrs(offset, request):
+    current_datetime = datetime.now()
+    dte_list = [0 for i in range(24)]
+    yval = [0 for i in range(24)]
+
+    if request.user.is_authenticated:
+        dte_list = []
+        url = f'https://api.roniib.com/r-api-end/getDayCalls/?username={request.user.username}'
+        response = requests.get(url).json()
+        yval = response['calls']
+        for r in range(24):
+            one_hour_ago = current_datetime - timedelta(hours=r)
+            frmt = int(one_hour_ago.strftime('%H'))
+            frmt += offset
+            val = f'{frmt}:00'
+            if frmt < 10:
+                val = f'0{frmt}:00'
+            if frmt > 23:
+                diff = frmt - 24
+                val = f'0{0 + diff}:00'
+
+            dte_list.append(val)
+
+        dte_list = dte_list[::-1]
+    return dte_list, yval
+
+
+def getLast7days(request):
+    current_datetime = datetime.now()
+    dte_list = ['0' for i in range(7)]
+    yval = [0 for i in range(7)]
+
+    if request.user.is_authenticated:
+        dte_list = []
+        url = f'https://api.roniib.com/r-api-end/getWeekCalls/?username={request.user.username}'
+        response = requests.get(url).json()
+        yval = response['calls']
+        for r in range(7):
+            days_ago = current_datetime - timedelta(days=r)
+            frmt = days_ago.strftime('%a (%d)')
+            dte_list.append(frmt)
+    dte_list = dte_list[::-1]
+
+    return dte_list, yval
+
+
+def getLast30Days(request):
+    current_datetime = datetime.now()
+    dte_list = ['0' for i in range(30)]
+    yval = [0 for i in range(30)]
+    if request.user.is_authenticated:
+        dte_list = []
+        url = f'https://api.roniib.com/r-api-end/getMonthCalls/?username={request.user.username}'
+        response = requests.get(url).json()
+        yval = response['calls']
+        for r in range(30):
+            days_ago = current_datetime - timedelta(days=r)
+            frmt = days_ago.strftime('%d/%m')
+            dte_list.append(frmt)
+
+    dte_list = dte_list[::-1]
+    return dte_list, yval
+
+
 @login_required
+@csrf_exempt
 def myAccount(request):
     lat = 0
     err = 0
     calls = 0
-    graph_x_dat = []
-    graph_y_dat = []
+
+    client_ip = request.META.get('REMOTE_ADDR')
+    location = geocoder.ip(client_ip)
+    timezone_name = location.raw.get('timezone')
+    try:
+        client_timezone = pytz.timezone(timezone_name)
+        offset = client_timezone.utcoffset(datetime.now())
+        offset_hours, offset_minutes = divmod(offset.seconds // 60, 60)
+    except pytz.UnknownTimeZoneError:
+        offset_hours = 0
+
+    graph_x_dat, graph_y_dat = getLast24hrs(offset_hours, request)
     if request.method == 'POST':
-        pass
+        type_e = request.POST.get('type')
+        if type_e == 'seven':
+            graph_x_dat, graph_y_dat = getLast7days(request)
+        elif type_e == 'thirty':
+            graph_x_dat, graph_y_dat = getLast30Days(request)
+        else:
+            graph_x_dat, graph_y_dat = getLast24hrs(offset_hours,request)
+        return JsonResponse({'x_values': graph_x_dat,
+                             'y_values': graph_y_dat})
 
     usr = UserDetails.objects.filter(user=request.user).first()
     currplan = 'Basic'

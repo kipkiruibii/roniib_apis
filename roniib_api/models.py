@@ -36,6 +36,7 @@ class ApiEndpoints(models.Model):
 
 
 class UserDetails(models.Model):
+    objects = None
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     api_key = models.TextField(default='verfx')
     is_verified = models.BooleanField(default=False)

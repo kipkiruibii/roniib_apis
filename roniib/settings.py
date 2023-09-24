@@ -69,17 +69,24 @@ WSGI_APPLICATION = 'roniib.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-DATABASES={
-    'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': '',
-            'USER': '',
-            'PASSWORD': '',
-            'HOST': '',
-            'PORT': '3306',
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
-}
+    }
+else:
+    DATABASES={
+        'default': {
+                'ENGINE': 'django.db.backends.mysql',
+                'NAME': '',
+                'USER': '',
+                'PASSWORD': '',
+                'HOST': '',
+                'PORT': '3306',
+            }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -118,13 +125,15 @@ LOGIN_REDIRECT_URL = '/categories/'  # Replace with your desired URL
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
-STATIC_ROOT = '/home/roninkhl/public_html/static/'
+if DEBUG:
+    STATIC_ROOT='/static/'
+else:
+    STATIC_ROOT = '/home/roninkhl/public_html/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-RECEIVER_EMAIL = 'checkout@roniib.coom'
-PAYPAL_TEST = False
+if not DEBUG:
+    RECEIVER_EMAIL = 'checkout@roniib.coom'
+    PAYPAL_TEST = False

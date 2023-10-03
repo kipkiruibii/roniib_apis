@@ -11,11 +11,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-)k@in1=8v46u-kkc=y!qqvw(yz$4@+z1!q)shf3%a%fbwj^)wo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-if DEBUG:
-    ALLOWED_HOSTS = []
-else:
-    ALLOWED_HOSTS = ['roniib.com', 'www.roniib.com']
+DEBUG = False
+
+
+ALLOWED_HOSTS = ['roniib.com','www.roniib.com']
 
 # Application definition
 
@@ -69,24 +68,24 @@ WSGI_APPLICATION = 'roniib.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+DATABASES={
+    'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'RONIIBMAINAPP',
+            'USER': 'hezronbii',
+            'PASSWORD': 'august4th',
+            'HOST': 'roniibdbaws.cfs2buzask9h.eu-north-1.rds.amazonaws.com',
+            'PORT': '3306',
         }
-    }
-else:
-    DATABASES={
-        'default': {
-                'ENGINE': 'django.db.backends.mysql',
-                'NAME': '',
-                'USER': '',
-                'PASSWORD': '',
-                'HOST': '',
-                'PORT': '3306',
-            }
-    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -125,15 +124,23 @@ LOGIN_REDIRECT_URL = '/categories/'  # Replace with your desired URL
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
-if DEBUG:
-    STATIC_ROOT='/static/'
-else:
-    STATIC_ROOT = '/home/roninkhl/public_html/static/'
+
+
+STATIC_ROOT = '/home/roninkhl/public_html/static/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-if not DEBUG:
-    RECEIVER_EMAIL = 'checkout@roniib.coom'
-    PAYPAL_TEST = False
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'roniib.com'  # Your SMTP server hostname
+EMAIL_PORT = 465  # The SMTP port number
+EMAIL_USE_SSL = True  # Use SSL for secure connection
+EMAIL_HOST_USER = 'support@roniib.com'  # Your cPanel email address
+EMAIL_HOST_PASSWORD = 'august4th'  # Your email account password
+DEFAULT_FROM_EMAIL = 'support@roniib.com'  # The default 'from' address for your app's emails
+
+
+PAYPAL_TEST = False

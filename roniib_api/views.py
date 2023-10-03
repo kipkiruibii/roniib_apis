@@ -128,8 +128,6 @@ def paypal_notification(request):
                             )
                             us.save()
 
-
-
                             subject = 'Successful subscription'
                             message = (
                                 f'Hello {user_paying.username},\nYour subscription to Roniib API {subtype} plan was '
@@ -321,13 +319,44 @@ def generateNewToken(request):
 def getLast24hrs(offset, request):
     current_datetime = datetime.now()
     dte_list = [0 for i in range(24)]
-    yval = [0 for i in range(24)]
+    val_l = [0 for i in range(24)]
 
     if request.user.is_authenticated:
         dte_list = []
-        url = f'https://api.roniib.com/r-api-end/getDayCalls/?username={request.user.username}'
-        response = requests.get(url).json()
-        yval = response['calls']
+        val_l = []
+        mn = HourData.objects.filter(user=request.user)
+        if mn:
+            cnt_l = 0
+            for r in mn:
+                cnt_l += 1
+                try:
+                    nxt_indx = mn[cnt_l]
+                except:
+                    break
+                nxt_tm = nxt_indx.formatted_time
+                cur_tm = r.formatted_time
+                val_l.append(r.count)
+                df = nxt_tm - cur_tm
+                if df < 0:
+                    nxt_tm += 24
+                    df = nxt_tm - cur_tm
+                if df > 1:
+                    for t in range(df - 1):
+                        val_l.append(0)
+                        hd = HourData(
+                            user=request.user,
+                            count=0,
+                            formatted_time=cur_tm+t+1
+                        )
+                        hd.save()
+
+            val_l = val_l[::-1]
+
+        if len(val_l) < 24:
+            redc = 24 - len(val_l)
+            for t in range(redc):
+                val_l.append(0)
+        val_l = val_l[::-1]
         for r in range(24):
             one_hour_ago = current_datetime - timedelta(hours=r)
             frmt = int(one_hour_ago.strftime('%H'))
@@ -342,52 +371,94 @@ def getLast24hrs(offset, request):
             dte_list.append(val)
 
         dte_list = dte_list[::-1]
-    return dte_list, yval
+    return dte_list, val_l
 
 
 def getLast7days(request):
     current_datetime = datetime.now()
     dte_list = ['0' for i in range(7)]
-    yval = [0 for i in range(7)]
+    val_l = [0 for i in range(7)]
 
     if request.user.is_authenticated:
         dte_list = []
-        url = f'https://api.roniib.com/r-api-end/getWeekCalls/?username={request.user.username}'
-        response = requests.get(url).json()
-        yval = response['calls']
+        val_l = []
+        mn = DayData.objects.filter(user=request.user)
+        if mn:
+            val_l = [i.count for i in DayData.objects.filter(user=request.user)]
+            val_l = val_l[::-1]
+
+        if len(val_l) < 7:
+            redc = 7 - len(val_l)
+            for t in range(redc):
+                val_l.append(0)
+        val_l = val_l[::-1]
         for r in range(7):
             days_ago = current_datetime - timedelta(days=r)
             frmt = days_ago.strftime('%a (%d)')
             dte_list.append(frmt)
     dte_list = dte_list[::-1]
 
-    return dte_list, yval
+    return dte_list, val_l
 
 
 def getLast30Days(request):
     current_datetime = datetime.now()
     dte_list = ['0' for i in range(30)]
-    yval = [0 for i in range(30)]
+    val_l = [0 for i in range(30)]
     if request.user.is_authenticated:
         dte_list = []
-        url = f'https://api.roniib.com/r-api-end/getMonthCalls/?username={request.user.username}'
-        response = requests.get(url).json()
-        yval = response['calls']
+        val_l = []
+        mn = DayData.objects.filter(user=request.user)
+        if mn:
+            val_l = [i.count for i in DayData.objects.filter(user=request.user)]
+            val_l = val_l[::-1]
+        if len(val_l) < 30:
+            redc = 30 - len(val_l)
+            for t in range(redc):
+                val_l.append(0)
+        val_l = val_l[::-1]
         for r in range(30):
             days_ago = current_datetime - timedelta(days=r)
             frmt = days_ago.strftime('%d/%m')
             dte_list.append(frmt)
 
     dte_list = dte_list[::-1]
-    return dte_list, yval
+    return dte_list, val_l
 
 
 @login_required
 @csrf_exempt
 def myAccount(request):
     lat = 0
-    err = 0
     calls = 0
+    err = 0
+    error = CallErrors.objects.filter(user=request.user).first()
+    c_s = DailyCounter.objects.filter(user=request.user).first()
+    if c_s:
+        calls = c_s.count
+        if calls > 0:
+            usr = UserTokens.objects.filter(user=request.user).first()
+            if usr:
+                sl = usr.subscription_level
+                rt = usr.requests_count
+                if sl == 'Basic':
+                    i_c = 100
+                    r_t = i_c - rt
+                elif sl == 'Developer':
+                    i_c = 300000
+                    r_t = i_c - rt
+
+                else:
+                    i_c = 1000000
+                    r_t = i_c - rt
+
+                number = (r_t / i_c) * 100
+                lat = "{:.1f}".format(number)
+    if error:
+        if calls > 0:
+            er = error.count
+            number = (er / calls) * 100
+            err = "{:.2f}".format(number)
 
     client_ip = request.META.get('REMOTE_ADDR')
     location = geocoder.ip(client_ip)
@@ -403,13 +474,27 @@ def myAccount(request):
     if request.method == 'POST':
         type_e = request.POST.get('type')
         if type_e == 'seven':
+            val = 0
+            for i in DayData.objects.all()[:7]:
+                val += i.count
+            calls = val
+
             graph_x_dat, graph_y_dat = getLast7days(request)
         elif type_e == 'thirty':
+            val = 0
+            for i in DayData.objects.all()[:30]:
+                val += i.count
+            calls = val
+
             graph_x_dat, graph_y_dat = getLast30Days(request)
         else:
-            graph_x_dat, graph_y_dat = getLast24hrs(offset_hours,request)
+            graph_x_dat, graph_y_dat = getLast24hrs(offset_hours, request)
         return JsonResponse({'x_values': graph_x_dat,
-                             'y_values': graph_y_dat})
+                             'y_values': graph_y_dat,
+                             'lat': f'{lat}%',
+                             'err': f'{err}%',
+                             'calls': f'{calls}',
+                             })
 
     usr = UserDetails.objects.filter(user=request.user).first()
     currplan = 'Basic'

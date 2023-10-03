@@ -305,19 +305,22 @@
 
                 <div style="display:flex;justify-content:space-evenly;margin-right:50px">
                     <div style="background-color:red;width:200px;height:100px:display:flex;justify-content:center;border-radius:10px">
-                        <p style="font-size:40px;margin-left:70px;color:white;margin-top:0px;margin-bottom:0px">
+                        <p id="api_errors"
+                           style="font-size:40px;color:white;margin-top:0px;margin-bottom:0px;text-align: center;">
                             {{err}}%</p>
-                        <p style="color:white;margin-left:70px">Errors</p>
+                        <p style="color:white;text-align: center;">Errors</p>
                     </div>
                     <div style="background-color:blue;width:200px;height:100px:display:flex;justify-content:center;border-radius:10px">
-                        <p style="font-size:40px;margin-left:70px;color:white;margin-top:0px;margin-bottom:0px">
+                        <p id="api_usage"
+                           style="font-size:40px;color:white;margin-top:0px;margin-bottom:0px;text-align: center;">
                             {{lat}}%</p>
-                        <p style="color:white;margin-left:70px">Latency</p>
+                        <p style="color:white;text-align: center;">Api Usage</p>
                     </div>
                     <div style="background-color:green;width:200px;height:100px:display:flex;justify-content:center;border-radius:10px">
-                        <p style="font-size:40px;margin-left:70px;color:white;margin-top:0px;margin-bottom:0px">
+                        <p id="api_calls"
+                           style="font-size:40px;color:white;margin-top:0px;margin-bottom:0px;text-align: center;">
                             {{calls}}</p>
-                        <p style="color:white;margin-left:70px">Api Calls</p>
+                        <p style="color:white;text-align: center;">Api Calls</p>
                     </div>
                 </div>
                 <canvas id="chartAnalytics" style="width:100%;margin-top:40px;margin-right:50px"></canvas>
@@ -344,7 +347,7 @@
                 {% if apitoken != 'absent' %}
                 <div id="apiview" style="margin-top:40px;">
                     <div style="display:flex;width:600px;">
-                        <p>API Token: <span style="font-weight:bold;" id="token">**********************************************</span>
+                        <p>API Token: <span style="font-weight:bold;" id="token">**********************************************</span><br>
                             <i class="fa fa-eye" id="visibility"
                                style="color:grey;margin-left:20px"> </i>
                             <i id="copyButton"
@@ -443,7 +446,7 @@
                 {% if apitoken != 'absent' %}
                 <div id="apiview" style="margin-top:40px;">
                     <div style="display:flex;width:100%;">
-                        <p>API Token: <br><span style="font-weight:bold;" id="token">**********************************************</span>
+                        <p>API Token: <br><span style="font-weight:bold;" id="token">**********************************************</span><br>
                             <i class="fa fa-eye" id="visibility"
                                style="color:grey;margin-left:20px"> </i>
                             <i id="copyButton"
@@ -479,62 +482,62 @@
                     <p>NEXT BILLING ON : <span style="color:blue">{{last_transactions}}</span></p>
                     {% endif %}
                     <div style="overflow-x:auto;">
-                    <table class="w3-table w3-striped w3-center" style="width:100%">
-                        <tr>
-                            <th>
-                                <div style="display:flex">
-                                    <p style="margin-left:20px">Transaction ID</p>
-                                </div>
-                            </th>
-                            <th>
-                                <div style="display:flex">
-                                    <p style="margin-left:20px">Amount</p>
-                                </div>
-                            </th>
-                            <th>
-                                <div style="display:flex">
-                                    <p style="margin-left:20px">Transaction date</p>
-                                </div>
-                            </th>
-                            <th>
-                                <div style="display:flex">
-                                    <p style="margin-left:20px">status</p>
-                                </div>
-                            </th>
-                        </tr>
-                        {% for t in transactions %}
-                        <tr>
-                            <td>
-                                <div style="display:flex">
-                                    <p style="margin-left:20px">{{t.transactionId}}</p>
-                                </div>
-                            </td>
-                            <td>
-                                <div style="display:flex;margin-left:20px">
-                                    <p>${{t.amount}}</p>
-                                </div>
+                        <table class="w3-table w3-striped w3-center" style="width:100%">
+                            <tr>
+                                <th>
+                                    <div style="display:flex">
+                                        <p style="margin-left:20px">Transaction ID</p>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div style="display:flex">
+                                        <p style="margin-left:20px">Amount</p>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div style="display:flex">
+                                        <p style="margin-left:20px">Transaction date</p>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div style="display:flex">
+                                        <p style="margin-left:20px">status</p>
+                                    </div>
+                                </th>
+                            </tr>
+                            {% for t in transactions %}
+                            <tr>
+                                <td>
+                                    <div style="display:flex">
+                                        <p style="margin-left:20px">{{t.transactionId}}</p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="display:flex;margin-left:20px">
+                                        <p>${{t.amount}}</p>
+                                    </div>
 
-                            </td>
-                            <td>
-                                <div style="display:flex;margin-left:20px">
-                                    <p style="color:blue">{{t.payment_date}}</p>
-                                </div>
+                                </td>
+                                <td>
+                                    <div style="display:flex;margin-left:20px">
+                                        <p style="color:blue">{{t.payment_date}}</p>
+                                    </div>
 
-                            </td>
-                            <td>
-                                <div style="display:flex;margin-left:20px">
-                                    {% if t.is_successful %}
-                                    <p style="color:green">Success</p>
-                                    {% else %}
-                                    <p style="color:red">Failed</p>
+                                </td>
+                                <td>
+                                    <div style="display:flex;margin-left:20px">
+                                        {% if t.is_successful %}
+                                        <p style="color:green">Success</p>
+                                        {% else %}
+                                        <p style="color:red">Failed</p>
 
-                                    {% endif %}
-                                </div>
+                                        {% endif %}
+                                    </div>
 
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </table>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
                     </div>
                     {% if transactions|length == 0 %}
                     <div style="display:flex;justify-content:center;">
@@ -582,6 +585,7 @@
 </di>
 {% endif %}
 
+{% if request.user_agent.is_pc %}
 <div id="myModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
@@ -595,8 +599,25 @@
         </div>
 
     </div>
-
 </div>
+{% else %}
+<div id="myModal" class="modal" >
+    <div class="modal-content" style="width:90%">
+        <span class="close">&times;</span>
+        <h2 style="color:red">WARNING!!</h2>
+        <p> Kindly note that generating a new API Key will revoke the current API Key.Please proceed with
+            caution</p>
+        <div style="display:flex;justify-content:space-between">
+
+            <div class="button" id="cancel_generating">cancel</div>
+            <div class="button" style="background-color:red" id="continue_generating">continue</div>
+        </div>
+
+    </div>
+</div>
+{% endif %}
+
+
 <p id="csrf" hidden="">{% csrf_token %}</p>
 <script>
 
@@ -783,6 +804,9 @@
                     setTimeout(function () {
                         generateGraph(X_values,Y_values);
                     }, 1000);
+                    $('#api_usage').text(response.lat);
+                    $('#api_errors').text(response.err);
+                    $('#api_calls').text(response.calls);
 
                     },
                 error: function (error) {

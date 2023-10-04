@@ -252,6 +252,11 @@ def register(request):
                     )
                     usdet.save()
                     sendVerMail(request, request.user.username, request.user.email)
+                    if len(DayData.objects.filter(user=request.user)) < 30:
+                        updateDayData(request.user)
+
+                    if len(HourData.objects.filter(user=request.user)) < 24:
+                        updateHourData(request.user)
 
                 return redirect('verify')
             else:
@@ -316,6 +321,63 @@ def generateNewToken(request):
         return JsonResponse({'result': 'Try again'})
 
 
+def updateHourData(request):
+    usr = request.user
+    _time_ = datetime.now(timezone.utc)
+    tms = []
+    for i in range(24):
+        tms.append(i)
+    tms.reverse()
+    for r_ in tms:
+        _t_diff_ = _time_ - timedelta(hours=r_)
+        for t in HourData.objects.filter(user=usr):
+            if t.formatted_time.hour == _t_diff_.hour and t.formatted_time.month == _t_diff_.month and t.formatted_time.day == _t_diff_.day:
+                continue
+        else:
+            hd = HourData(
+                user=usr,
+                count=0,
+                formatted_time=_t_diff_,
+                error_count=0
+
+            )
+            hd.save()
+    user_h_data = HourData.objects.filter(user=usr)
+    for t in user_h_data:
+        tim = t.formatted_time
+        _df = (_time_ - tim).total_seconds() / 3600
+        if _df > 24:
+            t.delete()
+
+
+def updateDayData(request):
+    usr = request.user
+    _time_ = datetime.now(timezone.utc)
+    tms = []
+    for i in range(30):
+        tms.append(i)
+    tms.reverse()
+    for r_ in tms:
+        _t_diff_ = _time_ - timedelta(days=r_)
+        for t in DayData.objects.filter(user=usr):
+            if t.formatted_time.day == _t_diff_.day and t.formatted_time.month == _t_diff_.month:
+                continue
+        hd = DayData(
+            user=usr,
+            count=0,
+            formatted_time=_t_diff_,
+            error_count=0
+
+        )
+        hd.save()
+    user_d_data = DayData.objects.filter(user=usr)
+    for t in user_d_data:
+        tim = t.formatted_time
+        _df = (_time_ - tim).days
+        if _df > 30:
+            t.delete()
+
+
 def getLast24hrs(offset, request):
     current_datetime = datetime.now()
     dte_list = [0 for i in range(24)]
@@ -324,41 +386,20 @@ def getLast24hrs(offset, request):
     if request.user.is_authenticated:
         dte_list = []
         val_l = []
-        mn = HourData.objects.filter(user=request.user)
-        if mn:
-            cnt_l = 0
-            for r in mn:
-                cnt_l += 1
-                try:
-                    nxt_indx = mn[cnt_l]
-                except:
-                    break
-                nxt_tm = nxt_indx.formatted_time
-                cur_tm = r.formatted_time
-                val_l.append(r.count)
-                df = nxt_tm - cur_tm
-                if df < 0:
-                    nxt_tm += 24
-                    df = nxt_tm - cur_tm
-                if df > 1:
-                    for t in range(df - 1):
-                        val_l.append(0)
-                        hd = HourData(
-                            user=request.user,
-                            count=0,
-                            formatted_time=cur_tm+t+1
-                        )
-                        hd.save()
+        fd = HourData.objects.filter(user=request.user)
+        if len(fd) < 24:
+            updateHourData(request)
 
-            val_l = val_l[::-1]
-
-        if len(val_l) < 24:
-            redc = 24 - len(val_l)
-            for t in range(redc):
-                val_l.append(0)
-        val_l = val_l[::-1]
-        for r in range(24):
+        for r in range(23):
             one_hour_ago = current_datetime - timedelta(hours=r)
+            pres = False
+            for r_i in HourData.objects.filter(user=request.user).order_by('-formatted_time'):
+                if r_i.formatted_time.hour == one_hour_ago.hour and r_i.formatted_time.day == one_hour_ago.day and r_i.formatted_time.month == one_hour_ago.month:
+                    val_l.append(r_i.count)
+                    pres = True
+                    break
+            if not pres:
+                val_l.append(0)
             frmt = int(one_hour_ago.strftime('%H'))
             frmt += offset
             val = f'{frmt}:00'
@@ -369,7 +410,7 @@ def getLast24hrs(offset, request):
                 val = f'0{0 + diff}:00'
 
             dte_list.append(val)
-
+        val_l = val_l[::-1]
         dte_list = dte_list[::-1]
     return dte_list, val_l
 
@@ -382,21 +423,26 @@ def getLast7days(request):
     if request.user.is_authenticated:
         dte_list = []
         val_l = []
-        mn = DayData.objects.filter(user=request.user)
-        if mn:
-            val_l = [i.count for i in DayData.objects.filter(user=request.user)]
-            val_l = val_l[::-1]
-
-        if len(val_l) < 7:
-            redc = 7 - len(val_l)
-            for t in range(redc):
-                val_l.append(0)
-        val_l = val_l[::-1]
-        for r in range(7):
+        fd = DayData.objects.filter(user=request.user)
+        if len(fd) < 30:
+            updateDayData(request)
+        for r in range(29):
+            if len(val_l) > 7:
+                break
             days_ago = current_datetime - timedelta(days=r)
+            pres = False
+            for r_i in DayData.objects.filter(user=request.user).order_by('formatted_time'):
+                if r_i.formatted_time.day == days_ago.day and r_i.formatted_time.month == days_ago.month:
+                    val_l.append(r_i.count)
+                    pres = True
+                    break
+            if not pres:
+                val_l.append(0)
+
             frmt = days_ago.strftime('%a (%d)')
             dte_list.append(frmt)
-    dte_list = dte_list[::-1]
+        dte_list = dte_list[::-1]
+        val_l = val_l[::-1]
 
     return dte_list, val_l
 
@@ -408,21 +454,24 @@ def getLast30Days(request):
     if request.user.is_authenticated:
         dte_list = []
         val_l = []
-        mn = DayData.objects.filter(user=request.user)
-        if mn:
-            val_l = [i.count for i in DayData.objects.filter(user=request.user)]
-            val_l = val_l[::-1]
-        if len(val_l) < 30:
-            redc = 30 - len(val_l)
-            for t in range(redc):
-                val_l.append(0)
-        val_l = val_l[::-1]
-        for r in range(30):
+        fd = DayData.objects.filter(user=request.user)
+        if len(fd) < 30:
+            updateDayData(request)
+        for r in range(29):
             days_ago = current_datetime - timedelta(days=r)
+            pres = False
+            for r_i in DayData.objects.filter(user=request.user).order_by('formatted_time'):
+                if r_i.formatted_time.day == days_ago.day and r_i.formatted_time.month == days_ago.month:
+                    val_l.append(r_i.count)
+                    pres = True
+                    break
+            if not pres:
+                val_l.append(0)
+
             frmt = days_ago.strftime('%d/%m')
             dte_list.append(frmt)
-
-    dte_list = dte_list[::-1]
+        dte_list = dte_list[::-1]
+        val_l = val_l[::-1]
     return dte_list, val_l
 
 
@@ -447,7 +496,6 @@ def myAccount(request):
                 elif sl == 'Developer':
                     i_c = 300000
                     r_t = i_c - rt
-
                 else:
                     i_c = 1000000
                     r_t = i_c - rt
@@ -475,16 +523,24 @@ def myAccount(request):
         type_e = request.POST.get('type')
         if type_e == 'seven':
             val = 0
-            for i in DayData.objects.all()[:7]:
+            errs = 0
+            for i in DayData.objects.filter(user=request.user).order_by('-formatted_time')[:7]:
                 val += i.count
+                errs += i.error_count
             calls = val
+            number = (errs / calls) * 100
+            err = "{:.2f}".format(number)
 
             graph_x_dat, graph_y_dat = getLast7days(request)
         elif type_e == 'thirty':
             val = 0
-            for i in DayData.objects.all()[:30]:
+            errs = 0
+            for i in DayData.objects.filter(user=request.user).order_by('-formatted_time')[:30]:
                 val += i.count
+                errs += i.error_count
             calls = val
+            number = (errs / calls) * 100
+            err = "{:.2f}".format(number)
 
             graph_x_dat, graph_y_dat = getLast30Days(request)
         else:

@@ -25,6 +25,7 @@ class ApiDocumentation(models.Model):
     api_total_requests = models.IntegerField(default=0)
 
     class Meta:
+        managed = False
         db_table = 'ApiDocumentation'
 
     def __str__(self):
@@ -109,6 +110,7 @@ class DailyCounter(models.Model):
     dateSub = models.DateTimeField(default=datetime.now(timezone.utc))
 
     class Meta:
+        managed = False
         db_table = 'DailyCounter'
 
     def __str__(self):
@@ -118,25 +120,29 @@ class DailyCounter(models.Model):
 class HourData(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     count = models.IntegerField(null=True)
-    formatted_time = models.IntegerField(default=0)
+    error_count = models.IntegerField(null=True)
+    formatted_time = models.DateTimeField(default=datetime.now(timezone.utc))
 
     class Meta:
+        managed = False
         db_table = 'HourData'
 
     def __str__(self):
-        return str(self.user.username)
+        return f'{self.user.username} || {self.formatted_time}'
 
 
 class DayData(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     count = models.IntegerField(null=True)
-    formatted_time = models.IntegerField(default=0)
+    error_count = models.IntegerField(null=True)
+    formatted_time = models.DateTimeField(default=datetime.now(timezone.utc))
 
     class Meta:
+        managed = False
         db_table = 'DayData'
 
     def __str__(self):
-        return str(self.user.username)
+        return f'{self.user.username} || {self.formatted_time}'
 
 
 class CallErrors(models.Model):
@@ -144,6 +150,7 @@ class CallErrors(models.Model):
     count = models.IntegerField(null=True)
 
     class Meta:
+        managed = False
         db_table = 'CallErrors'
 
     def __str__(self):
@@ -155,6 +162,7 @@ class CallLatency(models.Model):
     count = models.IntegerField(null=True)
 
     class Meta:
+        managed = False
         db_table = 'CallLatency'
 
     def __str__(self):
@@ -169,6 +177,7 @@ class UserTokens(models.Model):
     token_expiry = models.DateTimeField(default=datetime.now(timezone.utc))
 
     class Meta:
+        managed = False
         db_table = 'UserTokens'
 
     def __str__(self):

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+        margin: 10px;
+        font-family: Poppins;
+    }
+
+    </style>
+</head>
+<body style="align-items:center;display:flex;justify-content:center">
+<div>
+    <h2>Verify Your Account</h2>
+    <p>Dear {{user}},</p>
+    <div style="align-items:center;display:flex;justify-content:center">
+        <img src="cid:custom_image" alt="Roniib logo">
+    </div>
+
+    <div>
+        <p>Thank you for creating an account with Roniib API. To activate your account, please use the following
+            verification code:</p>
+
+        <div style="margin-top:20px;margin-bottom:20px">
+            <p>Verification Code: <span style="font-size:20px;font-weight:bold;color:#00b19d;margin-left:30px">{{verf_code}}
+            </span>
+            </p>
+        </div>
+        <p>Follow the on-screen instructions to complete account set up .</p>
+
+        <p>Please enter this code on our website to complete your account activation. If you didn't request this, you
+            can safely ignore this email.</p>
+
+        <p>Thank you for choosing Roniib Api</p>
+    </div>
+
+    <p>Best regards,</p>
+    <p>Roniib Team<br></p>
+</div>
+
+</body>
+</html>

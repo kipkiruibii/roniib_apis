@@ -78,38 +78,39 @@
 
             <h1 class="regtext">Register</h1>
 
-            <hr style="background-color: #013b51;height:2px;margin-top:0px">
+            <hr style="background-color: #013b51;height:2px;margin-top:0px;width:100%">
 
             <form class="f-class" style="margin-left:30px" id="user-registration" onsubmit="return validateForm()"
-                  method="post" action="{% url 'register' %}" >
+                  method="post" action="{% url 'register' %}">
                 {% csrf_token %}
                 <label for="username" style="font-size:15px">Username: </label>
                 <input type="text" id="username" placeholder="Username" name="username"
-                       style="background-color: #f4f4f4;" required><br>
+                       style="background-color: #f4f4f4;width:400px" required><br>
 
                 <label for="email" style="font-size:15px">Email: <small
                         style="font-size:10px;margin-left:10px;margin-top:5px;margin-bottom:10px">To be verified</small></label>
-                <input type="email" id="email" placeholder="Email" name="email" style="background-color: #f4f4f4;"
+                <input type="email" id="email" placeholder="Email" name="email"
+                       style="background-color: #f4f4f4;width:400px"
                        required><br>
                 <label for="password" style="font-size:15px">Password: </label>
                 <div style="display:flex;justify-content:space_between;align-items:center">
                     <input type="password" id="password" name="password" placeholder="Password"
-                           style="background-color: #f4f4f4;" required>
+                           style="background-color: #f4f4f4;width:400px" required>
                     <span style="margin-left:20px;color:grey"><i class="fa fa-eye" id="visibility"></i></span>
                 </div>
                 <br>
                 <label for="cpassword" style="font-size:15px">Confirm Password:</label>
                 <input type="password" id="cpassword" name="cpassword" placeholder="Confirm password"
-                       style="background-color: #f4f4f4;" required><br>
+                       style="background-color: #f4f4f4;width:400px" required><br>
 
 
-                <div style="justify-content: center;display: flex;">
+                <div style="justify-content: center;display: flex;align-items:center">
                     <p>Already have an account? <a href="{% url 'login' %}"> Sign in</a></p>
                 </div>
-                <div style="justify-content: center;display: flex;">
+                <div style="justify-content: center;display: flex;align-items:center">
                     <p>By clicking sign up below you accept the <a href="#">Terms and Conditions</a></p>
                 </div>
-                <div style="justify-content: center;display: flex;">
+                <div style="justify-content: center;display: flex;align-items:center">
                     <button type="submit" class="signupbtn">
                         <p>SIGN UP</p>
                     </button>
@@ -121,42 +122,44 @@
         </div>
         {% else %}
         <div class="incontent" style="background-color:white;padding-top:0px;width:90%;">
-                            {% if message %}
+            {% if message %}
             <div style="color:red;padding-top:10px">Error {{ message }}</div>
-                            {% endif %}
+            {% endif %}
 
             <h1 class="regtext" style="padding-left:10px">Register</h1>
-            <hr style="background-color: #013b51;height:2px;margin-top:0px;width:100%;">
+            <hr style="background-color: #013b51;height:2px;margin-top:0px;">
 
-            <form method="post" class="f-classmob" style="margin-left:30px;width:100%;" action="{% url 'register' %}"
+            <form method="post" class="f-classmob" style="width:90%;" action="{% url 'register' %}"
                   onsubmit="return validateForm()" id="user-registration">
                 {% csrf_token %}
                 <label for="username" style="font-size:15px">Username: </label>
                 <input type="text" id="username" placeholder="Username" name="username"
-                       style="background-color: #f4f4f4;" required><br>
+                       style="background-color: #f4f4f4;width:250px" required><br>
 
                 <label for="email" style="font-size:15px">Email: <small
                         style="font-size:10px;margin-left:10px;margin-top:5px;margin-bottom:10px">To be verified</small></label>
-                <input type="email" id="email" placeholder="Email" name="email" style="background-color: #f4f4f4;"
+                <input type="email" id="email" placeholder="Email" name="email"
+                       style="background-color: #f4f4f4;width:250px"
                        required><br>
                 <label for="password" style="font-size:15px">Password: </label>
                 <div style="display:flex;justify-content:space_between;align-items:center">
                     <input type="password" id="password" name="password" placeholder="Password"
-                           style="background-color: #f4f4f4;" required>
+                           style="background-color: #f4f4f4;width:250px" required>
                     <span style="margin-left:20px;color:grey"><i class="fa fa-eye" id="visibility"></i></span>
                 </div>
                 <br>
                 <label for="cpassword" style="font-size:15px">Confirm Password:</label>
                 <input type="password" id="cpassword" name="cpassword" placeholder="Confirm password"
-                       style="background-color: #f4f4f4;" required><br>
+                       style="background-color: #f4f4f4;width:250px" required><br>
 
-                <div style="align-items: center;display: flex;width:100%">
+                <div style="align-items: center;display: flex;justify-content:center">
                     <p>Already have an account? <a href="{% url 'login' %}"> Sign in</a></p>
                 </div>
-                <div style="align-items: center;display: flex;width:100%">
-                    <p>By clicking sign up below you accept the <a href="#">Terms and Conditions</a></p>
+                <div style="align-items: center;display: flex;justify-content:center">
+                    <p style="text-align:center;align-items: center;">By clicking sign up below you accept the <a
+                            href="#">Terms and Conditions</a></p>
                 </div>
-                <div style="align-items: center;display: flex;width:100%;margin-left:50px">
+                <div style="align-items: center;display: flex;justify-content:center">
                     <button type="submit" class="signupbtn">
                         <p>SIGN UP</p>
                     </button>

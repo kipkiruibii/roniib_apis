@@ -264,7 +264,7 @@
         <div style="display:flex;justify-content:center;margin-left:30px">
             <div class="apicontainer2" style="margin-top:40px;">
                 <div style="display: flex;padding-top: 10px;">
-                    <img src="{{api.api_image}}"
+                        <img width="50" height="50" src="{{api.api_image}}" style="margin-left:20px"
                          alt="">
                     <h2>{{api.api_name}}</h2>
                 </div>
@@ -299,8 +299,8 @@
             <div class="api-list">
                 {% for api in popular %}
                 <div class="apicontainer2">
-                    <div style="display: flex;padding-top: 10px;">
-                        <img src="{{api.api_image}}"
+                    <div style="display: flex;padding-top: 10px;margin-left:10px">
+                        <img width="50" height="50" src="{{api.api_image}}" style="margin-left:20px"
                              alt="">
                         <h2>{{api.api_name}}</h2>
                     </div>
@@ -323,8 +323,8 @@
             <div class="api-list">
                 {% for api in recommended %}
                 <div class="apicontainer2">
-                    <div style="display: flex;padding-top: 10px;">
-                        <img src="{{api.api_image}}"
+                    <div style="display: flex;padding-top: 10px;margin-left:10px">
+                        <img width="50" height="50" src="{{api.api_image}}" style="margin-left:20px"
                              alt="">
                         <h2>{{api.api_name}}</h2>
                     </div>

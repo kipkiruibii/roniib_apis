@@ -133,6 +133,8 @@ STATIC_ROOT = '/home/roninkhl/public_html/static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+from email.utils import formataddr
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'roniib.com'  # Your SMTP server hostname
@@ -140,7 +142,8 @@ EMAIL_PORT = 465  # The SMTP port number
 EMAIL_USE_SSL = True  # Use SSL for secure connection
 EMAIL_HOST_USER = 'support@roniib.com'  # Your cPanel email address
 EMAIL_HOST_PASSWORD = 'august4th'  # Your email account password
-DEFAULT_FROM_EMAIL = 'support@roniib.com'  # The default 'from' address for your app's emails
+# DEFAULT_FROM_EMAIL = 'support@roniib.com'  # The default 'from' address for your app's emails
+DEFAULT_FROM_EMAIL = formataddr(("Roniib Support", 'support@roniib.com'))
 
 
 PAYPAL_TEST = False

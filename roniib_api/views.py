@@ -1,6 +1,9 @@
+from email.mime.image import MIMEImage
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
+from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from paypal.standard.forms import PayPalPaymentsForm
@@ -16,6 +19,7 @@ from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 import pytz
 import geocoder
+from django.core.mail import EmailMultiAlternatives
 
 
 def generate_random_code(length=6):
@@ -26,6 +30,184 @@ def generate_random_code(length=6):
 
 def home(request):
     return render(request, 'index.html')
+
+
+def resendResetCode(request):
+    if request.method == "POST":
+        pass
+
+    pass
+
+
+def reset_password_code(request):
+    email = ''
+    messg = ''
+    val = request.GET.get('email_addr', None)
+    if val:
+        user = User.objects.filter(email__exact=val).first()
+        if user:
+            email = EmailMultiAlternatives(
+                subject='Password Reset Verification Code',
+                body='Plain text version of the email (optional)',
+                from_email='support@roniib.com',
+                to=[val],
+            )
+            rc = generate_random_code()
+
+            PasswordReset.objects.filter(user=user).delete()
+            m = PasswordReset(
+                user=user,
+                reset_code=rc
+            )
+            m.save()
+
+            context = {
+                'user': user.username,
+                'verf_code': rc,
+            }
+
+            html_content = render_to_string('password_reset_email.html', context=context)
+            email.attach_alternative(html_content, 'text/html')
+
+            image_path = '/home/roninkhl/mainapplication/roniib_api/static/images/roniib_logo.png'
+            email.mixed_subtype = 'related'
+            image_file = open(image_path, 'rb')
+            email_image = MIMEImage(image_file.read())
+            email_image.add_header('Content-ID', '<custom_image>')
+            email.attach(email_image)
+            email.send()
+            context = {
+                'failed': False,
+                'message': 'Sent',
+                'isVerf': True,
+                'email_ad': val,
+                'stage_2': True
+            }
+        else:
+            context = {
+                'failed': True,
+                'message': 'Failed to send',
+                'stage_2': True
+
+            }
+        return render(request, 'reset_password_code.html', context)
+
+    if request.method == "POST":
+        emaily = request.POST.get('email', None)
+        if emaily:
+            try:
+                user = User.objects.filter(email__exact=emaily).first()
+                if user:
+
+                    email = EmailMultiAlternatives(
+                        subject='Password Reset Verification Code',
+                        body='Plain text version of the email (optional)',
+                        from_email='support@roniib.com',
+                        to=[emaily],
+                    )
+                    rc = generate_random_code()
+
+                    PasswordReset.objects.filter(user=user).delete()
+                    m = PasswordReset(
+                        user=user,
+                        reset_code=rc
+                    )
+                    m.save()
+
+                    context = {
+                        'user': user.username,
+                        'verf_code': rc,
+                    }
+
+                    html_content = render_to_string('password_reset_email.html', context=context)
+                    email.attach_alternative(html_content, 'text/html')
+
+                    image_path = '/home/roninkhl/mainapplication/roniib_api/static/images/roniib_logo.png'
+                    email.mixed_subtype = 'related'
+                    image_file = open(image_path, 'rb')
+                    email_image = MIMEImage(image_file.read())
+                    email_image.add_header('Content-ID', '<custom_image>')
+                    email.attach(email_image)
+                    email.send()
+                    context = {
+                        'failed': False,
+                        'message': 'Enter the verification code sent to your email below',
+                        'isVerf': True,
+                        'email_ad': emaily,
+                        'stage_2': True
+                    }
+                else:
+                    context = {
+                        'failed': True,
+                        'message': 'No account associated with the email address provided',
+
+                    }
+                return render(request, 'reset_password_code.html', context)
+
+            except:
+                traceback.print_exc()
+        verfc = request.POST.get('verifycd', None)
+        if verfc:
+            eml = request.POST.get('eml', None)
+            user = User.objects.filter(email__exact=eml).first()
+
+            m = PasswordReset.objects.filter(user=user, reset_code=verfc).first()
+            if m:
+                context = {
+                    'failed': False,
+                    'message': "Let's set up a new password",
+                    'isVerf': True,
+                    'email_ad': eml,
+                    'stage_3': True
+                }
+
+                return render(request, 'reset_password_code.html', context=context)
+            else:
+                context = {
+                    'failed': True,
+                    'message': 'Invalid code',
+                    'stage_2': True
+                }
+                return render(request, 'reset_password_code.html', context)
+
+        passw1 = request.POST.get('pass1', None)
+        passw2 = request.POST.get('pass2', None)
+        eml = request.POST.get('eml', None)
+        if passw1 and passw1:
+            if passw1 == passw2:
+                user = User.objects.filter(email__exact=eml).first()
+                if user:
+                    user.set_password(passw1)
+                    user.save()
+                    PasswordReset.objects.filter(user=user).delete()
+                    context = {
+                        'stage_4': True
+                    }
+                else:
+                    context = {
+                        'failed': True,
+                        'message': 'Please check your passwords and try again',
+                        'stage_3': True
+                    }
+                return render(request, 'reset_password_code.html', context)
+            else:
+                context = {
+                    'failed': True,
+                    'message': 'Please check your passwords and try again',
+                    'stage_3': True
+                }
+                return render(request, 'reset_password_code.html', context)
+
+    context = {
+        'user': '',
+        'message': messg
+    }
+
+    return render(request, 'reset_password_code.html', context=context)
+
+
+def reset_password(request):
+    return render(request, 'reset_password.html')
 
 
 def pricing(request):
@@ -151,17 +333,30 @@ def sendVerMail(request, username, email):
         if usrr:
             usrr.verf_code = rc
             usrr.save()
+            val = email
 
-        message = (f"Hello {username},\nTo verify your email address and secure your account, please use the "
-                   f"following 6-character\n \nverification code:{rc} \n\nSimply copy this code "
-                   "and paste it on our website to complete the verification process.\n\nThank you for choosing "
-                   "us.\n\nBest regards,\nRoniib Team")
-        subject = 'Email Verification Code for Your Account'
-        message = message
-        from_email = 'support@roniib.com'
-        recipient_list = [email]
+            email = EmailMultiAlternatives(
+                subject='Account Verification',
+                body='Plain text version of the email (optional)',
+                from_email='support@roniib.com',
+                to=[val],
+            )
 
-        send_mail(subject, message, from_email, recipient_list)
+            context = {
+                'user': usrr.user.username,
+                'verf_code': rc,
+            }
+
+            html_content = render_to_string('welcome_email.html', context=context)
+            email.attach_alternative(html_content, 'text/html')
+
+            image_path = '/home/roninkhl/mainapplication/roniib_api/static/images/roniib_logo.png'
+            email.mixed_subtype = 'related'
+            image_file = open(image_path, 'rb')
+            email_image = MIMEImage(image_file.read())
+            email_image.add_header('Content-ID', '<custom_image>')
+            email.attach(email_image)
+            email.send()
         return 'success'
     except Exception as e:
         return str(e)
@@ -181,7 +376,7 @@ def request_ver_link(request):
             user_email = request.user.email
 
             val = sendVerMail(request, request.user.username, user_email)
-            isMessPositive = True,
+            isMessPositive = True
             disp_message = 'Verification link has been sent to your email. Check your inbox or spam box'
             if val != 'success':
                 isMessPositive = False
@@ -251,14 +446,20 @@ def register(request):
                         user=user
                     )
                     usdet.save()
-                    sendVerMail(request, request.user.username, request.user.email)
-                    if len(DayData.objects.filter(user=request.user)) < 30:
-                        updateDayData(request.user)
+                    val = sendVerMail(request, request.user.username, request.user.email)
+                    isMessPositive = True
+                    disp_message = 'Verification link has been sent to your email. Check your inbox or spam box'
+                    if val != 'success':
+                        isMessPositive = False
+                        disp_message = f'Failed {val}'
 
-                    if len(HourData.objects.filter(user=request.user)) < 24:
-                        updateHourData(request.user)
-
-                return redirect('verify')
+                    context = {
+                        'is_verified': False,
+                        'email': email,
+                        'isMessPositive': isMessPositive,
+                        'disp_message': disp_message
+                    }
+                    return render(request, 'verificationpage.html', context=context)
             else:
                 message = 'An account with this username/email already exists. Please try a different one'
                 return render(request, 'register.html', context={'message': message})
@@ -331,7 +532,7 @@ def updateHourData(request):
     for r_ in tms:
         _t_diff_ = _time_ - timedelta(hours=r_)
         for t in HourData.objects.filter(user=usr):
-            if t.formatted_time.hour == _t_diff_.hour and t.formatted_time.month == _t_diff_.month and t.formatted_time.day == _t_diff_.day:
+            if t.formatted_time.hour == _t_diff_.hour:
                 continue
         else:
             hd = HourData(
@@ -382,6 +583,8 @@ def getLast24hrs(offset, request):
     current_datetime = datetime.now()
     dte_list = [0 for i in range(24)]
     val_l = [0 for i in range(24)]
+    errors = 0
+    calls = 0
 
     if request.user.is_authenticated:
         dte_list = []
@@ -390,12 +593,14 @@ def getLast24hrs(offset, request):
         if len(fd) < 24:
             updateHourData(request)
 
-        for r in range(23):
+        for r in range(24):
             one_hour_ago = current_datetime - timedelta(hours=r)
             pres = False
             for r_i in HourData.objects.filter(user=request.user).order_by('-formatted_time'):
                 if r_i.formatted_time.hour == one_hour_ago.hour and r_i.formatted_time.day == one_hour_ago.day and r_i.formatted_time.month == one_hour_ago.month:
                     val_l.append(r_i.count)
+                    calls += r_i.count
+                    errors += r_i.error_count
                     pres = True
                     break
             if not pres:
@@ -412,7 +617,7 @@ def getLast24hrs(offset, request):
             dte_list.append(val)
         val_l = val_l[::-1]
         dte_list = dte_list[::-1]
-    return dte_list, val_l
+    return dte_list, val_l, errors, calls
 
 
 def getLast7days(request):
@@ -426,9 +631,9 @@ def getLast7days(request):
         fd = DayData.objects.filter(user=request.user)
         if len(fd) < 30:
             updateDayData(request)
-        for r in range(29):
-            if len(val_l) > 7:
-                break
+        for r in range(7):
+            # if len(val_l) > 7:
+            #     break
             days_ago = current_datetime - timedelta(days=r)
             pres = False
             for r_i in DayData.objects.filter(user=request.user).order_by('formatted_time'):
@@ -457,7 +662,7 @@ def getLast30Days(request):
         fd = DayData.objects.filter(user=request.user)
         if len(fd) < 30:
             updateDayData(request)
-        for r in range(29):
+        for r in range(30):
             days_ago = current_datetime - timedelta(days=r)
             pres = False
             for r_i in DayData.objects.filter(user=request.user).order_by('formatted_time'):
@@ -478,36 +683,16 @@ def getLast30Days(request):
 @login_required
 @csrf_exempt
 def myAccount(request):
-    lat = 0
-    calls = 0
-    err = 0
-    error = CallErrors.objects.filter(user=request.user).first()
-    c_s = DailyCounter.objects.filter(user=request.user).first()
-    if c_s:
-        calls = c_s.count
-        if calls > 0:
-            usr = UserTokens.objects.filter(user=request.user).first()
-            if usr:
-                sl = usr.subscription_level
-                rt = usr.requests_count
-                if sl == 'Basic':
-                    i_c = 100
-                    r_t = i_c - rt
-                elif sl == 'Developer':
-                    i_c = 300000
-                    r_t = i_c - rt
-                else:
-                    i_c = 1000000
-                    r_t = i_c - rt
-
-                number = (r_t / i_c) * 100
-                lat = "{:.1f}".format(number)
-    if error:
-        if calls > 0:
-            er = error.count
-            number = (er / calls) * 100
-            err = "{:.2f}".format(number)
-
+    i_c = 1
+    usr = UserTokens.objects.filter(user=request.user).first()
+    if usr:
+        sl = usr.subscription_level
+        if sl == 'Enterprise':
+            i_c = 1000000
+        elif sl == 'Developer':
+            i_c = 300000
+        else:
+            i_c = 100
     client_ip = request.META.get('REMOTE_ADDR')
     location = geocoder.ip(client_ip)
     timezone_name = location.raw.get('timezone')
@@ -518,7 +703,13 @@ def myAccount(request):
     except pytz.UnknownTimeZoneError:
         offset_hours = 0
 
-    graph_x_dat, graph_y_dat = getLast24hrs(offset_hours, request)
+    graph_x_dat, graph_y_dat, errors, calls = getLast24hrs(offset_hours, request)
+    err = 0
+    number = (calls / i_c) * 100
+    lat = "{:.2f}".format(number)
+    if calls > 0:
+        number = (errors / calls) * 100
+        err = "{:.2f}".format(number)
     if request.method == 'POST':
         type_e = request.POST.get('type')
         if type_e == 'seven':
@@ -544,7 +735,7 @@ def myAccount(request):
 
             graph_x_dat, graph_y_dat = getLast30Days(request)
         else:
-            graph_x_dat, graph_y_dat = getLast24hrs(offset_hours, request)
+            graph_x_dat, graph_y_dat, errors, calls = getLast24hrs(offset_hours, request)
         return JsonResponse({'x_values': graph_x_dat,
                              'y_values': graph_y_dat,
                              'lat': f'{lat}%',
@@ -553,6 +744,8 @@ def myAccount(request):
                              })
 
     usr = UserDetails.objects.filter(user=request.user).first()
+    isLate = False
+
     currplan = 'Basic'
     if not usr.is_verified:
         user_email = request.user.email
@@ -570,7 +763,7 @@ def myAccount(request):
         apitoken = usr.api_key
         datecreated = usr.date_created
         dt = datecreated.strftime("%d/%m/%Y at %H:%M UTC")
-        lastt = UserTransactions.objects.filter(user=request.user).first()
+        lastt = UserTransactions.objects.filter(user=request.user, is_successful=True).last()
 
         dtc = ''
         if lastt:
@@ -578,16 +771,21 @@ def myAccount(request):
             dtc = lt.strftime("%d/%m/%Y")
             currplan = lastt.subscription_type
 
+            tn = datetime.now(timezone.utc) - lt
+            if tn.total_seconds() > 0:
+                isLate = True
+
     context = {
         'apitoken': apitoken,
         'datecreated': dt,
-        'transactions': UserTransactions.objects.filter(user=request.user),
+        'transactions': UserTransactions.objects.filter(user=request.user).order_by('-pk'),
         'last_transactions': dtc,
         'current_plan': currplan,
         'notifications': UserNotifications.objects.filter(user=request.user),
         'lat': lat,
         'err': err,
         'calls': calls,
+        'isLate': isLate,
         'graph_x_dat': graph_x_dat,
         'graph_y_dat': graph_y_dat,
 

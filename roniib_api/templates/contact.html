@@ -78,7 +78,7 @@
             {% endif %}
             <h1 class="regtext">Contact Form</h1>
             <hr style="background-color: #013b51;height:2px;margin-top:0px">
-            <form class="f-class" style="margin-left:30px" action="{% url 'contact' %}" method="post">
+            <form class="f-class" style="margin-left:30px;" action="{% url 'contact' %}" method="post">
                 {% csrf_token %}
                 <label for="username" style="font-size:15px">Email: </label>
                 <input type="email" name="email" id="username" placeholder="Email" style="background-color: #f4f4f4;"
@@ -104,18 +104,18 @@
             {% endif %}
             <h1 class="regtext" style="padding-left:10px">Contact Form</h1>
             <hr style="background-color: #013b51;height:2px;margin-top:0px;width:100%;">
-            <form method="post" class="f-classmob" style="margin-left:30px;width:100%;" action="{% url 'contact' %}">
+            <form method="post" class="f-classmob" style="width:100%;" action="{% url 'contact' %}">
                 {% csrf_token %}
                 <label for="username" style="font-size:15px">Email: </label>
                 <input type="email" id="username" name="email" required placeholder="Email"
-                       style="background-color: #f4f4f4;"><br>
+                       style="background-color: #f4f4f4;width:250px;"><br>
                 <label for="complaint" style="font-size:15px">Complaint/compliment:</label><br>
-                <textarea rows="30" cols="45" name="message" required
+                <textarea rows="30" cols="50" name="message" required
                           placeholder="Describe in detail the issue you are facing" id="complaint"
-                          style="background-color: #f4f4f4;width:85%">
+                          style="background-color: #f4f4f4;width:250px;padding:10px">
                 </textarea>
 
-                <div style="align-items: center;display: flex;width:100%;margin-left:50px">
+                <div style="align-items: center;display: flex;justify-content:center">
                     <button type="submit" class="signupbtn">
                         <p>SUBMIT</p>
                     </button>

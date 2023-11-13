@@ -37,7 +37,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-go.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-json.min.js"></script>
 
+    <style>
+        pre:not(.parent) {
+      display: block;
+      white-space: pre-wrap;
+      margin: 0;
+      padding: 0;
+    }
 
+    .parent pre {
+      display: block;
+      white-space: pre-wrap;
+      margin: 0;
+      padding: 0;
+      float: left; /* new line */
+    }
+
+    </style>
 </head>
 
 <body style="width:100%">
@@ -137,17 +153,8 @@
                 <h2>Overview</h2>
             </div>
 
-
-            <h4>Introduction</h4>
-            <div style="padding-left:10px">
-                <p>
-                    {{api_intro}}
-                </p>
-            </div>
-
-
             <h4>Getting Started</h4>
-            <div style="padding-left:10px">
+            <div style="padding-left:10px;padding-bottom:20px">
                 <p>
                     To get started with the {{api_name}}, you'll need to sign up for an API key, which will grant you
                     access
@@ -155,7 +162,7 @@
                     handle responses, and utilize various endpoints effectively.
                 </p></div>
             <h4>Authentication</h4>
-            <div style="padding-left:10px">
+            <div style="padding-left:10px;padding-bottom:20px">
 
                 <p>
                     Once you have your API key, include it as an "Authorization" header in your HTTP requests using the
@@ -168,7 +175,7 @@
                     generated a new one.
                 </p></div>
             <h4>Endpoint Reference</h4>
-            <div style="padding-left:10px">
+            <div style="padding-left:10px;padding-bottom:20px">
                 <p style="font-size:16px">General requests</p>
                 <p>Note: All requests follow the following code sample. Replace the 'endpoint url' with the respective
                     endpoint
@@ -178,7 +185,7 @@
                 <p style="font-size:12px">Sample:</p>
 
 
-                <div style="display: flex;justify-content: space-between;margin-right:20px">
+                <div style="display: flex;justify-content: space-between;margin-right:20px;margin-bottom:10px">
                     <select id="language-selector"
                             style="font-family: poppins;background-color: azure;border-radius: 10px;">
                         <option value="javascript">JavaScript</option>
@@ -202,7 +209,7 @@
                     </button>
 
                 </div>
-<pre style="tab-index:4;margin:0;" >
+                <pre style="tab-index:4;margin:0;">
 <code id="code" class="language-javascript">
 
 const axios = require('axios');
@@ -239,12 +246,10 @@ axios
 
                     {% for e in endpoints %}
 
-                    <li id="{{e.endpoint_name}}">{{e.endpoint_name}}</li>
+                    <li id="{{e.endpoint_name}}" style="margin-top:20px">{{e.endpoint_name}}</li>
                     <p>{{e.endpoint_desc}}</p>
                     <p>apiURL:</p>
-<pre style="tab-index:4;margin:0;" >
-            <code class="language-javascript">{{e.endpoint_url}}</code>
-            </pre>
+                    <code class="language-javascript">{{e.endpoint_url}}</code>
                     <br>
                     {% endfor %}
 
@@ -252,7 +257,7 @@ axios
                 <p></p>
             </div>
             <h4>Rate Limiting</h4>
-            <div style="padding-left:10px">
+            <div style="padding-left:10px;padding-bottom:20px">
 
                 <p> Our API enforces rate limits to ensure fair usage and to protect the system from abuse. Rate
                     limiting is
@@ -262,7 +267,7 @@ axios
                 </p>
             </div>
             <h4>Error Handling</h4>
-            <div style="padding-left:10px">
+            <div style="padding-left:10px;padding-bottom:20px">
 
                 <p> The API uses standard HTTP status codes to indicate the success or failure of a request.</p> <br>
                 Here
@@ -276,8 +281,7 @@ axios
 
                     <li><p>400 Bad Request: The request was invalid, and the server could not understand it. The
                         response
-                        may
-                        contain details about the error in the response body.</p>
+                        contains details about the error in the response body.</p>
                     </li>
                     <li><p>401 Unauthorized: The request requires authentication, and the credentials are missing or
                         invalid.</p>
@@ -295,8 +299,8 @@ axios
                     </p>
                 </ul>
                 <p>Error responses typically include a JSON object with information about the error.</p>
-<pre style="tab-index:4;margin:0;" >
-<code class="language-json" tabindex="0px" >
+                <pre style="tab-index:4;margin:0;">
+<code class="language-json" tabindex="0px">
 {
   "error": {
     "status":401,
@@ -309,7 +313,7 @@ axios
 
             </div>
             <h4>FAQ and Support</h4>
-            <div style="padding-left:10px">
+            <div style="padding-left:10px;padding-bottom:20px">
                 <p>
                     <span style="font-weight:bold;color:black">Frequently Asked Questions (FAQs)</span><br>
 
@@ -328,6 +332,10 @@ axios
 
                     <span style="font-weight:500;color:green">A: Yes, we have rate limits in place to ensure fair usage.Please refer to our Rate Limiting section at the pricing page
                 for more details.</span><br><br>
+                    <span style="font-weight:normal;color:black">Q: Where do I get an API Key?</span><br>
+
+                    <span style="font-weight:500;color:green">A:  API Key is found by navigating to <strong>My Account >My API Keys</strong>. Copy the API Key and place them in the headers of your requests. In case you would like to change the API Key, click <strong>Generate API Key</strong></span><br><br>
+
                     <span style="font-weight:bold;">Support</span><br>
 
                     If you encounter any issues or have questions that are not covered in the FAQs, our support team is
@@ -344,7 +352,7 @@ axios
                 </p>
             </div>
             <h4>Terms of Use and Legal Information</h4>
-            <div style="padding-left:10px">
+            <div style="padding-left:10px;padding-bottom:20px">
                 <p>
                     By using the API provided by Roniib APIs, you agree to comply with these Terms of Use. If you do not
                     agree
@@ -387,7 +395,7 @@ axios
                 </ul>
             </div>
             <h4>Feedback</h4>
-            <div style="padding-left:10px">
+            <div style="padding-left:10px;padding-bottom:20px">
                 <p>
                     We value your feedback on our API! If you encounter any issues, have suggestions for improvements,
                     or
@@ -407,140 +415,140 @@ axios
 
     <p hidden id="javascript_code">
 
-const axios = require('axios');
+        const axios = require('axios');
 
-// Replace 'YOUR_API_KEY_HERE' with your actual API key
-const apiKey = 'YOUR_API_KEY_HERE';
+        // Replace 'YOUR_API_KEY_HERE' with your actual API key
+        const apiKey = 'YOUR_API_KEY_HERE';
 
-// Define the API endpoint you want to access
-const apiUrl = 'endpoint url';
+        // Define the API endpoint you want to access
+        const apiUrl = 'endpoint url';
 
-// Create headers with the Authorization header
-const headers = {
-    Authorization: `Token ${apiKey}`,
-};
+        // Create headers with the Authorization header
+        const headers = {
+        Authorization: `Token ${apiKey}`,
+        };
 
-// Make a GET request with the headers
-axios
-    .get(apiUrl, { headers })
-    .then((response) => {
+        // Make a GET request with the headers
+        axios
+        .get(apiUrl, { headers })
+        .then((response) => {
         if (response.status === 200) {
-            const data = response.data; // Access the response data
-            // Process the data as needed
+        const data = response.data; // Access the response data
+        // Process the data as needed
         } else {
-            console.error(`Error: ${response.status} - ${response.statusText}`);
+        console.error(`Error: ${response.status} - ${response.statusText}`);
         }
-    })
-    .catch((error) => {
+        })
+        .catch((error) => {
         console.error('Request error:', error);
-    });
+        });
 
 
     </p>
 
     <p hidden id="python_code">
-import requests
+        import requests
 
-# Replace these values with your actual API endpoint and Access token
-api_endpoint = 'endpoint url'
-access_token = 'YOUR_ACCESS_TOKEN_HERE'
+        # Replace these values with your actual API endpoint and Access token
+        api_endpoint = 'endpoint url'
+        access_token = 'YOUR_ACCESS_TOKEN_HERE'
 
-# Define the headers with the Authorization Access token
-headers = {
-    'Authorization': f'Token {access_token}',
-    'Content-Type': 'application/json' # You can modify headers as needed
-}
+        # Define the headers with the Authorization Access token
+        headers = {
+        'Authorization': f'Token {access_token}',
+        'Content-Type': 'application/json' # You can modify headers as needed
+        }
 
-try:
-    # Make the HTTP GET request
-    response = requests.get(api_endpoint, headers=headers)
+        try:
+        # Make the HTTP GET request
+        response = requests.get(api_endpoint, headers=headers)
 
-    # Check if the request was successful (status code 200)
-    if response.status_code == 200:
+        # Check if the request was successful (status code 200)
+        if response.status_code == 200:
         # Process the API response here (e.g., print or parse the data)
         print(response.json())
-    else:
+        else:
         # Handle errors or non-200 status codes here
         print(f"Request failed with status code {response.status_code}")
 
-except requests.exceptions.RequestException as e:
-    # Handle network or request-related exceptions
-    print(f"Request error: {e}")
+        except requests.exceptions.RequestException as e:
+        # Handle network or request-related exceptions
+        print(f"Request error: {e}")
 
     </p>
 
     <p hidden id="java_code">
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+        import java.io.BufferedReader;
+        import java.io.IOException;
+        import java.io.InputStreamReader;
+        import java.net.HttpURLConnection;
+        import java.net.URL;
 
-public class HttpGetWithAccessToken {
-    public static void main(String[] args) {
+        public class HttpGetWithAccessToken {
+        public static void main(String[] args) {
         // Replace these values with your actual API endpoint and Access token
         String apiEndpoint = "endpoint url";
         String accessToken = "YOUR_ACCESS_TOKEN_HERE";
 
         try {
-            // Create a URL object with the API endpoint
-            URL url = new URL(apiEndpoint);
+        // Create a URL object with the API endpoint
+        URL url = new URL(apiEndpoint);
 
-            // Open a connection to the URL
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        // Open a connection to the URL
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-            // Set the request method to GET
-            connection.setRequestMethod("GET");
+        // Set the request method to GET
+        connection.setRequestMethod("GET");
 
-            // Set the Authorization header with the Access token
-            connection.setRequestProperty("Authorization", "Token " + accessToken);
+        // Set the Authorization header with the Access token
+        connection.setRequestProperty("Authorization", "Token " + accessToken);
 
-            // Get the response code
-            int responseCode = connection.getResponseCode();
+        // Get the response code
+        int responseCode = connection.getResponseCode();
 
-            // Check if the request was successful (status code 200)
-            if (responseCode == 200) {
-                // Read and print the response data
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                String line;
-                StringBuilder response = new StringBuilder();
+        // Check if the request was successful (status code 200)
+        if (responseCode == 200) {
+        // Read and print the response data
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String line;
+        StringBuilder response = new StringBuilder();
 
-                while ((line = reader.readLine()) != null) {
-                    response.append(line);
-                }
-
-                reader.close();
-
-                System.out.println(response.toString());
-            } else {
-                // Handle errors or non-200 status codes here
-                System.out.println("Request failed with status code " + responseCode);
-            }
-
-            // Close the connection
-            connection.disconnect();
-        } catch (IOException e) {
-            // Handle network or IO exceptions
-            e.printStackTrace();
+        while ((line = reader.readLine()) != null) {
+        response.append(line);
         }
-    }
-}
+
+        reader.close();
+
+        System.out.println(response.toString());
+        } else {
+        // Handle errors or non-200 status codes here
+        System.out.println("Request failed with status code " + responseCode);
+        }
+
+        // Close the connection
+        connection.disconnect();
+        } catch (IOException e) {
+        // Handle network or IO exceptions
+        e.printStackTrace();
+        }
+        }
+        }
 
 
     </p>
 
     <p hidden id="kotlin_code">
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
+        import java.io.BufferedReader
+        import java.io.InputStreamReader
+        import java.net.HttpURLConnection
+        import java.net.URL
 
-fun main() {
-    // Replace these values with your actual API endpoint and Access token
-    val apiEndpoint = "endpoint url"
-    val accessToken = "YOUR_ACCESS_TOKEN_HERE"
+        fun main() {
+        // Replace these values with your actual API endpoint and Access token
+        val apiEndpoint = "endpoint url"
+        val accessToken = "YOUR_ACCESS_TOKEN_HERE"
 
-    try {
+        try {
         // Create a URL object with the API endpoint
         val url = URL(apiEndpoint)
 
@@ -558,83 +566,83 @@ fun main() {
 
         // Check if the request was successful (status code 200)
         if (responseCode == 200) {
-            // Read and print the response data
-            val reader = BufferedReader(InputStreamReader(connection.inputStream))
-            var line: String?
-            val response = StringBuilder()
+        // Read and print the response data
+        val reader = BufferedReader(InputStreamReader(connection.inputStream))
+        var line: String?
+        val response = StringBuilder()
 
-            while (reader.readLine().also { line = it } != null) {
-                response.append(line)
-            }
+        while (reader.readLine().also { line = it } != null) {
+        response.append(line)
+        }
 
-            reader.close()
+        reader.close()
 
-            println(response.toString())
+        println(response.toString())
         } else {
-            // Handle errors or non-200 status codes here
-            println("Request failed with status code $responseCode")
+        // Handle errors or non-200 status codes here
+        println("Request failed with status code $responseCode")
         }
 
         // Close the connection
         connection.disconnect()
-    } catch (e: Exception) {
+        } catch (e: Exception) {
         // Handle network or IO exceptions
         e.printStackTrace()
-    }
-}
+        }
+        }
     </p>
 
     <p hidden id="swift_code">
-import Foundation
+        import Foundation
 
-// Replace these values with your actual API endpoint and Access token
-let apiEndpoint = "endpoint url"
-let accessToken = "YOUR_ACCESS_TOKEN_HERE"
+        // Replace these values with your actual API endpoint and Access token
+        let apiEndpoint = "endpoint url"
+        let accessToken = "YOUR_ACCESS_TOKEN_HERE"
 
-// Create a URL object with the API endpoint
-if let url = URL(string: apiEndpoint) {
-    var request = URLRequest(url: url)
+        // Create a URL object with the API endpoint
+        if let url = URL(string: apiEndpoint) {
+        var request = URLRequest(url: url)
 
-    // Set the HTTP method to GET
-    request.httpMethod = "GET"
+        // Set the HTTP method to GET
+        request.httpMethod = "GET"
 
-    // Set the Authorization header with the Access token
-    request.setValue("Token \(accessToken)", forHTTPHeaderField: "Authorization")
+        // Set the Authorization header with the Access token
+        request.setValue("Token \(accessToken)", forHTTPHeaderField: "Authorization")
 
-    let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
         if let error = error {
-            // Handle network or request-related errors here
-            print("Request error: \(error)")
-            return
+        // Handle network or request-related errors here
+        print("Request error: \(error)")
+        return
         }
 
         if let httpResponse = response as? HTTPURLResponse {
-            // Check if the request was successful (status code 200)
-            if httpResponse.statusCode == 200 {
-                if let data = data {
-                    // Process the API response data here (e.g., print or parse the data)
-                    if let responseString = String(data: data, encoding: .utf8) {
-                        print(responseString)
-                    }
-                }
-            } else {
-                // Handle errors or non-200 status codes here
-                print("Request failed with status code \(httpResponse.statusCode)")
-            }
+        // Check if the request was successful (status code 200)
+        if httpResponse.statusCode == 200 {
+        if let data = data {
+        // Process the API response data here (e.g., print or parse the data)
+        if let responseString = String(data: data, encoding: .utf8) {
+        print(responseString)
         }
-    }
+        }
+        } else {
+        // Handle errors or non-200 status codes here
+        print("Request failed with status code \(httpResponse.statusCode)")
+        }
+        }
+        }
 
-    // Resume the task to initiate the request
-    task.resume()
-}
+        // Resume the task to initiate the request
+        task.resume()
+        }
 
     </p>
 
     <p hidden id="objectivec_code">
-#import &lt;Foundation/Foundation.h&gt;
+        #import &lt;Foundation/Foundation.h&gt;
 
-int main(int argc, const char * argv[]) {
-    @autoreleasepool {
+        int main(int argc, const char * argv[]) {
+        @autoreleasepool {
         // Replace these values with your actual endpoint and Access token
         NSString *apiEndpoint = @"endpoint url";
         NSString *accessToken = @"YOUR_ACCESS_TOKEN_HERE";
@@ -650,293 +658,295 @@ int main(int argc, const char * argv[]) {
         NSString *authHeader = [NSString stringWithFormat:@"Token %@", accessToken];
         [request setValue:authHeader forHTTPHeaderField:@"Authorization"];
 
-        NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-            if (error) {
-                // Handle network or request-related errors here
-                NSLog(@"Request error: %@", error);
-                return;
-            }
+        NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request
+        completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (error) {
+        // Handle network or request-related errors here
+        NSLog(@"Request error: %@", error);
+        return;
+        }
 
-            if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-                NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+        if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
 
-                // Check if the request was successful (status code 200)
-                if (httpResponse.statusCode == 200) {
-                    if (data) {
-                        // Process the API response data here (e.g., print or parse the data)
-                        NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                        NSLog(@"%@", responseString);
-                    }
-                } else {
-                    // Handle errors or non-200 status codes here
-                    NSLog(@"Request failed with status code %ld", (long)httpResponse.statusCode);
-                }
-            }
+        // Check if the request was successful (status code 200)
+        if (httpResponse.statusCode == 200) {
+        if (data) {
+        // Process the API response data here (e.g., print or parse the data)
+        NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        NSLog(@"%@", responseString);
+        }
+        } else {
+        // Handle errors or non-200 status codes here
+        NSLog(@"Request failed with status code %ld", (long)httpResponse.statusCode);
+        }
+        }
         }];
 
         // Start the request task
         [task resume];
-    }
-    return 0;
-}
+        }
+        return 0;
+        }
     </p>
 
     <p hidden id="dart_code">
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+        import 'dart:convert';
+        import 'package:http/http.dart' as http;
 
-void main() async {
-  // Replace these values with your actual API endpoint and Access token
-  final String apiEndpoint = 'endpoint url';
-  final String accessToken = 'YOUR_ACCESS_TOKEN_HERE';
+        void main() async {
+        // Replace these values with your actual API endpoint and Access token
+        final String apiEndpoint = 'endpoint url';
+        final String accessToken = 'YOUR_ACCESS_TOKEN_HERE';
 
-  try {
-    final response = await http.get(
-      Uri.parse(apiEndpoint),
-      headers: {
+        try {
+        final response = await http.get(
+        Uri.parse(apiEndpoint),
+        headers: {
         'Authorization': 'Token $accessToken',
         'Content-Type': 'application/json', // You can modify headers as needed
-      },
-    );
+        },
+        );
 
-    // Check if the request was successful (status code 200)
-    if (response.statusCode == 200) {
-      final jsonResponse = json.decode(response.body);
-      // Process the API response here (e.g., print or parse the data)
-      print(jsonResponse);
-    } else {
-      // Handle errors or non-200 status codes here
-      print('Request failed with status code ${response.statusCode}');
-    }
-  } catch (e) {
-    // Handle network or request-related exceptions
-    print('Request error: $e');
-  }
-}
+        // Check if the request was successful (status code 200)
+        if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        // Process the API response here (e.g., print or parse the data)
+        print(jsonResponse);
+        } else {
+        // Handle errors or non-200 status codes here
+        print('Request failed with status code ${response.statusCode}');
+        }
+        } catch (e) {
+        // Handle network or request-related exceptions
+        print('Request error: $e');
+        }
+        }
 
     </p>
 
     <p hidden id="php_code">
-&lt;?php
+        &lt;?php
 
-// Replace these values with your actual API endpoint and Access token
-$apiEndpoint = 'endpoint url';
-$accessToken = 'YOUR_ACCESS_TOKEN_HERE';
+        // Replace these values with your actual API endpoint and Access token
+        $apiEndpoint = 'endpoint url';
+        $accessToken = 'YOUR_ACCESS_TOKEN_HERE';
 
-// Initialize cURL session
-$ch = curl_init($apiEndpoint);
+        // Initialize cURL session
+        $ch = curl_init($apiEndpoint);
 
-// Set cURL options
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Return the response as a string
-curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    'Authorization: Token ' . $accessToken,
-    'Content-Type: application/json', // You can modify headers as needed
-]);
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Return the response as a string
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Token ' . $accessToken,
+        'Content-Type: application/json', // You can modify headers as needed
+        ]);
 
-// Execute cURL session and store the response in $response
-$response = curl_exec($ch);
+        // Execute cURL session and store the response in $response
+        $response = curl_exec($ch);
 
-// Check for cURL errors
-if (curl_errno($ch)) {
-    echo 'cURL Error: ' . curl_error($ch);
-    exit();
-}
+        // Check for cURL errors
+        if (curl_errno($ch)) {
+        echo 'cURL Error: ' . curl_error($ch);
+        exit();
+        }
 
-// Get the HTTP status code
-$httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        // Get the HTTP status code
+        $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-// Close the cURL session
-curl_close($ch);
+        // Close the cURL session
+        curl_close($ch);
 
-// Check if the request was successful (status code 200)
-if ($httpStatus == 200) {
-    // Process the API response here (e.g., print or parse the data)
-    echo $response;
-} else {
-    // Handle errors or non-200 status codes here
-    echo 'Request failed with status code ' . $httpStatus;
-}
-?>
+        // Check if the request was successful (status code 200)
+        if ($httpStatus == 200) {
+        // Process the API response here (e.g., print or parse the data)
+        echo $response;
+        } else {
+        // Handle errors or non-200 status codes here
+        echo 'Request failed with status code ' . $httpStatus;
+        }
+        ?>
 
     </p>
 
     <p hidden id="ruby_code">
-require 'net/http'
-require 'uri'
-require 'json'
+        require 'net/http'
+        require 'uri'
+        require 'json'
 
-# Replace these values with your actual API endpoint and Access token
-api_endpoint = URI.parse('endpoint url')
-access_token = 'YOUR_ACCESS_TOKEN_HERE'
+        # Replace these values with your actual API endpoint and Access token
+        api_endpoint = URI.parse('endpoint url')
+        access_token = 'YOUR_ACCESS_TOKEN_HERE'
 
-# Create an HTTP object for the API endpoint
-http = Net::HTTP.new(api_endpoint.host, api_endpoint.port)
-http.use_ssl = (api_endpoint.scheme == 'https')
+        # Create an HTTP object for the API endpoint
+        http = Net::HTTP.new(api_endpoint.host, api_endpoint.port)
+        http.use_ssl = (api_endpoint.scheme == 'https')
 
-# Create an HTTP request
-request = Net::HTTP::Get.new(api_endpoint.request_uri)
+        # Create an HTTP request
+        request = Net::HTTP::Get.new(api_endpoint.request_uri)
 
-# Set the Authorization header with the Access token
-request['Authorization'] = "Token #{access_token}"
-request['Content-Type'] = 'application/json' # You can modify headers as needed
+        # Set the Authorization header with the Access token
+        request['Authorization'] = "Token #{access_token}"
+        request['Content-Type'] = 'application/json' # You can modify headers as needed
 
-# Send the request and get the response
-response = http.request(request)
+        # Send the request and get the response
+        response = http.request(request)
 
-# Check if the request was successful (status code 200)
-if response.code == '200'
-  # Process the API response here (e.g., print or parse the data)
-  puts response.body
-else
-  # Handle errors or non-200 status codes here
-  puts "Request failed with status code #{response.code}"
-end
+        # Check if the request was successful (status code 200)
+        if response.code == '200'
+        # Process the API response here (e.g., print or parse the data)
+        puts response.body
+        else
+        # Handle errors or non-200 status codes here
+        puts "Request failed with status code #{response.code}"
+        end
     </p>
 
     <p hidden id="r_code">
-library(httr)
+        library(httr)
 
-# Replace these values with your actual API endpoint and Access token
-api_endpoint <- "endpoint url"
-access_token <- "YOUR_ACCESS_TOKEN_HERE"
+        # Replace these values with your actual API endpoint and Access token
+        api_endpoint <- "endpoint url"
+        access_token <- "YOUR_ACCESS_TOKEN_HERE"
 
-# Create a headers list with the Authorization Access token
-headers <- add_headers(
-  Authorization = paste("Token", access_token),
-  "Content-Type" = "application/json" # You can modify headers as needed
-)
+        # Create a headers list with the Authorization Access token
+        headers <- add_headers(
+        Authorization = paste("Token", access_token),
+        "Content-Type" = "application/json" # You can modify headers as needed
+        )
 
-# Make the GET request with the specified headers
-response <- GET(api_endpoint, headers = headers)
+        # Make the GET request with the specified headers
+        response <- GET(api_endpoint, headers = headers)
 
-# Check if the request was successful (status code 200)
-if (http_status(response)$status_code == 200) {
-  # Process the API response here (e.g., print or parse the data)
-  content <- content(response, "text")
-  cat(content)
-} else {
-  # Handle errors or non-200 status codes here
-  cat("Request failed with status code", http_status(response)$status_code)
-}
+        # Check if the request was successful (status code 200)
+        if (http_status(response)$status_code == 200) {
+        # Process the API response here (e.g., print or parse the data)
+        content <- content(response, "text")
+        cat(content)
+        } else {
+        # Handle errors or non-200 status codes here
+        cat("Request failed with status code", http_status(response)$status_code)
+        }
 
     </p>
 
     <p hidden id="go_code">
-package main
+        package main
 
-import (
-	"fmt"
-	"net/http"
-	"io/ioutil"
-)
+        import (
+        "fmt"
+        "net/http"
+        "io/ioutil"
+        )
 
-func main() {
-	// Replace these values with your actual API endpoint and Access token
-	apiEndpoint := "endpoint url"
-	accessToken := "YOUR_ACCESS_TOKEN_HERE"
+        func main() {
+        // Replace these values with your actual API endpoint and Access token
+        apiEndpoint := "endpoint url"
+        accessToken := "YOUR_ACCESS_TOKEN_HERE"
 
-	// Create an HTTP client
-	client := &http.Client{}
+        // Create an HTTP client
+        client := &http.Client{}
 
-	// Create a GET request
-	req, err := http.NewRequest("GET", apiEndpoint, nil)
-	if err != nil {
-		fmt.Println("Error creating request:", err)
-		return
-	}
+        // Create a GET request
+        req, err := http.NewRequest("GET", apiEndpoint, nil)
+        if err != nil {
+        fmt.Println("Error creating request:", err)
+        return
+        }
 
-	// Set the Authorization header with the Access token
-	req.Header.Add("Authorization", "Token " + accessToken)
-	req.Header.Add("Content-Type", "application/json") // You can modify headers as needed
+        // Set the Authorization header with the Access token
+        req.Header.Add("Authorization", "Token " + accessToken)
+        req.Header.Add("Content-Type", "application/json") // You can modify headers as needed
 
-	// Send the request
-	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Println("Error sending request:", err)
-		return
-	}
-	defer resp.Body.Close()
+        // Send the request
+        resp, err := client.Do(req)
+        if err != nil {
+        fmt.Println("Error sending request:", err)
+        return
+        }
+        defer resp.Body.Close()
 
-	// Check if the request was successful (status code 200)
-	if resp.StatusCode == http.StatusOK {
-		// Read and process the response body
-		body, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			fmt.Println("Error reading response body:", err)
-			return
-		}
+        // Check if the request was successful (status code 200)
+        if resp.StatusCode == http.StatusOK {
+        // Read and process the response body
+        body, err := ioutil.ReadAll(resp.Body)
+        if err != nil {
+        fmt.Println("Error reading response body:", err)
+        return
+        }
 
-		// Process the API response here (e.g., print or parse the data)
-		fmt.Println(string(body))
-	} else {
-		// Handle errors or non-200 status codes here
-		fmt.Println("Request failed with status code", resp.StatusCode)
-	}
-}
+        // Process the API response here (e.g., print or parse the data)
+        fmt.Println(string(body))
+        } else {
+        // Handle errors or non-200 status codes here
+        fmt.Println("Request failed with status code", resp.StatusCode)
+        }
+        }
     </p>
 
     <p hidden id="csharp_code">
-using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
+        using System;
+        using System.Net.Http;
+        using System.Net.Http.Headers;
+        using System.Threading.Tasks;
 
-class Program
-{
-    static async Task Main()
-    {
+        class Program
+        {
+        static async Task Main()
+        {
         // Replace these values with your actual API endpoint and Access token
         string apiEndpoint = "endpoint url";
         string accessToken = "YOUR_ACCESS_TOKEN_HERE";
 
         using (HttpClient client = new HttpClient())
         {
-            // Set the Authorization header with the Access token
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", accessToken);
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json")); // You can modify headers as needed
+        // Set the Authorization header with the Access token
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", accessToken);
+        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json")); // You can
+        modify headers as needed
 
-            try
-            {
-                // Send a GET request to the API endpoint
-                HttpResponseMessage response = await client.GetAsync(apiEndpoint);
+        try
+        {
+        // Send a GET request to the API endpoint
+        HttpResponseMessage response = await client.GetAsync(apiEndpoint);
 
-                // Check if the request was successful (status code 200)
-                if (response.IsSuccessStatusCode)
-                {
-                    // Read and process the response content
-                    string responseBody = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine(responseBody);
-                }
-                else
-                {
-                    // Handle errors or non-200 status codes here
-                    Console.WriteLine($"Request failed with status code {response.StatusCode}");
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle network or request-related exceptions
-                Console.WriteLine($"Request error: {ex.Message}");
-            }
+        // Check if the request was successful (status code 200)
+        if (response.IsSuccessStatusCode)
+        {
+        // Read and process the response content
+        string responseBody = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(responseBody);
         }
-    }
-}
+        else
+        {
+        // Handle errors or non-200 status codes here
+        Console.WriteLine($"Request failed with status code {response.StatusCode}");
+        }
+        }
+        catch (Exception ex)
+        {
+        // Handle network or request-related exceptions
+        Console.WriteLine($"Request error: {ex.Message}");
+        }
+        }
+        }
+        }
     </p>
 
     <p hidden id="cplus_code">
-#include &lt;iostream&gt;
-#include &lt;string&gt;
-#include &lt;curl/curl.h&gt;
+        #include &lt;iostream&gt;
+        #include &lt;string&gt;
+        #include &lt;curl/curl.h&gt;
 
 
-int main() {
-    std::string apiEndpoint = "endpoint url";
-    std::string accessToken = "YOUR_ACCESS_TOKEN_HERE";
+        int main() {
+        std::string apiEndpoint = "endpoint url";
+        std::string accessToken = "YOUR_ACCESS_TOKEN_HERE";
 
-    // Initialize libcurl
-    CURL* curl = curl_easy_init();
+        // Initialize libcurl
+        CURL* curl = curl_easy_init();
 
-    if (curl) {
+        if (curl) {
         // Set the URL
         curl_easy_setopt(curl, CURLOPT_URL, apiEndpoint.c_str());
 
@@ -950,10 +960,11 @@ int main() {
         std::string responseData;
 
         // Set the callback function to write response data
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, [](void* contents, size_t size, size_t nmemb, std::string* output) {
-            size_t totalSize = size * nmemb;
-            output->append(static_cast&lt;char*>(contents), totalSize);
-            return totalSize;
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, [](void* contents, size_t size, size_t nmemb, std::string* output)
+        {
+        size_t totalSize = size * nmemb;
+        output->append(static_cast&lt;char*>(contents), totalSize);
+        return totalSize;
         });
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseData);
 
@@ -962,27 +973,27 @@ int main() {
 
         // Check for errors
         if (res != CURLE_OK) {
-            std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+        std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
         } else {
-            // Check if the request was successful (status code 200)
-            long responseCode;
-            curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &responseCode);
-            if (responseCode == 200) {
-                // Process the API response here (e.g., print or parse the data)
-                std::cout << responseData << std::endl;
-            } else {
-                // Handle errors or non-200 status codes here
-                std::cerr << "Request failed with status code " << responseCode << std::endl;
-            }
+        // Check if the request was successful (status code 200)
+        long responseCode;
+        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &responseCode);
+        if (responseCode == 200) {
+        // Process the API response here (e.g., print or parse the data)
+        std::cout << responseData << std::endl;
+        } else {
+        // Handle errors or non-200 status codes here
+        std::cerr << "Request failed with status code " << responseCode << std::endl;
+        }
         }
 
         // Clean up
         curl_slist_free_all(headers);
         curl_easy_cleanup(curl);
-    }
+        }
 
-    return 0;
-}
+        return 0;
+        }
 
     </p>
 

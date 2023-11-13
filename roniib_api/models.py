@@ -41,7 +41,7 @@ class ApiEndpoints(models.Model):
         db_table = 'ApiEndpoints'
 
     def __str__(self):
-        return str(self.api_name)
+        return f'{self.api_name} | {self.endpoint_name}'
 
 
 class UserDetails(models.Model):
@@ -164,11 +164,13 @@ class CallLatency(models.Model):
 
 
 class UserTokens(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    token = models.TextField(null=True)
-    subscription_level = models.TextField(null=True)
-    requests_count = models.IntegerField(null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    token = models.CharField(max_length=255, null=True)
+    subscription_level = models.TextField(default='Basic')
+    requests_count = models.IntegerField(default=100)
     token_expiry = models.DateTimeField(default=datetime.now(timezone.utc))
+    is_suspended = models.BooleanField(default=False)
+    date_suspended = models.DateTimeField(default=datetime.now(timezone.utc))
 
     class Meta:
         db_table = 'UserTokens'
@@ -181,7 +183,6 @@ class PasswordReset(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     reset_code = models.TextField(null=True)
     code_expiry = models.DateTimeField(default=datetime.now(timezone.utc))
+
     def __str__(self):
         return str(self.user.username)
-
-

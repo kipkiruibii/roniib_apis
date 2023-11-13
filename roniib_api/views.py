@@ -36,7 +36,9 @@ def resendResetCode(request):
     if request.method == "POST":
         pass
 
-    pass
+
+def getPolicyNotice(request):
+    return render(request, 'wahzahp_policy.html')
 
 
 def reset_password_code(request):
@@ -241,11 +243,17 @@ def pricing(request):
         "return": request.build_absolute_uri(reverse('payment_successful')),
         "cancel_return": request.build_absolute_uri(reverse('payment_failed')),
     }
+    sub_level = 'Basic'
+    if request.user.is_authenticated:
+        usr = UserTokens.objects.filter(user=request.user).first()
+        if usr:
+            sub_level = usr.subscription_level
 
     developer = PayPalPaymentsForm(initial=paypal_dict, button_type="subscribe")
     enterprise = PayPalPaymentsForm(initial=paypal_dict1, button_type="subscribe")
     context = {"developer": developer,
-               "enterprise": enterprise
+               "enterprise": enterprise,
+               'userPlan': sub_level
                }
     return render(request, "pricing.html", context)
 
@@ -585,38 +593,42 @@ def getLast24hrs(offset, request):
     val_l = [0 for i in range(24)]
     errors = 0
     calls = 0
-
+    accountSuspended = False
     if request.user.is_authenticated:
-        dte_list = []
-        val_l = []
-        fd = HourData.objects.filter(user=request.user)
-        if len(fd) < 24:
-            updateHourData(request)
+        usr = UserTokens.objects.filter(user=request.user).first()
+        if usr:
+            accountSuspended = usr.is_suspended
+        if not accountSuspended:
+            dte_list = []
+            val_l = []
+            fd = HourData.objects.filter(user=request.user)
+            if len(fd) < 24:
+                updateHourData(request)
 
-        for r in range(24):
-            one_hour_ago = current_datetime - timedelta(hours=r)
-            pres = False
-            for r_i in HourData.objects.filter(user=request.user).order_by('-formatted_time'):
-                if r_i.formatted_time.hour == one_hour_ago.hour and r_i.formatted_time.day == one_hour_ago.day and r_i.formatted_time.month == one_hour_ago.month:
-                    val_l.append(r_i.count)
-                    calls += r_i.count
-                    errors += r_i.error_count
-                    pres = True
-                    break
-            if not pres:
-                val_l.append(0)
-            frmt = int(one_hour_ago.strftime('%H'))
-            frmt += offset
-            val = f'{frmt}:00'
-            if frmt < 10:
-                val = f'0{frmt}:00'
-            if frmt > 23:
-                diff = frmt - 24
-                val = f'0{0 + diff}:00'
+            for r in range(24):
+                one_hour_ago = current_datetime - timedelta(hours=r)
+                pres = False
+                for r_i in HourData.objects.filter(user=request.user).order_by('-formatted_time'):
+                    if r_i.formatted_time.hour == one_hour_ago.hour and r_i.formatted_time.day == one_hour_ago.day and r_i.formatted_time.month == one_hour_ago.month:
+                        val_l.append(r_i.count)
+                        calls += r_i.count
+                        errors += r_i.error_count
+                        pres = True
+                        break
+                if not pres:
+                    val_l.append(0)
+                frmt = int(one_hour_ago.strftime('%H'))
+                frmt += offset
+                val = f'{frmt}:00'
+                if frmt < 10:
+                    val = f'0{frmt}:00'
+                if frmt > 23:
+                    diff = frmt - 24
+                    val = f'0{0 + diff}:00'
 
-            dte_list.append(val)
-        val_l = val_l[::-1]
-        dte_list = dte_list[::-1]
+                dte_list.append(val)
+            val_l = val_l[::-1]
+            dte_list = dte_list[::-1]
     return dte_list, val_l, errors, calls
 
 
@@ -625,29 +637,34 @@ def getLast7days(request):
     dte_list = ['0' for i in range(7)]
     val_l = [0 for i in range(7)]
 
+    accountSuspended = False
     if request.user.is_authenticated:
-        dte_list = []
-        val_l = []
-        fd = DayData.objects.filter(user=request.user)
-        if len(fd) < 30:
-            updateDayData(request)
-        for r in range(7):
-            # if len(val_l) > 7:
-            #     break
-            days_ago = current_datetime - timedelta(days=r)
-            pres = False
-            for r_i in DayData.objects.filter(user=request.user).order_by('formatted_time'):
-                if r_i.formatted_time.day == days_ago.day and r_i.formatted_time.month == days_ago.month:
-                    val_l.append(r_i.count)
-                    pres = True
-                    break
-            if not pres:
-                val_l.append(0)
+        usr = UserTokens.objects.filter(user=request.user).first()
+        if usr:
+            accountSuspended = usr.is_suspended
+        if not accountSuspended:
+            dte_list = []
+            val_l = []
+            fd = DayData.objects.filter(user=request.user)
+            if len(fd) < 30:
+                updateDayData(request)
+            for r in range(7):
+                # if len(val_l) > 7:
+                #     break
+                days_ago = current_datetime - timedelta(days=r)
+                pres = False
+                for r_i in DayData.objects.filter(user=request.user).order_by('formatted_time'):
+                    if r_i.formatted_time.day == days_ago.day and r_i.formatted_time.month == days_ago.month:
+                        val_l.append(r_i.count)
+                        pres = True
+                        break
+                if not pres:
+                    val_l.append(0)
 
-            frmt = days_ago.strftime('%a (%d)')
-            dte_list.append(frmt)
-        dte_list = dte_list[::-1]
-        val_l = val_l[::-1]
+                frmt = days_ago.strftime('%a (%d)')
+                dte_list.append(frmt)
+            dte_list = dte_list[::-1]
+            val_l = val_l[::-1]
 
     return dte_list, val_l
 
@@ -656,36 +673,44 @@ def getLast30Days(request):
     current_datetime = datetime.now()
     dte_list = ['0' for i in range(30)]
     val_l = [0 for i in range(30)]
+    accountSuspended = False
     if request.user.is_authenticated:
-        dte_list = []
-        val_l = []
-        fd = DayData.objects.filter(user=request.user)
-        if len(fd) < 30:
-            updateDayData(request)
-        for r in range(30):
-            days_ago = current_datetime - timedelta(days=r)
-            pres = False
-            for r_i in DayData.objects.filter(user=request.user).order_by('formatted_time'):
-                if r_i.formatted_time.day == days_ago.day and r_i.formatted_time.month == days_ago.month:
-                    val_l.append(r_i.count)
-                    pres = True
-                    break
-            if not pres:
-                val_l.append(0)
+        usr = UserTokens.objects.filter(user=request.user).first()
+        if usr:
+            accountSuspended = usr.is_suspended
+        if not accountSuspended:
+            dte_list = []
+            val_l = []
+            fd = DayData.objects.filter(user=request.user)
+            if len(fd) < 30:
+                updateDayData(request)
+            for r in range(30):
+                days_ago = current_datetime - timedelta(days=r)
+                pres = False
+                for r_i in DayData.objects.filter(user=request.user).order_by('formatted_time'):
+                    if r_i.formatted_time.day == days_ago.day and r_i.formatted_time.month == days_ago.month:
+                        val_l.append(r_i.count)
+                        pres = True
+                        break
+                if not pres:
+                    val_l.append(0)
 
-            frmt = days_ago.strftime('%d/%m')
-            dte_list.append(frmt)
-        dte_list = dte_list[::-1]
-        val_l = val_l[::-1]
+                frmt = days_ago.strftime('%d/%m')
+                dte_list.append(frmt)
+            dte_list = dte_list[::-1]
+            val_l = val_l[::-1]
     return dte_list, val_l
 
 
 @login_required
 @csrf_exempt
 def myAccount(request):
+    accountSuspended = False
     i_c = 1
     usr = UserTokens.objects.filter(user=request.user).first()
+
     if usr:
+        accountSuspended = usr.is_suspended
         sl = usr.subscription_level
         if sl == 'Enterprise':
             i_c = 1000000
@@ -710,6 +735,7 @@ def myAccount(request):
     if calls > 0:
         number = (errors / calls) * 100
         err = "{:.2f}".format(number)
+
     if request.method == 'POST':
         type_e = request.POST.get('type')
         if type_e == 'seven':
@@ -786,6 +812,7 @@ def myAccount(request):
         'err': err,
         'calls': calls,
         'isLate': isLate,
+        'accountGood': not accountSuspended,
         'graph_x_dat': graph_x_dat,
         'graph_y_dat': graph_y_dat,
 

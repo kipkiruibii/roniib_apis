@@ -120,7 +120,12 @@
                                 <div class="sub_btn_align" style="cursor:pointer">
                                     <div class="sub_btn">
                                         {% if request.user.is_authenticated %}
+                                        {% if userPlan == 'Developer' %}
+                                        <div style="color:green;font-size:20px">CURRENT PLAN</div>
+                                        {% else %}
                                         {{developer.render}}
+                                        {% endif %}
+
                                         {% else %}
                                         <a href="{% url 'login' %}"><p>Login to Subscribe</p></a>
                                         {% endif %}
@@ -146,7 +151,11 @@
                                     <div class="sub_btn_align" style="cursor:pointer">
                                         <div class="sub_btn">
                                             {% if request.user.is_authenticated %}
+                                            {% if userPlan == 'Enterprise' %}
+                                            <div style="color:green;font-size:20px">CURRENT PLAN</div>
+                                            {% else %}
                                             {{enterprise.render}}
+                                            {% endif %}
 
                                             {% else %}
                                             <a href="{% url 'login' %}"><p>Login to Subscribe</p></a>

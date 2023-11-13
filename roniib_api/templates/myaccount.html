@@ -195,6 +195,15 @@
                 <div>
                     <p>Username: <span style="font-weight:bold">{{ request.user.username }}</span></p>
                     <p>Email: <span style="font-weight:bold">{{ request.user.email }} </span></p>
+                       <div style="display:flex;justify-content:space-between;margin-right:50px">
+
+                        <p style="margin-right:10px">Account Status</p>
+                           {% if accountGood %}
+                        <p style="margin-right:10px;color:green">Active</p>
+                           {% else %}
+                         <p style="margin-right:10px;color:red">Temporarily suspended</p>
+                           {% endif %}
+                       </div>
 
 
                 </div>
@@ -294,6 +303,7 @@
             </div>
             <div style="margin-left:15px">
                 <div style="display:flex;">
+                    {% if accountGood %}
                     <div style="display:flex;justify-content:space-between;margin-right:50px">
                         <p style="margin-right:10px">Duration</p>
                         <select id="time_filter"
@@ -303,6 +313,17 @@
                             <option value="thirty">Last 30days</option>
                         </select>
                     </div>
+                    {% endif %}
+                       <div style="display:flex;justify-content:space-between;margin-right:50px">
+                        <p style="margin-right:10px">Account Status</p>
+                           {% if accountGood %}
+                        <p style="margin-right:10px;color:green">Active</p>
+                           {% else %}
+                         <p style="margin-right:10px;color:red">Temporarily suspended</p>
+                           {% endif %}
+
+                    </div>
+
 
                 </div>
                 <hr style="margin:5px">
@@ -362,7 +383,7 @@
                     </div>
                     <p>Date Created: <span style="font-weight:bold" id="date_id">{{datecreated}}</span></p>
                     <p>Remember to include the token above in the headers of every request you make.</p>
-                    <p>Keep this token a secret.</p>
+                    <p>Keep this token secret.</p>
 
                 </div>
                 {% endif %}
@@ -708,7 +729,7 @@
     });
 
     $(document).ready(function () {
-        var tokenToCopy = $('#token');
+        var tokenToCopy = $('#apitokenkey');
         var copyButton = $('#copyButton');
 
         copyButton.on('click', function () {

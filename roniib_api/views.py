@@ -213,11 +213,12 @@ def reset_password(request):
 
 
 def pricing(request):
+
     paypal_dict = {
         "cmd": "_xclick-subscriptions",
         "business": 'checkout@roniib.com',
         "custom": request.user.username,
-        "a3": "29",
+        "a3": "29", 
         "p3": 1,
         "t3": "M",
         "src": "1",
@@ -228,6 +229,8 @@ def pricing(request):
         "return": request.build_absolute_uri(reverse('payment_successful')),
         "cancel_return": request.build_absolute_uri(reverse('payment_failed')),
     }
+    developer = PayPalPaymentsForm(initial=paypal_dict, button_type="subscribe")
+
     paypal_dict1 = {
         "cmd": "_xclick-subscriptions",
         "business": 'checkout@roniib.com',
@@ -249,7 +252,7 @@ def pricing(request):
         if usr:
             sub_level = usr.subscription_level
 
-    developer = PayPalPaymentsForm(initial=paypal_dict, button_type="subscribe")
+    # developer = PayPalPaymentsForm(initial=paypal_dict, button_type="subscribe")
     enterprise = PayPalPaymentsForm(initial=paypal_dict1, button_type="subscribe")
     context = {"developer": developer,
                "enterprise": enterprise,
